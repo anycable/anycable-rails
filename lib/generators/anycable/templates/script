@@ -1,8 +1,7 @@
 #!/usr/bin/env ruby
 # frozen_string_literal: true
 require ::File.expand_path('../../config/environment', __FILE__)
-require "anycable"
-require 'anycable/rails/connection'
+require "anycable-rails"
 
 Anycable.configure do |config|
   config.connection_factory = ActionCable.server.config.connection_class.call
