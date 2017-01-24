@@ -19,7 +19,7 @@ describe "subscriptions", :rpc_command do
       it "responds with error and subscription rejection", :aggregate_failures do
         expect(subject.status).to eq :ERROR
         expect(subject.streams).to eq []
-        expect(subject.stop_streams).to eq false
+        expect(subject.stop_streams).to eq true
         expect(subject.transmissions.first).to include('reject_subscription')
       end
     end

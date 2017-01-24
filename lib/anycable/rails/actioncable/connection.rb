@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-require "action_cable"
+require "action_cable/connection"
 require "anycable/rails/refinements/subscriptions"
 require "anycable/rails/actioncable/channel"
 
@@ -8,11 +8,11 @@ module ActionCable
     class Base # :nodoc:
       using Anycable::Refinements::Subscriptions
 
-      attr_reader :transmissions
+      attr_reader :socket
 
       class << self
-        def create(**options)
-          new(**options)
+        def create(socket, **options)
+          new(socket, **options)
         end
 
         def identified_by(*identifiers)
@@ -25,23 +25,17 @@ module ActionCable
         end
       end
 
-      def initialize(env: {}, identifiers: '{}', subscriptions: [])
+      def initialize(socket, identifiers: '{}', subscriptions: [])
         @ids = ActiveSupport::JSON.decode(identifiers)
 
         @cached_ids = {}
-        @env = env
+        @env = socket.env
         @coder = ActiveSupport::JSON
-        @closed = false
-        @transmissions = []
+        @socket = socket
         @subscriptions = ActionCable::Connection::Subscriptions.new(self)
 
         # Initialize channels if any
         subscriptions.each { |id| @subscriptions.fetch(id) }
-      end
-
-      # Create a channel instance from identifier for the connection
-      def channel_for(identifier)
-        subscriptions.fetch(identifier)
       end
 
       def handle_open
@@ -56,21 +50,33 @@ module ActionCable
         disconnect if respond_to?(:disconnect)
       end
 
-      def close
-        @closed = true
+      # rubocop:disable Metrics/MethodLength
+      def handle_channel_command(identifier, command, data)
+        channel = subscriptions.fetch(identifier)
+        case command
+        when "subscribe"
+          channel.handle_subscribe
+          !channel.subscription_rejected?
+        when "unsubscribe"
+          subscriptions.remove_subscription(channel)
+          true
+        when "message"
+          channel.perform_action ActiveSupport::JSON.decode(data)
+          true
+        else
+          false
+        end
+      rescue Exception # rubocop:disable Lint/RescueException
+        false
       end
+      # rubocop:enable Metrics/MethodLength
 
-      def closed?
-        @closed
+      def close
+        socket.close
       end
 
       def transmit(cable_message)
-        transmissions << encode(cable_message)
-      end
-
-      def dispose
-        @closed = false
-        transmissions.clear
+        socket.transmit encode(cable_message)
       end
 
       # Generate identifiers info.
