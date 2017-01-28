@@ -14,11 +14,11 @@ module ActionCable
 
       def stream_from(broadcasting, callback = nil, coder: nil)
         raise ArgumentError('Unsupported') if callback.present? || coder.present? || block_given?
-        connection.socket.stream broadcasting
+        connection.socket.subscribe identifier, broadcasting
       end
 
       def stop_all_streams
-        connection.socket.stop_all_streams
+        connection.socket.unsubscribe_from_all identifier
       end
 
       def delegate_connection_identifiers
