@@ -1,5 +1,9 @@
 # Change log
 
+## 0.4.4
+
+- Fix bug with ActiveRecord connections (https://github.com/anycable/anycable/issues/9). ([@palkan][])
+
 ## 0.4.0
 
 - Initial version. ([@palkan][])
