@@ -1,5 +1,11 @@
 # Change log
 
+## 0.4.5
+
+- Handle tagged logger. ([@palkan][])
+
+Ignore tagged logger features ('cause we do not have _persistent_ logger).
+
 ## 0.4.4
 
 - Fix bug with ActiveRecord connections (https://github.com/anycable/anycable/issues/9). ([@palkan][])

@@ -103,7 +103,7 @@ module ActionCable
       end
 
       def logger
-        ::Rails.logger
+        Anycable::Rails.logger
       end
     end
   end

@@ -16,6 +16,7 @@ module ApplicationCable
     def connect
       self.current_user = verify_user
       self.url = request.url if current_user
+      logger.add_tags 'ActionCable', current_user.name
     end
 
     def disconnect
