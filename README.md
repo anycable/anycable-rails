@@ -44,6 +44,10 @@ For usage outside Rails see [AnyCable repository](https://github.com/anycable/an
 Add Anycable to your application's Gemfile:
 
 ```ruby
+gem 'anycable-rails'
+
+# or if you want to use built-in Action Cable server
+# for test and development (which is possible)
 gem 'anycable-rails', group: :production
 ```
 
@@ -54,8 +58,6 @@ rails generate anycable
 ```
 
 to create executable.
-
-You can use _built-in_ ActionCable for test and development.
 
 ## Configuration
 
