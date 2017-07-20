@@ -47,7 +47,7 @@ Add Anycable to your application's Gemfile:
 gem 'anycable-rails'
 
 # or if you want to use built-in Action Cable server
-# for test and development (which is possible)
+# for test and development (which is possible and recommended)
 gem 'anycable-rails', group: :production
 ```
 
