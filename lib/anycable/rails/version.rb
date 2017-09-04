@@ -2,6 +2,6 @@
 
 module Anycable
   module Rails
-    VERSION = "0.4.6"
+    VERSION = "0.4.7"
   end
 end
