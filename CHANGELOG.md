@@ -1,5 +1,9 @@
 # Change log
 
+## 0.4.7
+
+- Minor fixes. ([@palkan][])
+
 ## 0.4.6
 
 - Disable mounting default Action Cable server when AnyCable is loaded. ([@palkan][])

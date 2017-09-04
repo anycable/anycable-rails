@@ -15,4 +15,8 @@ class TestChannel < ApplicationCable::Channel
   def add(data)
     transmit result: (data['a'].to_i + data['b'].to_i)            
   end
+
+  def fail
+    non_existent_method(1)
+  end
 end

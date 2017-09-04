@@ -66,8 +66,6 @@ module ActionCable
         else
           false
         end
-      rescue Exception # rubocop:disable Lint/RescueException
-        false
       end
       # rubocop:enable Metrics/MethodLength
 

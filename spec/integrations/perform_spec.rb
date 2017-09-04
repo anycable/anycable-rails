@@ -29,5 +29,13 @@ describe "client messages", :rpc_command do
         expect(subject.stop_streams).to eq false
       end
     end
+
+    context "with exception" do
+      let(:data) { { action: 'fail' } }
+
+      it "responds with error" do
+        expect(subject.status).to eq :ERROR
+      end
+    end
   end
 end
