@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 module Anycable
   module Rails
     class Engine < ::Rails::Engine # :nodoc:

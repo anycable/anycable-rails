@@ -5,11 +5,14 @@ AllCops:
     - 'lib/**/*.rake'
     - 'spec/**/*.rb'
   Exclude:
+    - '*.gemspec'
     - 'bin/**/*'
     - 'spec/dummy/**/*'
     - 'tmp/**/*'
     - 'bench/**/*'
     - 'lib/anycable/rpc/**/*'
+    - 'Rakefile'
+    - 'Gemfile'
   DisplayCopNames: true
   StyleGuideCopsOnly: false
   TargetRubyVersion: 2.3
@@ -33,6 +36,12 @@ Style/SpaceInsideStringInterpolation:
 Style/BlockDelimiters:
   Exclude:
     - 'spec/**/*.rb'
+
+Style/PercentLiteralDelimeters:
+  Enabled: false
+
+Lint/ScriptPermission:
+  Enabled: false
 
 Lint/AmbiguousRegexpLiteral:
   Enabled: false

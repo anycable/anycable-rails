@@ -1,6 +1,5 @@
 # frozen_string_literal: true
-lib = File.expand_path("../../../../anycable/lib", __FILE__)
-$LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
+
 require "anycable"
 require "anycable/rails/version"
 
@@ -17,7 +16,7 @@ module Anycable
         @logger.warn "Tagged logger is not supported by AnyCable. Skip"
       end
 
-      %i( debug info warn error fatal unknown ).each do |severity|
+      %i[debug info warn error fatal unknown].each do |severity|
         define_method(severity) do |message|
           @logger.send severity, message
         end
