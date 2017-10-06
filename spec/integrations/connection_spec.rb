@@ -42,6 +42,19 @@ describe "client connection" do
       expect { subject }.to output(/Started \"\/cable\?token=123\" \[Anycable\]/).to_stdout_from_any_process
     end
 
+    context "when access logs disabled" do
+      around do |ex|
+        was_disabled = Anycable.config.access_logs_disabled
+        Anycable.config.access_logs_disabled = true
+        ex.run
+        Anycable.config.access_logs_disabled = was_disabled
+      end
+
+      it "doesn't log access message", log: :info do
+        expect { subject }.not_to output(/Started \"\/cable\?token=123\" \[Anycable\]/).to_stdout_from_any_process
+      end
+    end
+
     context "auth failure" do
       let(:cookies) { 'user=john' }
 

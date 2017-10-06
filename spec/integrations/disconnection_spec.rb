@@ -34,6 +34,19 @@ describe "disconnection", :rpc_command do
     it "logs access message (closed)", log: :info do
       expect { subject }.to output(/Finished \"\/cable\?token=123\" \[Anycable\].*\(Closed\)/).to_stdout_from_any_process
     end
+
+    context "when access logs disabled" do
+      around do |ex|
+        was_disabled = Anycable.config.access_logs_disabled
+        Anycable.config.access_logs_disabled = true
+        ex.run
+        Anycable.config.access_logs_disabled = was_disabled
+      end
+
+      it "doesn't log access message", log: :info do
+        expect { subject }.not_to output(/Finished \"\/cable\?token=123\" \[Anycable\].*\(Closed\)/).to_stdout_from_any_process
+      end
+    end
   end
 
   describe "Channel#unsubscribed" do

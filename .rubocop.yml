@@ -35,6 +35,9 @@ Style/FormatString:
 Style/StringLiterals: 
   Enabled: false
 
+Style/RegexpLiteral:
+  Enabled: false
+
 Style/SpaceInsideStringInterpolation:
   EnforcedStyle: no_space
 

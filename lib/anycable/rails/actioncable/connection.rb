@@ -40,17 +40,17 @@ module ActionCable
       end
 
       def handle_open
-        logger.info started_request_message
+        logger.info started_request_message if access_logs?
 
         connect if respond_to?(:connect)
         send_welcome_message
       rescue ActionCable::Connection::Authorization::UnauthorizedError
-        logger.info finished_request_message('Rejected')
+        logger.info finished_request_message('Rejected') if access_logs?
         close
       end
 
       def handle_close
-        logger.info finished_request_message
+        logger.info finished_request_message if access_logs?
 
         subscriptions.unsubscribe_from_all
         disconnect if respond_to?(:disconnect)
@@ -129,6 +129,10 @@ module ActionCable
           Time.now.to_s,
           reason
         ]
+      end
+
+      def access_logs?
+        Anycable.config.access_logs_disabled == false
       end
     end
   end
