@@ -16,7 +16,8 @@ module Dummy
     # Middleware like session, flash, cookies can be added back manually.
     # Skip views, helpers and assets when generating a new resource.
     config.api_only = true
-    config.logger = Logger.new('/dev/null')
+    config.logger = Logger.new(STDOUT)
+    config.log_level = :fatal
     config.eager_load = false
   end
 end

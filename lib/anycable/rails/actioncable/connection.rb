@@ -40,13 +40,18 @@ module ActionCable
       end
 
       def handle_open
+        logger.info started_request_message
+
         connect if respond_to?(:connect)
         send_welcome_message
       rescue ActionCable::Connection::Authorization::UnauthorizedError
+        logger.info finished_request_message('Rejected')
         close
       end
 
       def handle_close
+        logger.info finished_request_message
+
         subscriptions.unsubscribe_from_all
         disconnect if respond_to?(:disconnect)
       end
@@ -102,7 +107,28 @@ module ActionCable
       end
 
       def logger
-        Anycable::Rails.logger
+        Anycable.logger
+      end
+
+      private
+
+      def started_request_message
+        'Started "%s"%s for %s at %s' % [
+          request.filtered_path,
+          " [Anycable]",
+          request.ip,
+          Time.now.to_s
+        ]
+      end
+
+      def finished_request_message(reason = "Closed")
+        'Finished "%s"%s for %s at %s (%s)' % [
+          request.filtered_path,
+          " [Anycable]",
+          request.ip,
+          Time.now.to_s,
+          reason
+        ]
       end
     end
   end

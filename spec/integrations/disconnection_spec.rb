@@ -30,6 +30,10 @@ describe "disconnection", :rpc_command do
 
       expect(log.last[:data]).to eq(name: 'disco', url: 'http://example.io/cable?token=123')
     end
+
+    it "logs access message (closed)", log: :info do
+      expect { subject }.to output(/Finished \"\/cable\?token=123\" \[Anycable\].*\(Closed\)/).to_stdout_from_any_process
+    end
   end
 
   describe "Channel#unsubscribed" do
