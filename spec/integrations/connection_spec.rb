@@ -17,10 +17,12 @@ describe "client connection" do
   end
 
   context "with cookies and path info" do
+    let(:cookies) { 'username=john' }
+
     let(:request) do
       Anycable::ConnectionRequest.new(
         headers: {
-          'Cookie' => 'username=john;'
+          'Cookie' => cookies
         },
         path: 'http://example.io/cable?token=123'
       )
@@ -34,6 +36,22 @@ describe "client connection" do
         'url' => 'http://example.io/cable?token=123'
       )
       expect(subject.transmissions.first).to eq JSON.dump('type' => 'welcome')
+    end
+
+    it "logs access message (started)", log: :info do
+      expect { subject }.to output(/Started \"\/cable\?token=123\" \[Anycable\]/).to_stdout_from_any_process
+    end
+
+    context "auth failure" do
+      let(:cookies) { 'user=john' }
+
+      it "logs access message (started)", log: :info do
+        expect { subject }.to output(/Started \"\/cable\?token=123\" \[Anycable\]/).to_stdout_from_any_process
+      end
+
+      it "logs access message (rejected)", log: :info do
+        expect { subject }.to output(/Finished \"\/cable\?token=123\" \[Anycable\].*\(Rejected\)/).to_stdout_from_any_process
+      end
     end
   end
 end
