@@ -18,7 +18,7 @@ describe "subscriptions", :rpc_command do
       let(:user) { User.new(name: 'john', secret: '000') }
 
       it "responds with error and subscription rejection", :aggregate_failures do
-        expect(subject.status).to eq :ERROR
+        expect(subject.status).to eq :FAILURE
         expect(subject.streams).to eq []
         expect(subject.stop_streams).to eq true
         expect(subject.transmissions.first).to include('reject_subscription')

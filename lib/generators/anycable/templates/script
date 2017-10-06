@@ -4,9 +4,7 @@
 require ::File.expand_path('../../config/environment', __FILE__)
 require "anycable-rails"
 
-Anycable.configure do |config|
-  config.connection_factory = ActionCable.server.config.connection_class.call
-end
+Anycable.connection_factory = ActionCable.server.config.connection_class.call
 
 Rails.application.eager_load!
 

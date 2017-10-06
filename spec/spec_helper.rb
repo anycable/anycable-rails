@@ -15,9 +15,7 @@ require File.expand_path("../dummy/config/environment", __FILE__)
 require "anycable-rails"
 require "anycable/rails/actioncable/connection"
 
-Anycable.configure do |config|
-  config.connection_factory = ApplicationCable::Connection
-end
+Anycable.connection_factory = ApplicationCable::Connection
 
 Rails.application.eager_load!
 

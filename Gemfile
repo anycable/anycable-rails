@@ -1,4 +1,5 @@
 source 'https://rubygems.org'
+
 gemspec
 
 local_gemfile = "#{File.dirname(__FILE__)}/Gemfile.local"
