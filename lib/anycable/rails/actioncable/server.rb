@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require "action_cable"
+require "action_cable/server/base"
 
 module ActionCable
   module Server
