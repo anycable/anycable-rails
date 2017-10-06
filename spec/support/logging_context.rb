@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 shared_context "log:info", log: :info do
   before do
     @old_level = Rails.logger.level
