@@ -96,6 +96,18 @@ Don't forget to set cable url in your `config/environments/production.rb`:
 config.action_cable.url = "ws://localhost:3334/cable"
 ```
 
+### Logging
+
+Anycable uses `Rails.logger` as `Anycable.logger` by default, thus Anycable _debug_ mode (`ANYCABLE_DEBUG=1`) is not available, you should configure Rails logger instead, e.g.:
+
+```ruby
+# in Rails configuration
+if Anycable.config.debug
+  config.logger = Logger.new(STDOUT)
+  config.log_level = :debug
+end
+```
+
 ## ActionCable Compatibility
 
 This is the compatibility list for the AnyCable gem, not for AnyCable servers (which may not support some of the features yet).
