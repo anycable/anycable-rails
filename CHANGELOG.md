@@ -1,5 +1,13 @@
 # Change log
 
+## master
+
+- [#17](https://github.com/anycable/anycable-rails/issues/17) Refactor logging. ([@palkan][])
+
+Use Rails logger everywhere.
+
+Add access logs ([anycable/anycable#20](https://github.com/anycable/anycable/issues/20)).
+
 ## 0.4.7
 
 - Minor fixes. ([@palkan][])
