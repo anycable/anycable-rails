@@ -12,7 +12,7 @@ describe "client connection" do
     let(:request) { Anycable::ConnectionRequest.new }
 
     it "responds with error if no cookies" do
-      expect(subject.status).to eq :ERROR
+      expect(subject.status).to eq :FAILURE
     end
   end
 

@@ -12,7 +12,7 @@ module ActionCable
       attr_reader :socket
 
       class << self
-        def create(socket, **options)
+        def call(socket, **options)
           new(socket, **options)
         end
 
