@@ -1,6 +1,9 @@
 language: ruby
 cache: bundler
 
+notifications:
+  email: false
+
 rvm: 2.3.3
 
 matrix:
