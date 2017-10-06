@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 require "action_cable/connection"
 require "anycable/rails/refinements/subscriptions"
 require "anycable/rails/actioncable/channel"

@@ -10,6 +10,8 @@ AllCops:
     - 'spec/dummy/**/*'
     - 'tmp/**/*'
     - 'bench/**/*'
+    - 'vendor/**/*'
+    - 'gemfiles/**/*'
     - 'lib/anycable/rpc/**/*'
     - 'Rakefile'
     - 'Gemfile'
@@ -26,6 +28,9 @@ Style/TrivialAccessors:
 Style/Documentation:
   Exclude:
     - 'spec/**/*.rb'
+
+Style/FormatString:
+  Enabled: false
 
 Style/StringLiterals: 
   Enabled: false
