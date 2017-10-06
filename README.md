@@ -108,6 +108,15 @@ if Anycable.config.debug
 end
 ```
 
+You can also turn off access logging (`Started <request data>` / `Finished <request data>`):
+
+```ruby
+# in anycable.yml
+production:
+  access_logs_disabled: true
+```
+
+
 ## ActionCable Compatibility
 
 This is the compatibility list for the AnyCable gem, not for AnyCable servers (which may not support some of the features yet).
