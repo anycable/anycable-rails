@@ -7,7 +7,7 @@ require "anycable/rails/config"
 module Anycable
   # Rails handler for AnyCable
   module Rails
-    require "anycable/rails/engine"
+    require "anycable/rails/railtie"
     require "anycable/rails/actioncable/server"
     require "anycable/rails/actioncable/connection"
   end

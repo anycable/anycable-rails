@@ -19,7 +19,7 @@ module Anycable
       end
     end
 
-    class Engine < ::Rails::Engine # :nodoc:
+    class Railtie < ::Rails::Railtie # :nodoc:
       initializer "disable built-in Action Cable mount" do |app|
         app.config.action_cable.mount_path = nil
       end

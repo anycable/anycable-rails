@@ -12,6 +12,8 @@ if ENV['COVER']
 end
 
 require File.expand_path("../dummy/config/environment", __FILE__)
+require "ammeter/init"
+
 require "anycable-rails"
 require "anycable/rails/actioncable/connection"
 
