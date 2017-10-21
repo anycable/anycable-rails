@@ -108,12 +108,12 @@ if Anycable.config.debug
 end
 ```
 
-You can also turn off access logging (`Started <request data>` / `Finished <request data>`):
+You can also turn on access logging (`Started <request data>` / `Finished <request data>`):
 
 ```ruby
 # in anycable.yml
 production:
-  access_logs_disabled: true
+  access_logs_disabled: false
 ```
 
 
