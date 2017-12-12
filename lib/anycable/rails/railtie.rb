@@ -20,18 +20,33 @@ module Anycable
     end
 
     class Railtie < ::Rails::Railtie # :nodoc:
-      initializer "disable built-in Action Cable mount" do |app|
+      initializer "anycable.disable_action_cable_mount", before: "action_cable.routes" do |app|
         app.config.action_cable.mount_path = nil
       end
 
-      initializer "set up logger" do |_app|
+      initializer "anycable.logger", after: :initialize_logger do |_app|
         Anycable.logger = LoggerProxy.new(::Rails.logger)
+
+        # Broadcast logs to STDOUT in development
+        if ::Rails.env.development? &&
+           !ActiveSupport::Logger.logger_outputs_to?(::Rails.logger, STDOUT)
+          console = ActiveSupport::Logger.new(STDOUT)
+          console.formatter = ::Rails.logger.formatter
+          console.level = ::Rails.logger.level
+          ::Rails.logger.extend(ActiveSupport::Logger.broadcast(console))
+        end
       end
 
-      initializer "release AR connections in RPC handler" do |_app|
+      initializer "anycable.release_connections" do |_app|
         ActiveSupport.on_load(:active_record) do
           require "anycable/rails/activerecord/release_connection"
           Anycable::RPCHandler.prepend Anycable::Rails::ActiveRecord::ReleaseConnection
+        end
+      end
+
+      initializer "anycable.connection_factory", after: "action_cable.set_configs" do |_app|
+        ActiveSupport.on_load(:action_cable) do
+          Anycable.connection_factory = connection_class.call
         end
       end
     end

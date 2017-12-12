@@ -4,7 +4,7 @@ require "action_cable/engine"
 require "global_id"
 
 Bundler.require(*Rails.groups)
-require "anycable"
+require "anycable-rails"
 
 module Dummy
   class Application < Rails::Application

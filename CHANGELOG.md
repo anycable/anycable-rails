@@ -1,6 +1,14 @@
 # Change log
 
-## master
+## 0.5.1
+
+- Improve Rails integration. ([@palkan][])
+
+Log to STDOUT in development.
+Make order of initializers more deterministic.
+Show warning if AnyCable is loaded after application initialization.
+
+## 0.5.0
 
 - [#17](https://github.com/anycable/anycable-rails/issues/17) Refactor logging. ([@palkan][])
 

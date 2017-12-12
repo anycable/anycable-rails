@@ -51,6 +51,9 @@ gem 'anycable-rails'
 gem 'anycable-rails', group: :production
 ```
 
+**NOTE**: if you want to require `anycable-rails` _manually_ (i.e. with `require: false` in your `Gemfile`)
+make sure that it's loaded prior to `Rails.application.initialize!` call (see `config/environment.rb`).
+
 And then run:
 
 ```shell
@@ -115,7 +118,6 @@ You can also turn on access logging (`Started <request data>` / `Finished <reque
 production:
   access_logs_disabled: false
 ```
-
 
 ## ActionCable Compatibility
 

@@ -2,10 +2,5 @@
 # frozen_string_literal: true
 
 require ::File.expand_path('../../config/environment', __FILE__)
-require "anycable-rails"
-
-Anycable.connection_factory = ActionCable.server.config.connection_class.call
-
-Rails.application.eager_load!
 
 Anycable::Server.start

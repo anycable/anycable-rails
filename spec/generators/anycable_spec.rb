@@ -17,8 +17,6 @@ describe AnycableGenerator, type: :generator do
 
   it "creates script", :aggregate_failures do
     is_expected.to exist
-    is_expected.to contain("Anycable.connection_factory = ActionCable.server.config.connection_class.call")
-    is_expected.to contain("Rails.application.eager_load!")
     is_expected.to contain("Anycable::Server.start")
   end
 end
