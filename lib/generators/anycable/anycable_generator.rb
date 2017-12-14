@@ -9,4 +9,8 @@ class AnycableGenerator < Rails::Generators::Base # :nodoc:
     template "script", "bin/anycable"
     chmod "bin/anycable", 0o755
   end
+
+  def add_anycable_config
+    template 'anycable.yml', 'config/anycable.yml'
+  end
 end

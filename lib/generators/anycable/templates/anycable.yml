@@ -1,0 +1,44 @@
+#  grpс server settings, anycable grpc server will listen
+#  websocket server at given host:port, usually Anycable server runs locally to ws server
+#  MUST BE in sync with ws-server setting -rpc=0.0.0.0:50051
+#  rpc_host: "localhost:50051"
+
+# redis url
+# MUST BE in sync with ws-server setting -redis=redis://localhost:6379/5
+# REM: PubSub queue doesn't care the database part of URI, but if you using redis for storing
+# redis_url: "redis://localhost:6379/5"
+
+#  redis_sentinels:
+#    - { host: 'localhost', port: 26379 }
+#    - { host: 'redis-1-2', port: 26379 }
+#    - { host: 'redis-1-3', port: 26379 }
+
+# anycable use single pubsub queue, this is queue name
+# MUST BE in sync with -redis_channel=__anycable__
+# redis_channel: "__anycable__",
+
+# log_file: nil,
+# log_level: :info,
+# log_grpc: false,
+# debug: false # Shortcut to enable GRPC logging and debug level
+
+
+production:
+  rpc_host: "localhost:50051"
+  redis_url: "redis://localhost:6379/1"
+  redis_sentinels: []
+  redis_channel: "__anycable__"
+  log_file: nil
+  log_level: info
+  log_grpc: false
+  debug: false # Shortcut to enable GRPC logging and debug level
+
+development:
+  rpc_host: "localhost:50051"
+  redis_url: "redis://localhost:6379/2"
+  redis_sentinels: []
+  redis_channel: "__anycable__"
+  log_file: nil
+  log_level: info
+  log_grpc: false
+  debug: false # Shortcut to enable GRPC logging and debug level
