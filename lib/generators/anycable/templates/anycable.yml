@@ -1,0 +1,41 @@
+#  grpс server settings, anycable grpc server will listen
+#  websocket server at given host:port, usually Anycable server runs locally to ws server
+#  MUST BE in sync with ws-server setting -rpc=0.0.0.0:50051
+#  rpc_host: "localhost:50051"
+
+# redis url
+# MUST BE in sync with ws-server setting -redis=redis://localhost:6379/5
+# REM: Redis PubSub system doesn't use the database part of URI
+# redis_url: "redis://localhost:6379/5"
+
+#  redis_sentinels:
+#    - { host: 'localhost', port: 26379 }
+#    - { host: 'redis-1-2', port: 26379 }
+#    - { host: 'redis-1-3', port: 26379 }
+
+# anycable use single pubsub queue, this is queue name
+# MUST BE in sync with ws-server setting  -redis_channel=__anycable__
+# redis_channel: "__anycable__",
+
+#---------- ENVIRONMENT VARIABLES ----------
+# since Anycable config based on anyway_config (https://github.com/palkan/anyway_config), all Anycable settings,
+# can be set or overridden through corresponding Environment variable.
+# Ex: rpc_host is overridden by ANYCABLE_RPC_HOST, redis_url by ANYCABLE_REDIS_URL e.t.c Look in anyway_config for more details
+
+default: &default
+  rpc_host: "localhost:50051"
+  log_grpc: false
+  log_file: nil
+  debug: false # Shortcut to enable GRPC logging and debug level
+  log_level: info
+  redis_channel: "__anycable__" 
+  redis_sentinels: []
+
+
+production:
+  <<: *default
+  redis_url: "redis://localhost:6379/1"
+
+development:
+  <<: *default
+  redis_url: "redis://localhost:6379/2"
