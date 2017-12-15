@@ -1,5 +1,9 @@
 # Change log
 
+## Unreleased
+
+- config/anycable.yml added to rails generator
+
 ## 0.5.1
 
 - Improve Rails integration. ([@palkan][])
