@@ -28,16 +28,14 @@ default: &default
   log_file: nil
   debug: false # Shortcut to enable GRPC logging and debug level
   log_level: info
+  redis_channel: "__anycable__" 
+  redis_sentinels: []
 
 
 production:
   <<: *default
   redis_url: "redis://localhost:6379/1"
-  redis_sentinels: []
-  redis_channel: "__anycable__"
 
 development:
   <<: *default
   redis_url: "redis://localhost:6379/2"
-  redis_sentinels: []
-  redis_channel: "__anycable__"
