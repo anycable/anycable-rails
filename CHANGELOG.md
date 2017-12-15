@@ -1,8 +1,8 @@
 # Change log
 
-## Unreleased
+## 0.5.2
 
-- config/anycable.yml added to rails generator
+- Add config/anycable.yml to Rails generator. ([@alekseyl][])
 
 ## 0.5.1
 
@@ -43,3 +43,4 @@ Ignore tagged logger features ('cause we do not have _persistent_ logger).
 - Initial version. ([@palkan][])
 
 [@palkan]: https://github.com/palkan
+[@alekseyl]: https://github.com/alekseyl
