@@ -21,14 +21,6 @@ module ActionCable
       def stop_all_streams
         connection.socket.unsubscribe_from_all identifier
       end
-
-      def delegate_connection_identifiers
-        connection.identifiers.each do |identifier|
-          define_singleton_method(identifier) do
-            connection.fetch_identifier(identifier)
-          end
-        end
-      end
     end
   end
 end
