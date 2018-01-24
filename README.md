@@ -93,10 +93,18 @@ and also run AnyCable-compatible WebSocket server, e.g. [anycable-go](https://gi
 anycable-go -addr='localhost:3334'
 ```
 
-Don't forget to set cable url in your `config/environments/production.rb`:
+Don't forget to set cable url in your environment:
 
 ```ruby
+# For development it's likely the localhost
+
+# config/environments/development.rb
 config.action_cable.url = "ws://localhost:3334/cable"
+
+# For production it's likely to have a sub-domain and secure connection
+
+# config/environments/production.rb
+config.action_cable.url = "wss://ws.example.com/cable"
 ```
 
 ### Logging
