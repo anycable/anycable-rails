@@ -4,10 +4,12 @@ cache: bundler
 notifications:
   email: false
 
-rvm: 2.3.3
-
 matrix:
   include:
+    - rvm: 2.4.3
+      gemfile: Gemfile
+    - rvm: 2.5.0
+      gemfile: Gemfile
     - gemfile: gemfiles/rails5.gemfile
     - gemfile: gemfiles/railsmaster.gemfile
   allow_failures:
