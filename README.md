@@ -84,7 +84,7 @@ Anycable uses [anyway_config](https://github.com/palkan/anyway_config), thus it 
 Run Anycable RPC server:
 
 ```ruby
-./bin/anycable
+RAILS_ENV=production ./bin/anycable
 ```
 
 and also run AnyCable-compatible WebSocket server, e.g. [anycable-go](https://github.com/anycable/anycable-go):
