@@ -6,6 +6,7 @@ require "anycable/rails/actioncable/channel"
 
 module ActionCable
   module Connection
+    # rubocop:disable Metrics/ClassLength
     class Base # :nodoc:
       using Anycable::Refinements::Subscriptions
 
@@ -136,5 +137,6 @@ module ActionCable
         Anycable.config.access_logs_disabled == false
       end
     end
+    # rubocop:enable Metrics/ClassLength
   end
 end
