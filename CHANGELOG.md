@@ -1,5 +1,13 @@
 # Change log
 
+## master
+
+## 0.5.3
+
+- Fix return value of `Connection#handle_close`. ([@palkan][])
+
+  Should always be `true`, we do not expect a failure here.
+
 ## 0.5.2
 
 - Add config/anycable.yml to Rails generator. ([@alekseyl][])

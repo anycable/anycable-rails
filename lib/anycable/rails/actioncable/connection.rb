@@ -54,6 +54,7 @@ module ActionCable
 
         subscriptions.unsubscribe_from_all
         disconnect if respond_to?(:disconnect)
+        true
       end
 
       # rubocop:disable Metrics/MethodLength
