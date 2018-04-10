@@ -4,7 +4,7 @@ require 'spec_helper'
 require 'generators/anycable/anycable_generator'
 
 describe AnycableGenerator, type: :generator do
-  destination File.expand_path("../../../tmp", __FILE__)
+  destination File.expand_path('../../tmp', __dir__)
 
   let(:args) { [] }
 

@@ -11,7 +11,7 @@ if ENV['COVER']
   SimpleCov.start
 end
 
-require File.expand_path("../dummy/config/environment", __FILE__)
+require File.expand_path('dummy/config/environment', __dir__)
 require "ammeter/init"
 
 require "anycable-rails"
