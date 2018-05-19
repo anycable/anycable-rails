@@ -14,7 +14,7 @@ module ActionCable
 
       class << self
         def call(socket, **options)
-          new(socket, **options)
+          new(socket, options)
         end
 
         def identified_by(*identifiers)
