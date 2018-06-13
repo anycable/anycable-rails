@@ -2,6 +2,12 @@
 
 ## master
 
+## 0.5.4 (2018-06-13)
+
+- Fix duplicate logs in development. ([@palkan][])
+
+  Fixes https://github.com/anycable/anycable_demo/issues/5.
+
 ## 0.5.3
 
 - Fix return value of `Connection#handle_close`. ([@palkan][])
