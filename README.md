@@ -90,7 +90,7 @@ RAILS_ENV=production ./bin/anycable
 and also run AnyCable-compatible WebSocket server, e.g. [anycable-go](https://github.com/anycable/anycable-go):
 
 ```sh
-anycable-go -addr='localhost:3334'
+anycable-go --host=localhost --port=3334
 ```
 
 Don't forget to set cable url in your environment:
