@@ -91,6 +91,7 @@ module ActionCable
         identifiers.each_with_object({}) do |id, acc|
           obj = instance_variable_get("@#{id}")
           next unless obj
+
           acc[id] = obj.try(:to_gid_param) || obj
         end
       end
@@ -104,6 +105,7 @@ module ActionCable
         @cached_ids[name] ||= @cached_ids.fetch(name) do
           val = @ids[name.to_s]
           next val unless val.is_a?(String)
+
           GlobalID::Locator.locate(val) || val
         end
       end
