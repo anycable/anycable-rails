@@ -70,6 +70,12 @@ Metrics/BlockLength:
   Exclude:
     - 'spec/**/*.rb'
 
+Naming/FileName:
+  Exclude:
+    - 'README.md'
+    - 'CHANGELOG.md'
+    - 'lib/anycable-rails.rb'
+
 Rails/Date:
   Enabled: false
 
