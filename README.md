@@ -1,4 +1,4 @@
-[![GitPitch](https://gitpitch.com/assets/badge.svg)](https://gitpitch.com/anycable/anycable/master?grs=github) [![Gem Version](https://badge.fury.io/rb/anycable-rails.svg)](https://rubygems.org/gems/anycable-rails) [![Build Status](https://travis-ci.org/anycable/anycable-rails.svg?branch=master)](https://travis-ci.org/anycable/anycable-rails) [![Circle CI](https://circleci.com/gh/anycable/anycable-rails/tree/master.svg?style=svg)](https://circleci.com/gh/anycable/anycable-rails/tree/master)
+[![GitPitch](https://gitpitch.com/assets/badge.svg)](https://gitpitch.com/anycable/anycable/master?grs=github) [![Gem Version](https://badge.fury.io/rb/anycable-rails.svg)](https://rubygems.org/gems/anycable-rails) [![Build Status](https://travis-ci.org/anycable/anycable-rails.svg?branch=master)](https://travis-ci.org/anycable/anycable-rails)
 [![Gitter](https://img.shields.io/badge/gitter-join%20chat%20%E2%86%92-brightgreen.svg)](https://gitter.im/anycable/Lobby)
 
 # Anycable Rails
