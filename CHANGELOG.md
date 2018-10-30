@@ -2,6 +2,8 @@
 
 ## 0.6.0-dev
 
+- Add dynamic (`Anycable::CompatibilityError`) compatibility checks. ([@DmitryTsepelev][])
+
 - Added static (RuboCop) compatibility checks. ([@DmitryTsepelev][])
 
   See https://github.com/anycable/anycable-rails/issues/52
