@@ -16,6 +16,7 @@ require "ammeter/init"
 
 require "anycable-rails"
 require "anycable/rails/actioncable/connection"
+require 'anycable/rails/compatibility/cops'
 
 Anycable.connection_factory = ApplicationCable::Connection
 
