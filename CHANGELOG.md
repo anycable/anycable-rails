@@ -2,6 +2,10 @@
 
 ## master
 
+- Static compatibility checks. ([@DmitryTsepelev][])
+
+  Partially fixes https://github.com/anycable/anycable-rails/issues/52
+
 ## 0.5.4 (2018-06-13)
 
 - Fix duplicate logs in development. ([@palkan][])
@@ -58,3 +62,4 @@ Ignore tagged logger features ('cause we do not have _persistent_ logger).
 
 [@palkan]: https://github.com/palkan
 [@alekseyl]: https://github.com/alekseyl
+[@DmitryTsepelev]: https://github.com/DmitryTsepelev
