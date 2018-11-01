@@ -1,0 +1,3 @@
+Anycable:
+  Include:
+    - "**/channels/**/*.rb"
