@@ -7,13 +7,12 @@ require "ammeter/init"
 
 require "anycable-rails"
 require "anycable/rails/actioncable/connection"
-require "anycable/rails/compatibility/cops"
 
 Anycable.connection_factory = ApplicationCable::Connection
 
 Rails.application.eager_load!
 
-Dir["#{File.dirname(__FILE__)}/support/**/*.rb"].each { |f| require f }
+Dir["#{__dir__}/support/**/*.rb"].each { |f| require f }
 
 RSpec.configure do |config|
   config.after(:each) { ApplicationCable::Connection.events_log.clear }

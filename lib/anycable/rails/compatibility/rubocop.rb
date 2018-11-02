@@ -1,7 +1,17 @@
 # frozen_string_literal: true
 
+require "rubocop"
+require "pathname"
+
+require_relative "rubocop/cops/anycable/stream_callbacks"
+require_relative "rubocop/cops/anycable/remote_disconnect"
+require_relative "rubocop/cops/anycable/periodical_timers"
+require_relative "rubocop/cops/anycable/instance_vars"
+
 module RuboCop
-  module Anycable # :nodoc:
+  module AnyCable # :nodoc:
+    CONFIG_DEFAULT = Pathname.new(__dir__).join("rubocop", "config", "default.yml").freeze
+
     # Merge anycable config into default configuration
     # See https://github.com/backus/rubocop-rspec/blob/master/lib/rubocop/rspec/inject.rb
     def self.inject!
@@ -15,4 +25,4 @@ module RuboCop
   end
 end
 
-RuboCop::Anycable.inject!
+RuboCop::AnyCable.inject!

@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
-require "spec_helper"
+require "cops_spec_helper"
 
-RSpec.describe Anycable::Compatibility::Anycable::InstanceVars do
+describe RuboCop::Cop::AnyCable::InstanceVars do
   include_context "cop spec"
 
   it "registers offense for instance var declaration in #subscribed" do

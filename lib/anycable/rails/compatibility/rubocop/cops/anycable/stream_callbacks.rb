@@ -1,8 +1,10 @@
 # frozen_string_literal: true
 
-module Anycable
-  module Compatibility
-    module Anycable
+require "rubocop"
+
+module RuboCop
+  module Cop
+    module AnyCable
       # Checks for #stream_from calls with custom callbacks and coders.
       #
       # @example
