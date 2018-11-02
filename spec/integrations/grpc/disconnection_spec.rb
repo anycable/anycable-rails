@@ -1,15 +1,14 @@
 # frozen_string_literal: true
 
 require "spec_helper"
-require "bg_helper"
 
-describe "disconnection", :rpc_command do
+describe "disconnection", :with_grpc_server, :rpc_command do
   include_context "rpc stub"
 
-  let(:user) { User.new(name: 'disco', secret: '321') }
-  let(:url) { 'http://example.io/cable?token=123' }
+  let(:user) { User.new(name: "disco", secret: "321") }
+  let(:url) { "http://example.io/cable?token=123" }
   let(:subscriptions) { [] }
-  let(:headers) { { 'Cookie' => 'username=john;' } }
+  let(:headers) { { "Cookie" => "username=john;" } }
 
   let(:request) do
     Anycable::DisconnectRequest.new(
@@ -28,7 +27,7 @@ describe "disconnection", :rpc_command do
     it "invokes #disconnect method with correct data" do
       expect { subject }.to change { log.size }.by(1)
 
-      expect(log.last[:data]).to eq(name: 'disco', url: 'http://example.io/cable?token=123')
+      expect(log.last[:data]).to eq(name: "disco", url: "http://example.io/cable?token=123")
     end
 
     it "logs access message (closed)", log: :info do
@@ -51,7 +50,7 @@ describe "disconnection", :rpc_command do
 
   describe "Channel#unsubscribed" do
     let(:subscriptions) { [channel_id_json] }
-    let(:channel) { 'ChatChannel' }
+    let(:channel) { "ChatChannel" }
 
     it "invokes #unsubscribed for channel" do
       expect { subject }
@@ -59,7 +58,7 @@ describe "disconnection", :rpc_command do
         .by(1)
 
       channel_logs = log.select { |entry| entry[:source] == channel_id_json }
-      expect(channel_logs.last[:data]).to eq(user: 'disco', type: 'unsubscribed')
+      expect(channel_logs.last[:data]).to eq(user: "disco", type: "unsubscribed")
     end
 
     context "with multiple channels" do
@@ -74,10 +73,10 @@ describe "disconnection", :rpc_command do
           .by(1)
 
         channel_logs = log.select { |entry| entry[:source] == channel_id_json }
-        expect(channel_logs.last[:data]).to eq(user: 'disco', type: 'unsubscribed')
+        expect(channel_logs.last[:data]).to eq(user: "disco", type: "unsubscribed")
 
         channel2_logs = log.select { |entry| entry[:source] == channel_id2_json }
-        expect(channel2_logs.last[:data]).to eq(user: 'disco', type: 'unsubscribed')
+        expect(channel2_logs.last[:data]).to eq(user: "disco", type: "unsubscribed")
       end
     end
   end
