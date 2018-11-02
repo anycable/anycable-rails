@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require_relative "boot"
 require "action_controller/railtie"
 require "action_cable/engine"
@@ -21,4 +23,3 @@ module Dummy
     config.eager_load = false
   end
 end
-

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module ApplicationCable
   class Connection < ActionCable::Connection::Base
     class << self
@@ -16,17 +18,18 @@ module ApplicationCable
     def connect
       self.current_user = verify_user
       self.url = request.url if current_user
-      logger.add_tags 'ActionCable', current_user.name
+      logger.add_tags "ActionCable", current_user.name
     end
 
     def disconnect
-      self.class.log_event('disconnect', name: current_user.name, url: url)
+      self.class.log_event("disconnect", name: current_user.name, url: url)
     end
 
     private
 
     def verify_user
       return reject_unauthorized_connection unless cookies[:username].present?
+
       User.new(name: cookies[:username], secret: request.params[:token])
     end
   end

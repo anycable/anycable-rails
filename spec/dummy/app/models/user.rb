@@ -1,4 +1,6 @@
-require 'active_model'
+# frozen_string_literal: true
+
+require "active_model"
 
 class User
   include ActiveModel::Model

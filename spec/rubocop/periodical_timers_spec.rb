@@ -5,7 +5,7 @@ require "spec_helper"
 RSpec.describe Anycable::Compatibility::Anycable::PeriodicalTimers do
   include_context "cop spec"
 
-  it 'registers offense for #periodically call' do
+  it "registers offense for #periodically call" do
     inspect_source(<<-RUBY.strip_indent)
       class MyChannel < ApplicationCable::Channel
         periodically(:do_something, every: 2.seconds)
@@ -16,7 +16,7 @@ RSpec.describe Anycable::Compatibility::Anycable::PeriodicalTimers do
     expect(cop.messages.first).to eq("Periodical Timers are not supported in AnyCable")
   end
 
-  it 'registers offense for #periodically call explicit self' do
+  it "registers offense for #periodically call explicit self" do
     inspect_source(<<-RUBY.strip_indent)
       class MyChannel < ApplicationCable::Channel
         self.periodically(:do_something, every: 2.seconds)

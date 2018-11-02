@@ -1,6 +1,8 @@
+# frozen_string_literal: true
+
 class TestChannel < ApplicationCable::Channel
   def subscribed
-    if current_user.secret != '123'
+    if current_user.secret != "123"
       reject
     else
       stream_from "test"
@@ -13,7 +15,7 @@ class TestChannel < ApplicationCable::Channel
   end
 
   def add(data)
-    transmit result: (data['a'].to_i + data['b'].to_i)            
+    transmit result: (data["a"].to_i + data["b"].to_i)
   end
 
   def fail

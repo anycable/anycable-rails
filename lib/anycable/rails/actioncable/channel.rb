@@ -15,7 +15,7 @@ module ActionCable
 
       def stream_from(broadcasting, callback = nil, coder: nil)
         if callback.present? || coder.present? || block_given?
-          raise ArgumentError, 'Custom stream callbacks are not supported in AnyCable!'
+          raise ArgumentError, "Custom stream callbacks are not supported in AnyCable!"
         end
 
         connection.socket.subscribe identifier, broadcasting

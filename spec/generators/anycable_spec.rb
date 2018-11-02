@@ -1,10 +1,10 @@
 # frozen_string_literal: true
 
-require 'spec_helper'
-require 'generators/anycable/anycable_generator'
+require "spec_helper"
+require "generators/anycable/anycable_generator"
 
 describe AnycableGenerator, type: :generator do
-  destination File.expand_path('../../tmp', __dir__)
+  destination File.expand_path("../../tmp", __dir__)
 
   let(:args) { [] }
 
@@ -13,7 +13,7 @@ describe AnycableGenerator, type: :generator do
     run_generator(args)
   end
 
-  subject { file('bin/anycable') }
+  subject { file("bin/anycable") }
 
   it "creates script", :aggregate_failures do
     is_expected.to exist

@@ -4,19 +4,19 @@ ENV["RAILS_ENV"] = "test"
 
 require "pry-byebug"
 
-if ENV['COVER']
-  require 'simplecov'
-  SimpleCov.root File.join(File.dirname(__FILE__), '..')
+if ENV["COVER"]
+  require "simplecov"
+  SimpleCov.root File.join(File.dirname(__FILE__), "..")
   SimpleCov.add_filter "/spec/"
   SimpleCov.start
 end
 
-require File.expand_path('dummy/config/environment', __dir__)
+require File.expand_path("dummy/config/environment", __dir__)
 require "ammeter/init"
 
 require "anycable-rails"
 require "anycable/rails/actioncable/connection"
-require 'anycable/rails/compatibility/cops'
+require "anycable/rails/compatibility/cops"
 
 Anycable.connection_factory = ApplicationCable::Connection
 
