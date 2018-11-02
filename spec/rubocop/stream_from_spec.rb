@@ -2,7 +2,7 @@
 
 require "cops_spec_helper"
 
-describe RuboCop::Cop::AnyCable::StreamCallbacks do
+describe RuboCop::Cop::AnyCable::StreamFrom do
   include_context "cop spec"
 
   it "registers offense for #stream_from with block" do

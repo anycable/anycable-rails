@@ -5,7 +5,7 @@ require "rubocop"
 module RuboCop
   module Cop
     module AnyCable
-      # Checks for remote disconnect usage inside channels.
+      # Checks for periodical timers usage.
       #
       # @example
       #   # bad

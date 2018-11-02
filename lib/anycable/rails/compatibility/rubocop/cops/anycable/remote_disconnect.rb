@@ -5,12 +5,12 @@ require "rubocop"
 module RuboCop
   module Cop
     module AnyCable
-      # Checks for remote disconnect usage inside channels.
+      # Checks for remote disconnect usage.
       #
       # @example
       #   # bad
-      #   class MyChannel < ApplicationCable::Channel
-      #     def subscribed
+      #   class MyServive
+      #     def call(user)
       #       ActionCable.server.remote_connections.where(current_user: user).disconnect
       #     end
       #   end

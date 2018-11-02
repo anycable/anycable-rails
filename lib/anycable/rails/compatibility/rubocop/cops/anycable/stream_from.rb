@@ -5,7 +5,7 @@ require "rubocop"
 module RuboCop
   module Cop
     module AnyCable
-      # Checks for #stream_from calls with custom callbacks and coders.
+      # Checks for #stream_from calls with custom callbacks or coders.
       #
       # @example
       #   # bad
@@ -21,15 +21,20 @@ module RuboCop
       #     end
       #   end
       #
-      #   end
-      #
       #   class MyChannel < ApplicationCable::Channel
       #     def follow
       #       stream_from("all", coder: SomeCoder)
       #     end
       #   end
       #
-      class StreamCallbacks < RuboCop::Cop::Cop
+      #  # good
+      #   class MyChannel < ApplicationCable::Channel
+      #     def follow
+      #       stream_from "all"
+      #     end
+      #   end
+      #
+      class StreamFrom < RuboCop::Cop::Cop
         def_node_matcher :stream_from_with_block?, <<-PATTERN
           (block (send _ :stream_from ...) ...)
         PATTERN

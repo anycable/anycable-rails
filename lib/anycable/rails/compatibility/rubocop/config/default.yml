@@ -2,7 +2,7 @@ AnyCable/InstanceVars:
   Include:
     - "**/channels/**/*.rb"
 
-AnyCable/StreamCallbacks:
+AnyCable/StreamFrom:
   Include:
     - "**/channels/**/*.rb"
 

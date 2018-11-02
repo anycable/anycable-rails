@@ -22,7 +22,7 @@ describe "Rubocop default config" do
     expect(res).to include("AnyCable/InstanceVars")
     expect(res).to include("@another_var")
     expect(res).to include("@bad_var")
-    expect(res).to include("AnyCable/StreamCallbacks")
+    expect(res).to include("AnyCable/StreamFrom")
     expect(res).to include("AnyCable/PeriodicalTimers")
   end
 
