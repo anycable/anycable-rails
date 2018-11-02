@@ -25,27 +25,20 @@ module Anycable
       class InstanceVars < RuboCop::Cop::Cop
         MSG = "Subscription instance variables are not supported in AnyCable"
 
-        def_node_matcher :subscribed_definitions, <<-PATTERN
-          (def :subscribed args $...)
-        PATTERN
-
-        def on_def(node)
-          definitions = subscribed_definitions(node)
-          return if definitions.nil?
-
-          find_nested_ivars(definitions) do |nested_ivar|
+        def on_class(node)
+          find_nested_ivars(node) do |nested_ivar|
             add_offense(nested_ivar)
           end
         end
 
         private
 
-        def find_nested_ivars(nodes, &block)
-          nodes.each do |node|
-            if node.begin_type? || node.block_type?
-              find_nested_ivars(node.child_nodes, &block)
-            elsif node.ivasgn_type? || node.ivar_type?
-              yield(node)
+        def find_nested_ivars(node, &block)
+          node.each_child_node do |child|
+            if child.begin_type? || child.block_type? || child.def_type?
+              find_nested_ivars(child, &block)
+            elsif child.ivasgn_type? || child.ivar_type?
+              yield(child)
             end
           end
         end

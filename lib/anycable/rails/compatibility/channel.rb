@@ -26,6 +26,12 @@ module Anycable
           super
         end
 
+        def perform_action(args)
+          vars_before_action = instance_variables
+          super(args)
+          raise_subscription_variables_exception if instance_variables != vars_before_action
+        end
+
         private
 
         def save_instance_variables
@@ -35,6 +41,10 @@ module Anycable
         def check_instance_variables
           return if instance_variables == remove_instance_variable(:@vars_before_subscribe)
 
+          raise_subscription_variables_exception
+        end
+
+        def raise_subscription_variables_exception
           raise Anycable::CompatibilityError,
                 "Subscription instance variables are not supported in AnyCable!"
         end

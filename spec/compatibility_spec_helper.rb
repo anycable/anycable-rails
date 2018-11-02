@@ -16,10 +16,6 @@ require "ammeter/init"
 
 require "anycable/rails/compatibility"
 
-Rails.application.eager_load!
-
-Dir["#{File.dirname(__FILE__)}/support/**/*.rb"].each { |f| require f }
-
 RSpec.configure do |config|
   config.mock_with :rspec do |mocks|
     mocks.verify_partial_doubles = true
