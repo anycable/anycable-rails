@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
-require "spec_helper"
+require "cops_spec_helper"
 
-RSpec.describe Anycable::Compatibility::Anycable::RemoteDisconnect do
+describe RuboCop::Cop::AnyCable::RemoteDisconnect do
   include_context "cop spec"
 
   it "registers offense for remote disconnection attempt" do

@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
-require "spec_helper"
+require "cops_spec_helper"
 
-RSpec.describe Anycable::Compatibility::Anycable::StreamCallbacks do
+describe RuboCop::Cop::AnyCable::StreamCallbacks do
   include_context "cop spec"
 
   it "registers offense for #stream_from with block" do

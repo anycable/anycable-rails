@@ -1,0 +1,12 @@
+AnyCable/InstanceVars:
+  Include:
+    - "**/channels/**/*.rb"
+
+AnyCable/StreamCallbacks:
+  Include:
+    - "**/channels/**/*.rb"
+
+AnyCable/PeriodicalTimers:
+  Include:
+    - "**/channels/**/*.rb"
+    

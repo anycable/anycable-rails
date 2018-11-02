@@ -1,8 +1,10 @@
 # frozen_string_literal: true
 
-module Anycable
-  module Compatibility
-    module Anycable
+require "rubocop"
+
+module RuboCop
+  module Cop
+    module AnyCable
       # Checks for instance variable usage inside subscriptions.
       #
       # @example
@@ -17,7 +19,7 @@ module Anycable
       #   # good
       #   class MyChannel < ApplicationCable::Channel
       #     def subscribed
-      #       post = Post.first
+      #       post = Post.find(params[:id])
       #       stream_from post
       #     end
       #   end
