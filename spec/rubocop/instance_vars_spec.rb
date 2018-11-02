@@ -5,7 +5,7 @@ require "spec_helper"
 RSpec.describe Anycable::Compatibility::Anycable::InstanceVars do
   include_context "cop spec"
 
-  it 'registers offense for instance var declaration in #subscribed' do
+  it "registers offense for instance var declaration in #subscribed" do
     inspect_source(<<-RUBY.strip_indent)
       class MyChannel < ApplicationCable::Channel
         def subscribed
@@ -18,7 +18,7 @@ RSpec.describe Anycable::Compatibility::Anycable::InstanceVars do
     expect(cop.messages.first).to eq("Channel instance variables are not supported in AnyCable")
   end
 
-  it 'registers offense for instance var definition inside block in #subscribed' do
+  it "registers offense for instance var definition inside block in #subscribed" do
     inspect_source(<<-RUBY.strip_indent)
       class MyChannel < ApplicationCable::Channel
         def subscribed
@@ -31,7 +31,7 @@ RSpec.describe Anycable::Compatibility::Anycable::InstanceVars do
     expect(cop.messages.first).to eq("Channel instance variables are not supported in AnyCable")
   end
 
-  it 'registers offense for instance var definitions inside action' do
+  it "registers offense for instance var definitions inside action" do
     inspect_source(<<-RUBY.strip_indent)
       class MyChannel < ApplicationCable::Channel
         def follow
