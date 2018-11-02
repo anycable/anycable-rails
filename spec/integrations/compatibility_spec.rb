@@ -1,6 +1,10 @@
 # frozen_string_literal: true
 
-require "compatibility_spec_helper"
+require "base_spec_helper"
+
+require File.expand_path("spec/dummy/config/environment", PROJECT_ROOT)
+
+require "anycable/rails/compatibility"
 
 describe "Compatibility" do
   describe "Channel" do
@@ -9,7 +13,7 @@ describe "Compatibility" do
     end
 
     let(:socket) { instance_double("socket", subscribe: nil) }
-    let(:connection) { instance_double("connection", identifiers: [], socket: socket) }
+    let(:connection) { instance_double("connection", identifiers: [], socket: socket, logger: Logger.new(IO::NULL)) }
 
     subject { CompatibilityChannel.new(connection, "channel_id") }
 
@@ -63,6 +67,19 @@ describe "Compatibility" do
         end
 
         expect { subject.handle_subscribe }.to raise_exception(
+          Anycable::CompatibilityError,
+          "Channel instance variables are not supported in AnyCable!"
+        )
+      end
+    end
+
+    describe "Channel#perform_action" do
+      it "throws CompatibilityError when new instance variables were defined" do
+        allow_any_instance_of(CompatibilityChannel).to receive(:follow) do |channel|
+          channel.instance_variable_set(:@test, "test")
+        end
+
+        expect { subject.perform_action("action" => "follow") }.to raise_exception(
           Anycable::CompatibilityError,
           "Channel instance variables are not supported in AnyCable!"
         )
