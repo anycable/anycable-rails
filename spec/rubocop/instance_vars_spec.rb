@@ -5,7 +5,7 @@ require "spec_helper"
 RSpec.describe Anycable::Compatibility::Anycable::InstanceVars do
   include_context "cop spec"
 
-  it 'registers offense for instance vars in the middle of #subscribed' do
+  it "registers offense for instance vars in the middle of #subscribed" do
     inspect_source(<<-RUBY.strip_indent)
       class MyChannel < ApplicationCable::Channel
         def subscribed
@@ -20,7 +20,7 @@ RSpec.describe Anycable::Compatibility::Anycable::InstanceVars do
     expect(cop.messages.first).to eq("Subscription instance variables are not supported in AnyCable")
   end
 
-  it 'registers offense for instance vars in the beginning of #subscribed' do
+  it "registers offense for instance vars in the beginning of #subscribed" do
     inspect_source(<<-RUBY.strip_indent)
       class MyChannel < ApplicationCable::Channel
         def subscribed
@@ -34,7 +34,7 @@ RSpec.describe Anycable::Compatibility::Anycable::InstanceVars do
     expect(cop.messages.first).to eq("Subscription instance variables are not supported in AnyCable")
   end
 
-  it 'registers offense for instance var definitions in #subscribed' do
+  it "registers offense for instance var definitions in #subscribed" do
     inspect_source(<<-RUBY.strip_indent)
       class MyChannel < ApplicationCable::Channel
         def subscribed
@@ -47,7 +47,7 @@ RSpec.describe Anycable::Compatibility::Anycable::InstanceVars do
     expect(cop.messages.first).to eq("Subscription instance variables are not supported in AnyCable")
   end
 
-  it 'registers offense for instance var definitions inside block in #subscribed' do
+  it "registers offense for instance var definitions inside block in #subscribed" do
     inspect_source(<<-RUBY.strip_indent)
       class MyChannel < ApplicationCable::Channel
         def subscribed

@@ -5,7 +5,7 @@ require "spec_helper"
 RSpec.describe Anycable::Compatibility::Anycable::StreamCallbacks do
   include_context "cop spec"
 
-  it 'registers offense for #stream_from with block' do
+  it "registers offense for #stream_from with block" do
     inspect_source(<<-RUBY.strip_indent)
       class MyChannel < ApplicationCable::Channel
         def follow
@@ -18,7 +18,7 @@ RSpec.describe Anycable::Compatibility::Anycable::StreamCallbacks do
     expect(cop.messages.first).to eq("Custom stream callbacks are not supported in AnyCable")
   end
 
-  it 'registers offense for #stream_from with callback' do
+  it "registers offense for #stream_from with callback" do
     inspect_source(<<-RUBY.strip_indent)
       class MyChannel < ApplicationCable::Channel
         def follow
@@ -31,7 +31,7 @@ RSpec.describe Anycable::Compatibility::Anycable::StreamCallbacks do
     expect(cop.messages.first).to eq("Custom stream callbacks are not supported in AnyCable")
   end
 
-  it 'registers offense for #stream_from with not JSON coder' do
+  it "registers offense for #stream_from with not JSON coder" do
     inspect_source(<<-RUBY.strip_indent)
       class MyChannel < ApplicationCable::Channel
         def follow
@@ -44,7 +44,7 @@ RSpec.describe Anycable::Compatibility::Anycable::StreamCallbacks do
     expect(cop.messages.first).to eq("Custom coders are not supported in AnyCable")
   end
 
-  it 'does not register offense for #stream_from with JSON coder' do
+  it "does not register offense for #stream_from with JSON coder" do
     inspect_source(<<-RUBY.strip_indent)
       class MyChannel < ApplicationCable::Channel
         def follow

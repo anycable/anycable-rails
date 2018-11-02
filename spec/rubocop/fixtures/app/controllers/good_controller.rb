@@ -2,6 +2,6 @@
 
 class GoodController < ActionController::Base
   def subscribed
-    @good_var = 'good'
+    @good_var = "good"
   end
 end

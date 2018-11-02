@@ -6,7 +6,6 @@ require "anycable/rails/actioncable/channel"
 
 module ActionCable
   module Connection
-    # rubocop:disable Metrics/ClassLength
     class Base # :nodoc:
       using Anycable::Refinements::Subscriptions
 
@@ -27,7 +26,7 @@ module ActionCable
         end
       end
 
-      def initialize(socket, identifiers: '{}', subscriptions: [])
+      def initialize(socket, identifiers: "{}", subscriptions: [])
         @ids = ActiveSupport::JSON.decode(identifiers)
 
         @cached_ids = {}
@@ -46,7 +45,7 @@ module ActionCable
         connect if respond_to?(:connect)
         send_welcome_message
       rescue ActionCable::Connection::Authorization::UnauthorizedError
-        logger.info finished_request_message('Rejected') if access_logs?
+        logger.info finished_request_message("Rejected") if access_logs?
         close
       end
 
@@ -117,28 +116,22 @@ module ActionCable
       private
 
       def started_request_message
-        'Started "%s"%s for %s at %s' % [
-          request.filtered_path,
-          " [Anycable]",
-          request.ip,
-          Time.now.to_s
-        ]
+        format(
+          'Started "%s"%s for %s at %s',
+          request.filtered_path, " [Anycable]", request.ip, Time.now.to_s
+        )
       end
 
       def finished_request_message(reason = "Closed")
-        'Finished "%s"%s for %s at %s (%s)' % [
-          request.filtered_path,
-          " [Anycable]",
-          request.ip,
-          Time.now.to_s,
-          reason
-        ]
+        format(
+          'Finished "%s"%s for %s at %s (%s)',
+          request.filtered_path, " [Anycable]", request.ip, Time.now.to_s, reason
+        )
       end
 
       def access_logs?
         Anycable.config.access_logs_disabled == false
       end
     end
-    # rubocop:enable Metrics/ClassLength
   end
 end

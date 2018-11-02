@@ -5,7 +5,7 @@ require "spec_helper"
 RSpec.describe Anycable::Compatibility::Anycable::RemoteDisconnect do
   include_context "cop spec"
 
-  it 'registers offense for remote disconnection attempt' do
+  it "registers offense for remote disconnection attempt" do
     inspect_source(<<-RUBY.strip_indent)
       class MyChannel < ApplicationCable::Channel
         def subscribed

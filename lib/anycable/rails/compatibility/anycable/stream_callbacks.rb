@@ -40,7 +40,7 @@ module Anycable
           (send _ :stream_from str_type? $...)
         PATTERN
 
-        def_node_matcher :coder_symbol?, '(pair (sym :coder) ...)'
+        def_node_matcher :coder_symbol?, "(pair (sym :coder) ...)"
 
         def_node_matcher :active_support_json?, <<-PATTERN
           (pair _ (const (const nil? :ActiveSupport) :JSON))

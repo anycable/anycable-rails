@@ -1,10 +1,10 @@
 # frozen_string_literal: true
 
 shared_context "rpc command", rpc_command: true do
-  let(:user) { User.new(name: 'john', secret: '123') }
-  let(:url) { '' }
-  let(:command) { '' }
-  let(:channel) { '' }
+  let(:user) { User.new(name: "john", secret: "123") }
+  let(:url) { "" }
+  let(:command) { "" }
+  let(:channel) { "" }
   let(:conn_id) { { current_user: user.to_gid_param, url: url } }
   let(:data) { {} }
 
