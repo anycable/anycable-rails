@@ -70,7 +70,7 @@ describe Anycable::Rails::Compatibility::Channel do
 
       expect { subject.handle_subscribe }.to raise_exception(
         Anycable::CompatibilityError,
-        "Subscription instance variables are not supported in AnyCable!"
+        "Channel instance variables are not supported in AnyCable!"
       )
     end
 
@@ -81,7 +81,7 @@ describe Anycable::Rails::Compatibility::Channel do
 
       expect { subject.perform_action('action' => 'follow') }.to raise_exception(
         Anycable::CompatibilityError,
-        "Subscription instance variables are not supported in AnyCable!"
+        "Channel instance variables are not supported in AnyCable!"
       )
     end
   end
