@@ -46,7 +46,7 @@ module Anycable
 
         def raise_subscription_variables_exception
           raise Anycable::CompatibilityError,
-                "Subscription instance variables are not supported in AnyCable!"
+                "Channel instance variables are not supported in AnyCable!"
         end
       end
     end

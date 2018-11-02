@@ -23,7 +23,7 @@ module Anycable
       #   end
       #
       class InstanceVars < RuboCop::Cop::Cop
-        MSG = "Subscription instance variables are not supported in AnyCable"
+        MSG = "Channel instance variables are not supported in AnyCable"
 
         def on_class(node)
           find_nested_ivars(node) do |nested_ivar|
