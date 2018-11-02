@@ -1,10 +1,10 @@
 # Change log
 
-## master
+## 0.6.0-dev
 
-- Static compatibility checks. ([@DmitryTsepelev][])
+- Added static (RuboCop) compatibility checks. ([@DmitryTsepelev][])
 
-  Partially fixes https://github.com/anycable/anycable-rails/issues/52
+  See https://github.com/anycable/anycable-rails/issues/52
 
 ## 0.5.4 (2018-06-13)
 
