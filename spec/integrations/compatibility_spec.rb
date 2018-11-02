@@ -13,7 +13,7 @@ describe "Compatibility" do
     end
 
     let(:socket) { instance_double("socket", subscribe: nil) }
-    let(:connection) { instance_double("connection", identifiers: [], socket: socket, logger: Logger.new(IO::NULL)) }
+    let(:connection) { instance_double("connection", identifiers: [], transmit: nil, socket: socket, logger: Logger.new(IO::NULL)) }
 
     subject { CompatibilityChannel.new(connection, "channel_id") }
 
@@ -33,7 +33,7 @@ describe "Compatibility" do
 
         expect { subject.follow }.to raise_exception(
           Anycable::CompatibilityError,
-          "Custom coders are not supported in AnyCable!"
+          "Custom coders are not supported by AnyCable"
         )
       end
 
@@ -44,7 +44,7 @@ describe "Compatibility" do
 
         expect { subject.follow }.to raise_exception(
           Anycable::CompatibilityError,
-          "Custom stream callbacks are not supported in AnyCable!"
+          "Custom stream callbacks are not supported by AnyCable"
         )
       end
 
@@ -55,7 +55,7 @@ describe "Compatibility" do
 
         expect { subject.follow }.to raise_exception(
           Anycable::CompatibilityError,
-          "Custom stream callbacks are not supported in AnyCable!"
+          "Custom stream callbacks are not supported by AnyCable"
         )
       end
     end
@@ -68,7 +68,7 @@ describe "Compatibility" do
 
         expect { subject.handle_subscribe }.to raise_exception(
           Anycable::CompatibilityError,
-          "Channel instance variables are not supported in AnyCable!"
+          "Channel instance variables are not supported by AnyCable, but were set: @test"
         )
       end
     end
@@ -81,7 +81,7 @@ describe "Compatibility" do
 
         expect { subject.perform_action("action" => "follow") }.to raise_exception(
           Anycable::CompatibilityError,
-          "Channel instance variables are not supported in AnyCable!"
+          "Channel instance variables are not supported by AnyCable, but were set: @test"
         )
       end
     end
@@ -92,7 +92,7 @@ describe "Compatibility" do
           CompatibilityChannel.periodically(:do_something, every: 2.seconds)
         end.to raise_exception(
           Anycable::CompatibilityError,
-          "Periodical Timers are not supported in AnyCable!"
+          "Periodical timers are not supported by AnyCable"
         )
       end
     end
@@ -107,7 +107,7 @@ describe "Compatibility" do
     it "throws CompatibilityError when called" do
       expect { subject.disconnect }.to raise_exception(
         Anycable::CompatibilityError,
-        "Disconnecting remote clients is not supported in AnyCable!"
+        "Disconnecting remote clients is not supported by AnyCable yet"
       )
     end
   end
