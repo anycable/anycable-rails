@@ -1,9 +1,8 @@
 # frozen_string_literal: true
 
 require "spec_helper"
-require "bg_helper"
 
-describe "client connection" do
+describe "client connection", :with_grpc_server do
   include_context "rpc stub"
 
   subject { service.connect(request) }
@@ -17,14 +16,14 @@ describe "client connection" do
   end
 
   context "with cookies and path info" do
-    let(:cookies) { 'username=john' }
+    let(:cookies) { "username=john" }
 
     let(:request) do
       Anycable::ConnectionRequest.new(
         headers: {
-          'Cookie' => cookies
+          "Cookie" => cookies
         },
-        path: 'http://example.io/cable?token=123'
+        path: "http://example.io/cable?token=123"
       )
     end
 
@@ -32,10 +31,10 @@ describe "client connection" do
       expect(subject.status).to eq :SUCCESS
       identifiers = JSON.parse(subject.identifiers)
       expect(identifiers).to include(
-        'current_user',
-        'url' => 'http://example.io/cable?token=123'
+        "current_user",
+        "url" => "http://example.io/cable?token=123"
       )
-      expect(subject.transmissions.first).to eq JSON.dump('type' => 'welcome')
+      expect(subject.transmissions.first).to eq JSON.dump("type" => "welcome")
     end
 
     it "logs access message (started)", log: :info do
@@ -56,7 +55,7 @@ describe "client connection" do
     end
 
     context "auth failure" do
-      let(:cookies) { 'user=john' }
+      let(:cookies) { "user=john" }
 
       it "logs access message (started)", log: :info do
         expect { subject }.to output(/Started \"\/cable\?token=123\" \[Anycable\]/).to_stdout_from_any_process
