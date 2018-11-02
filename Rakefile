@@ -8,13 +8,14 @@ task(:spec).clear
 
 desc "Run specs"
 RSpec::Core::RakeTask.new("spec") do |task|
-  task.exclude_pattern = "spec/**/compatibility_spec.rb"
+  task.exclude_pattern = "spec/**/compatibility/**/*.rb"
   task.verbose = false
 end
 
 desc "Run compatibility specs"
 RSpec::Core::RakeTask.new("spec:compatibility") do |task|
-  task.pattern = "spec/**/compatibility_spec.rb"
+  task.pattern = "spec/**/compatibility/**/*.rb"
+  task.exclude_pattern = "spec/**/compatibility/**/fixtures/**/*.rb"
   task.verbose = false
 end
 

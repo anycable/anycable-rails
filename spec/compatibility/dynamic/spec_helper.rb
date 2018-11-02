@@ -11,12 +11,12 @@ if ENV['COVER']
   SimpleCov.start
 end
 
-require File.expand_path('dummy/config/environment', __dir__)
+require File.expand_path('../../dummy/config/environment', __dir__)
 require "ammeter/init"
 
-require "anycable/rails/compatibility"
-
 Rails.application.eager_load!
+
+require "anycable/rails/compatibility"
 
 Dir["#{File.dirname(__FILE__)}/support/**/*.rb"].each { |f| require f }
 
