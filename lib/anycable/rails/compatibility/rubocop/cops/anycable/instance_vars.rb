@@ -11,7 +11,7 @@ module RuboCop
       #   # bad
       #   class MyChannel < ApplicationCable::Channel
       #     def subscribed
-      #       @post = Post.first
+      #       @post = Post.find(params[:id])
       #       stream_from @post
       #     end
       #   end
