@@ -13,3 +13,12 @@ module Anycable
     end
   end
 end
+
+if ENV["RAILS_ENV"] == 'production'
+  puts("\n**************************************************")
+  puts(
+    "⛔️  WARNING: AnyCable compatibilty checks are enabled in the production environment!\n" \
+    "`Anycable::CompatibilityError` can be thrown when not supported features are used."
+  )
+  puts("**************************************************\n\n")
+end
