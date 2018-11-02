@@ -3,13 +3,13 @@
 module Anycable
   class CompatibilityError < StandardError; end
 
-  module Compatibility # :nodoc:
-    require "anycable/rails/compatibility/channel"
-    require "anycable/rails/compatibility/remote_connection"
+  module Rails
+    module Compatibility # :nodoc:
+      require_relative "compatibility/ext/channel"
+      require_relative "compatibility/ext/remote_connection"
 
-    ActionCable::Channel::Base.prepend(Rails::Compatibility::Channel)
-    ActionCable::RemoteConnections::RemoteConnection.prepend(
-      Rails::Compatibility::RemoteConnection
-    )
+      ActionCable::Channel::Base.prepend(Channel)
+      ActionCable::RemoteConnections::RemoteConnection.prepend(RemoteConnection)
+    end
   end
 end
