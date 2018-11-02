@@ -11,10 +11,7 @@ if ENV["COVER"]
   SimpleCov.start
 end
 
-require File.expand_path("dummy/config/environment", __dir__)
-require "ammeter/init"
-
-require "anycable/rails/compatibility"
+PROJECT_ROOT = File.expand_path("../", __dir__)
 
 RSpec.configure do |config|
   config.mock_with :rspec do |mocks|
