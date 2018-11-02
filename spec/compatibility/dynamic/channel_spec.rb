@@ -8,47 +8,54 @@ describe Anycable::Rails::Compatibility::Channel do
   end
 
   let(:socket) { instance_double('socket', subscribe: nil) }
-  let(:connection) { instance_double('connection', identifiers: [], socket: socket) }
+  let(:connection) do
+    instance_double(
+      'connection',
+      identifiers: [],
+      socket: socket,
+      logger: Logger.new(IO::NULL)
+    )
+  end
 
   subject { CompatibilityChannel.new(connection, 'channel_id') }
 
   describe "#stream_from" do
     it "not throws exception when JSON coder is passed" do
-      allow_any_instance_of(CompatibilityChannel).to receive(:follow) do |channel|
-        channel.stream_from("all", coder: ActiveSupport::JSON)
+      allow(subject).to receive(:follow) do
+        subject.stream_from("all", coder: ActiveSupport::JSON)
       end
 
-      expect { subject.follow }.not_to raise_exception
+      expect { subject.perform_action('action' => 'follow') }.not_to raise_exception
     end
 
     it "throws exception when not JSON coder is passed" do
-      allow_any_instance_of(CompatibilityChannel).to receive(:follow) do |channel|
-        channel.stream_from("all", coder: :some_coder)
+      allow(subject).to receive(:follow) do
+        subject.stream_from("all", coder: :some_coder)
       end
 
-      expect { subject.follow }.to raise_exception(
+      expect { subject.perform_action('action' => 'follow') }.to raise_exception(
         Anycable::CompatibilityError,
         "Custom coders are not supported in AnyCable!"
       )
     end
 
     it "throws exception when callback is passed" do
-      allow_any_instance_of(CompatibilityChannel).to receive(:follow) do |channel|
-        channel.stream_from("all", -> {})
+      allow(subject).to receive(:follow) do
+        subject.stream_from("all", -> {})
       end
 
-      expect { subject.follow }.to raise_exception(
+      expect { subject.perform_action('action' => 'follow') }.to raise_exception(
         Anycable::CompatibilityError,
         "Custom stream callbacks are not supported in AnyCable!"
       )
     end
 
     it "throws exception when block is passed" do
-      allow_any_instance_of(CompatibilityChannel).to receive(:follow) do |channel|
-        channel.stream_from("all") {}
+      allow(subject).to receive(:follow) do
+        subject.stream_from("all") {}
       end
 
-      expect { subject.follow }.to raise_exception(
+      expect { subject.perform_action('action' => 'follow') }.to raise_exception(
         Anycable::CompatibilityError,
         "Custom stream callbacks are not supported in AnyCable!"
       )
@@ -56,12 +63,23 @@ describe Anycable::Rails::Compatibility::Channel do
   end
 
   describe "#subscribe" do
-    it 'throws CompatibilityError when new instance variables were defined' do
-      allow_any_instance_of(CompatibilityChannel).to receive(:subscribed) do |channel|
-        channel.instance_variable_set(:@test, "test")
+    it 'throws error when new instance variables were defined inside subscribed' do
+      allow(subject).to receive(:subscribed) do
+        subject.instance_variable_set(:@test, "test")
       end
 
       expect { subject.handle_subscribe }.to raise_exception(
+        Anycable::CompatibilityError,
+        "Subscription instance variables are not supported in AnyCable!"
+      )
+    end
+
+    it 'throws error when new instance variables were defined inside action' do
+      allow(subject).to receive(:follow) do
+        subject.instance_variable_set(:@test, "test")
+      end
+
+      expect { subject.perform_action('action' => 'follow') }.to raise_exception(
         Anycable::CompatibilityError,
         "Subscription instance variables are not supported in AnyCable!"
       )
