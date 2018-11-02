@@ -15,7 +15,7 @@ RSpec.describe Anycable::Compatibility::Anycable::InstanceVars do
     RUBY
 
     expect(cop.offenses.size).to be(1)
-    expect(cop.messages.first).to eq("Subscription instance variables are not supported in AnyCable")
+    expect(cop.messages.first).to eq("Channel instance variables are not supported in AnyCable")
   end
 
   it 'registers offense for instance var definition inside block in #subscribed' do
@@ -28,7 +28,7 @@ RSpec.describe Anycable::Compatibility::Anycable::InstanceVars do
     RUBY
 
     expect(cop.offenses.size).to be(1)
-    expect(cop.messages.first).to eq("Subscription instance variables are not supported in AnyCable")
+    expect(cop.messages.first).to eq("Channel instance variables are not supported in AnyCable")
   end
 
   it 'registers offense for instance var definitions inside action' do
@@ -41,6 +41,6 @@ RSpec.describe Anycable::Compatibility::Anycable::InstanceVars do
     RUBY
 
     expect(cop.offenses.size).to be(1)
-    expect(cop.messages.first).to eq("Subscription instance variables are not supported in AnyCable")
+    expect(cop.messages.first).to eq("Channel instance variables are not supported in AnyCable")
   end
 end
