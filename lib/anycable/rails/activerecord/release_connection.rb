@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-module Anycable
+module AnyCable
   module Rails
     module ActiveRecord
       # Release ActiveRecord connection after every call (if any)

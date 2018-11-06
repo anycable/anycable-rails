@@ -5,13 +5,13 @@ require "spec_helper"
 describe "disconnection", :with_grpc_server, :rpc_command do
   include_context "rpc stub"
 
-  let(:user) { User.new(name: "disco", secret: "321") }
+  let!(:user) { User.create!(name: "disco", secret: "123") }
   let(:url) { "http://example.io/cable?token=123" }
   let(:subscriptions) { [] }
-  let(:headers) { { "Cookie" => "username=john;" } }
+  let(:headers) { { "Cookie" => "username=disco;" } }
 
   let(:request) do
-    Anycable::DisconnectRequest.new(
+    AnyCable::DisconnectRequest.new(
       identifiers: conn_id.to_json,
       subscriptions: subscriptions,
       path: url,
@@ -31,19 +31,19 @@ describe "disconnection", :with_grpc_server, :rpc_command do
     end
 
     it "logs access message (closed)", log: :info do
-      expect { subject }.to output(/Finished \"\/cable\?token=123\" \[Anycable\].*\(Closed\)/).to_stdout_from_any_process
+      expect { subject }.to output(/Finished \"\/cable\?token=123\" \[AnyCable\].*\(Closed\)/).to_stdout_from_any_process
     end
 
     context "when access logs disabled" do
       around do |ex|
-        was_disabled = Anycable.config.access_logs_disabled
-        Anycable.config.access_logs_disabled = true
+        was_disabled = AnyCable.config.access_logs_disabled
+        AnyCable.config.access_logs_disabled = true
         ex.run
-        Anycable.config.access_logs_disabled = was_disabled
+        AnyCable.config.access_logs_disabled = was_disabled
       end
 
       it "doesn't log access message", log: :info do
-        expect { subject }.not_to output(/Finished \"\/cable\?token=123\" \[Anycable\].*\(Closed\)/).to_stdout_from_any_process
+        expect { subject }.not_to output(/Finished \"\/cable\?token=123\" \[AnyCable\].*\(Closed\)/).to_stdout_from_any_process
       end
     end
   end

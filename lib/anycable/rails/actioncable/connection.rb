@@ -7,7 +7,7 @@ require "anycable/rails/actioncable/channel"
 module ActionCable
   module Connection
     class Base # :nodoc:
-      using Anycable::Refinements::Subscriptions
+      using AnyCable::Refinements::Subscriptions
 
       attr_reader :socket
 
@@ -110,7 +110,7 @@ module ActionCable
       end
 
       def logger
-        Anycable.logger
+        AnyCable.logger
       end
 
       private
@@ -118,19 +118,19 @@ module ActionCable
       def started_request_message
         format(
           'Started "%s"%s for %s at %s',
-          request.filtered_path, " [Anycable]", request.ip, Time.now.to_s
+          request.filtered_path, " [AnyCable]", request.ip, Time.now.to_s
         )
       end
 
       def finished_request_message(reason = "Closed")
         format(
           'Finished "%s"%s for %s at %s (%s)',
-          request.filtered_path, " [Anycable]", request.ip, Time.now.to_s, reason
+          request.filtered_path, " [AnyCable]", request.ip, Time.now.to_s, reason
         )
       end
 
       def access_logs?
-        Anycable.config.access_logs_disabled == false
+        AnyCable.config.access_logs_disabled == false
       end
     end
   end

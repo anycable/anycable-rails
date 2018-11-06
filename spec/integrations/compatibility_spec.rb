@@ -32,7 +32,7 @@ describe "Compatibility" do
         end
 
         expect { subject.follow }.to raise_exception(
-          Anycable::CompatibilityError,
+          AnyCable::CompatibilityError,
           "Custom coders are not supported by AnyCable"
         )
       end
@@ -43,7 +43,7 @@ describe "Compatibility" do
         end
 
         expect { subject.follow }.to raise_exception(
-          Anycable::CompatibilityError,
+          AnyCable::CompatibilityError,
           "Custom stream callbacks are not supported by AnyCable"
         )
       end
@@ -54,7 +54,7 @@ describe "Compatibility" do
         end
 
         expect { subject.follow }.to raise_exception(
-          Anycable::CompatibilityError,
+          AnyCable::CompatibilityError,
           "Custom stream callbacks are not supported by AnyCable"
         )
       end
@@ -67,7 +67,7 @@ describe "Compatibility" do
         end
 
         expect { subject.handle_subscribe }.to raise_exception(
-          Anycable::CompatibilityError,
+          AnyCable::CompatibilityError,
           "Channel instance variables are not supported by AnyCable, but were set: @test"
         )
       end
@@ -80,7 +80,7 @@ describe "Compatibility" do
         end
 
         expect { subject.perform_action("action" => "follow") }.to raise_exception(
-          Anycable::CompatibilityError,
+          AnyCable::CompatibilityError,
           "Channel instance variables are not supported by AnyCable, but were set: @test"
         )
       end
@@ -91,7 +91,7 @@ describe "Compatibility" do
         expect do
           CompatibilityChannel.periodically(:do_something, every: 2.seconds)
         end.to raise_exception(
-          Anycable::CompatibilityError,
+          AnyCable::CompatibilityError,
           "Periodical timers are not supported by AnyCable"
         )
       end
@@ -102,11 +102,11 @@ describe "Compatibility" do
     let(:user) { User.new(name: "john", secret: "123") }
     let(:url) { "" }
 
-    subject { ActionCable.server.remote_connections.where(current_user: user.to_gid_param, url: url) }
+    subject { ActionCable.server.remote_connections.where(current_user: user, url: url) }
 
     it "throws CompatibilityError when called" do
       expect { subject.disconnect }.to raise_exception(
-        Anycable::CompatibilityError,
+        AnyCable::CompatibilityError,
         "Disconnecting remote clients is not supported by AnyCable yet"
       )
     end
