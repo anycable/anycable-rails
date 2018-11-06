@@ -1,11 +1,11 @@
 [![GitPitch](https://gitpitch.com/assets/badge.svg)](https://gitpitch.com/anycable/anycable/master?grs=github) [![Gem Version](https://badge.fury.io/rb/anycable-rails.svg)](https://rubygems.org/gems/anycable-rails) [![Build Status](https://travis-ci.org/anycable/anycable-rails.svg?branch=master)](https://travis-ci.org/anycable/anycable-rails)
 [![Gitter](https://img.shields.io/badge/gitter-join%20chat%20%E2%86%92-brightgreen.svg)](https://gitter.im/anycable/Lobby)
 
-# Anycable Rails
+# AnyCable Rails
 
-AnyCable allows you to use any WebSocket server (written in any language) as a replacement for built-in Rails ActionCable server.
+AnyCable allows you to use any WebSocket server (written in any language) as a replacement for built-in Rails Action Cable server.
 
-With AnyCable you can use channels, client-side JS, broadcasting - (almost) all that you can do with ActionCable.
+With AnyCable you can use channels, client-side JS, broadcasting - (almost) all that you can do with Action Cable.
 
 You can even use ActionCable in development and not be afraid of compatibility issues.
 

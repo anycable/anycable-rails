@@ -8,7 +8,7 @@ describe "client connection", :with_grpc_server do
   subject { service.connect(request) }
 
   context "no cookies" do
-    let(:request) { Anycable::ConnectionRequest.new }
+    let(:request) { AnyCable::ConnectionRequest.new }
 
     it "responds with error if no cookies" do
       expect(subject.status).to eq :FAILURE
@@ -19,7 +19,7 @@ describe "client connection", :with_grpc_server do
     let(:cookies) { "username=john" }
 
     let(:request) do
-      Anycable::ConnectionRequest.new(
+      AnyCable::ConnectionRequest.new(
         headers: {
           "Cookie" => cookies
         },
@@ -43,14 +43,14 @@ describe "client connection", :with_grpc_server do
 
     context "when access logs disabled" do
       around do |ex|
-        was_disabled = Anycable.config.access_logs_disabled
-        Anycable.config.access_logs_disabled = true
+        was_disabled = AnyCable.config.access_logs_disabled
+        AnyCable.config.access_logs_disabled = true
         ex.run
-        Anycable.config.access_logs_disabled = was_disabled
+        AnyCable.config.access_logs_disabled = was_disabled
       end
 
       it "doesn't log access message", log: :info do
-        expect { subject }.not_to output(/Started \"\/cable\?token=123\" \[Anycable\]/).to_stdout_from_any_process
+        expect { subject }.not_to output(/Started \"\/cable\?token=123\" \[AnyCable\]/).to_stdout_from_any_process
       end
     end
 
@@ -58,11 +58,11 @@ describe "client connection", :with_grpc_server do
       let(:cookies) { "user=john" }
 
       it "logs access message (started)", log: :info do
-        expect { subject }.to output(/Started \"\/cable\?token=123\" \[Anycable\]/).to_stdout_from_any_process
+        expect { subject }.to output(/Started \"\/cable\?token=123\" \[AnyCable\]/).to_stdout_from_any_process
       end
 
       it "logs access message (rejected)", log: :info do
-        expect { subject }.to output(/Finished \"\/cable\?token=123\" \[Anycable\].*\(Rejected\)/).to_stdout_from_any_process
+        expect { subject }.to output(/Finished \"\/cable\?token=123\" \[AnyCable\].*\(Rejected\)/).to_stdout_from_any_process
       end
     end
   end

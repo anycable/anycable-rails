@@ -1,17 +1,17 @@
 # frozen_string_literal: true
 
-module Anycable
+module AnyCable
   class CompatibilityError < StandardError; end
 
   module Compatibility # :nodoc:
     ActionCable::Channel::Base.prepend(Module.new do
       def stream_from(broadcasting, callback = nil, coder: nil)
         if coder.present? && coder != ActiveSupport::JSON
-          raise Anycable::CompatibilityError, "Custom coders are not supported by AnyCable"
+          raise AnyCable::CompatibilityError, "Custom coders are not supported by AnyCable"
         end
 
         if callback.present? || block_given?
-          raise Anycable::CompatibilityError,
+          raise AnyCable::CompatibilityError,
                 "Custom stream callbacks are not supported by AnyCable"
         end
 
@@ -32,7 +32,7 @@ module Anycable
         diff = instance_variables - was_ivars
 
         unless diff.empty?
-          raise Anycable::CompatibilityError,
+          raise AnyCable::CompatibilityError,
                 "Channel instance variables are not supported by AnyCable, " \
                 "but were set: #{diff.join(', ')}"
         end
@@ -42,12 +42,12 @@ module Anycable
     end)
 
     ActionCable::Channel::Base.singleton_class.define_method(:periodically) do |*|
-      raise Anycable::CompatibilityError, "Periodical timers are not supported by AnyCable"
+      raise AnyCable::CompatibilityError, "Periodical timers are not supported by AnyCable"
     end
 
     ActionCable::RemoteConnections::RemoteConnection.prepend(Module.new do
       def disconnect
-        raise Anycable::CompatibilityError,
+        raise AnyCable::CompatibilityError,
               "Disconnecting remote clients is not supported by AnyCable yet"
       end
     end)

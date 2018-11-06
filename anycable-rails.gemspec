@@ -6,7 +6,7 @@ require 'anycable/rails/version'
 
 Gem::Specification.new do |spec|
   spec.name          = "anycable-rails"
-  spec.version       = Anycable::Rails::VERSION
+  spec.version       = AnyCable::Rails::VERSION
   spec.authors       = ["palkan"]
   spec.email         = ["dementiev.vm@gmail.com"]
 

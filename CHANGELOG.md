@@ -2,7 +2,7 @@
 
 ## 0.6.0-dev
 
-- Add dynamic (`Anycable::CompatibilityError`) compatibility checks. ([@DmitryTsepelev][])
+- Add dynamic (`AnyCable::CompatibilityError`) compatibility checks. ([@DmitryTsepelev][])
 
 - Added static (RuboCop) compatibility checks. ([@DmitryTsepelev][])
 

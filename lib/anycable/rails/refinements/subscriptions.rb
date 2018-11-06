@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-module Anycable
+module AnyCable
   module Refinements
     module Subscriptions # :nodoc:
       refine ActionCable::Connection::Subscriptions do

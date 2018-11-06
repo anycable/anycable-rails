@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-module Anycable
+module AnyCable
   module Rails
     # Use this proxy to quack like a TaggedLoggerProxy
     class LoggerProxy
@@ -25,7 +25,7 @@ module Anycable
       end
 
       initializer "anycable.logger", after: :initialize_logger do |_app|
-        Anycable.logger = LoggerProxy.new(::Rails.logger)
+        AnyCable.logger = LoggerProxy.new(::Rails.logger)
 
         # Broadcast logs to STDOUT in development
         if ::Rails.env.development? &&
@@ -41,13 +41,13 @@ module Anycable
       initializer "anycable.release_connections" do |_app|
         ActiveSupport.on_load(:active_record) do
           require "anycable/rails/activerecord/release_connection"
-          Anycable::RPCHandler.prepend Anycable::Rails::ActiveRecord::ReleaseConnection
+          AnyCable::RPCHandler.prepend AnyCable::Rails::ActiveRecord::ReleaseConnection
         end
       end
 
       initializer "anycable.connection_factory", after: "action_cable.set_configs" do |_app|
         ActiveSupport.on_load(:action_cable) do
-          Anycable.connection_factory = connection_class.call
+          AnyCable.connection_factory = connection_class.call
         end
       end
     end
