@@ -3,7 +3,17 @@
 require_relative "boot"
 require "action_controller/railtie"
 require "action_cable/engine"
-require "global_id"
+require "global_id/railtie"
+require "active_record"
+
+ActiveRecord::Base.establish_connection(adapter: "sqlite3", database: File.join(PROJECT_ROOT, "tmp", "test_db.sqlite"))
+
+ActiveRecord::Schema.define do
+  create_table :users, force: true do |t|
+    t.string :name
+    t.string :secret
+  end
+end
 
 Bundler.require(*Rails.groups)
 require "anycable-rails"

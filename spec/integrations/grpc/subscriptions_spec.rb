@@ -9,12 +9,12 @@ describe "subscriptions", :with_grpc_server, :rpc_command do
 
   describe "#subscribe" do
     let(:command) { "subscribe" }
-    let(:user) { User.new(name: "john", secret: "123") }
+    let(:user) { User.create!(name: "john", secret: "123") }
 
     subject { service.command(request) }
 
     context "reject subscription" do
-      let(:user) { User.new(name: "john", secret: "000") }
+      let(:user) { User.create!(name: "john", secret: "000") }
 
       it "responds with error and subscription rejection", :aggregate_failures do
         expect(subject.status).to eq :FAILURE

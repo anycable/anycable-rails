@@ -5,6 +5,8 @@ require "spec_helper"
 describe "client connection", :with_grpc_server do
   include_context "rpc stub"
 
+  let!(:user) { User.create!(name: "john", secret: "123") }
+
   subject { service.connect(request) }
 
   context "no cookies" do
@@ -38,7 +40,7 @@ describe "client connection", :with_grpc_server do
     end
 
     it "logs access message (started)", log: :info do
-      expect { subject }.to output(/Started \"\/cable\?token=123\" \[Anycable\]/).to_stdout_from_any_process
+      expect { subject }.to output(/Started \"\/cable\?token=123\" \[AnyCable\]/).to_stdout_from_any_process
     end
 
     context "when access logs disabled" do

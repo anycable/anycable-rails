@@ -13,6 +13,14 @@ module ActionCable
         # noop
       end
 
+      def start_periodic_timers
+        # noop
+      end
+
+      def stop_periodic_timers
+        # noop
+      end
+
       def stream_from(broadcasting, _callback = nil, _options = {})
         connection.socket.subscribe identifier, broadcasting
       end
