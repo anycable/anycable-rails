@@ -7,93 +7,49 @@ AnyCable allows you to use any WebSocket server (written in any language) as a r
 
 With AnyCable you can use channels, client-side JS, broadcasting - (almost) all that you can do with Action Cable.
 
-You can even use ActionCable in development and not be afraid of compatibility issues.
+You can even use Action Cable in development and not be afraid of [compatibility issues](#compatibility).
 
-[Example Application](https://github.com/anycable/anycable_demo)
+💾 [Example Application](https://github.com/anycable/anycable_demo)
 
-For usage outside Rails see [AnyCable repository](https://github.com/anycable/anycable).
+📑 [Documentation](https://docs.anycable.io).
+
 
 <a href="https://evilmartians.com/">
 <img src="https://evilmartians.com/badges/sponsored-by-evil-martians.svg" alt="Sponsored by Evil Martians" width="236" height="54"></a>
 
 ## Requirements
 
-- Ruby ~> 2.3;
+- Ruby ~> 2.4;
 - Rails ~> 5.0;
-- Redis
+- Redis (see [other options]() for broadcasting)
 
 ## How It Works?
 
 <img src="https://trello-attachments.s3.amazonaws.com/5781e0ed48e4679e302833d3/820x987/5b6a305417b04e20e75f49c5816e027c/Anycable_vs_ActionCable_copy.jpg" width="400" />
 
-## Links
-
-- [GitPitch Slides](https://gitpitch.com/anycable/anycable/master?grs=github)
-
-- RailsClub Moscow 2016 [slides](https://speakerdeck.com/palkan/railsclub-moscow-2016-anycable) and [video](https://www.youtube.com/watch?v=-k7GQKuBevY&list=PLiWUIs1hSNeOXZhotgDX7Y7qBsr24cu7o&index=4) (RU)
-
-
-## Compatible WebSocket servers
-
-- [Anycable Go](https://github.com/anycable/anycable-go)
-- [ErlyCable](https://github.com/anycable/erlycable)
-
-
-## Installation
-
-Add Anycable to your application's Gemfile:
-
-```ruby
-gem 'anycable-rails'
-
-# or if you want to use built-in Action Cable server
-# for test and development (which is possible and recommended)
-gem 'anycable-rails', group: :production
-```
-
-**NOTE**: if you want to require `anycable-rails` _manually_ (i.e. with `require: false` in your `Gemfile`)
-make sure that it's loaded prior to `Rails.application.initialize!` call (see `config/environment.rb`).
-
-And then run:
-
-```shell
-rails generate anycable
-```
-
-to create executable.
-
-## Configuration
-
-Add `config/anycable.yml`if you want to override defaults (see below):
-
-```yml
-production:
-  # gRPC server host
-  rpc_host: "localhost:50051"
-  # Redis URL (for broadcasting) 
-  redis_url: "redis://localhost:6379/2"
-  # Redis channel name
-  redis_channel: "anycable"
-
-```
-
-Anycable uses [anyway_config](https://github.com/palkan/anyway_config), thus it is also possible to set configuration variables through `secrets.yml` or environment vars.
-
 ## Usage
 
-Run Anycable RPC server:
+
+Add `anycable-rails` gem to your Gemfile:
 
 ```ruby
-RAILS_ENV=production ./bin/anycable
+gem "anycable-rails"
+
+# when using Redis broadcast adapter
+gem "redis", ">= 4.0"
 ```
 
-and also run AnyCable-compatible WebSocket server, e.g. [anycable-go](https://github.com/anycable/anycable-go):
+(and don't forget to run `bundle install`).
 
-```sh
-anycable-go --host=localhost --port=3334
+Next, specify AnyCable subscription adapter for Action Cable:
+
+```yml
+# config/cable.yml
+production:
+  adapter: any_cable
 ```
 
-Don't forget to set cable url in your environment:
+and specify AnyCable WebSocket server URL:
 
 ```ruby
 # For development it's likely the localhost
@@ -107,46 +63,44 @@ config.action_cable.url = "ws://localhost:3334/cable"
 config.action_cable.url = "wss://ws.example.com/cable"
 ```
 
-### Logging
-
-Anycable uses `Rails.logger` as `Anycable.logger` by default, thus Anycable _debug_ mode (`ANYCABLE_DEBUG=1`) is not available, you should configure Rails logger instead, e.g.:
+hen, run AnyCable RPC server:
 
 ```ruby
-# in Rails configuration
-if Anycable.config.debug
-  config.logger = Logger.new(STDOUT)
-  config.log_level = :debug
-end
+$ bundle exec anycable
+
+# don't forget to provide Rails env
+
+$ RAILS_ENV=production bundle exec anycable
 ```
 
-You can also turn on access logging (`Started <request data>` / `Finished <request data>`):
+And, finally, run AnyCable WebSocket server, e.g. [anycable-go](./go_getting_started.md):
 
-```ruby
-# in anycable.yml
-production:
-  access_logs_disabled: false
+```sh
+anycable-go --host=localhost --port=3334
 ```
 
-## ActionCable Compatibility
+See [documentation](https://docs.anycable.io/#/./using_with_rails) for more information on AnyCable + Rails usage.
 
-This is the compatibility list for the AnyCable gem, not for AnyCable servers (which may not support some of the features yet).
+## Action Cable Compatibility
 
-Feature                  | Status 
--------------------------|--------
-Connection Identifiers   | +
-Connection Request (cookies, params) | +
-Disconnect Handling | +
-Subscribe to channels | +
-Parameterized subscriptions | +
-Unsubscribe from channels | +
-[Subscription Instance Variables](http://edgeapi.rubyonrails.org/classes/ActionCable/Channel/Streams.html) | -
-Performing Channel Actions | +
-Streaming | +
-[Custom stream callbacks](http://edgeapi.rubyonrails.org/classes/ActionCable/Channel/Streams.html) | -
-Broadcasting | +
-Periodical Timers | -
-Disconnect remote clients | -
+See [documentation](https://docs.anycable.io/#/./compatibility).
 
+## Links
+
+- [AnyCable: Action Cable on steroids!](https://evilmartians.com/chronicles/anycable-actioncable-on-steroids)
+
+- [From Action to Any](https://medium.com/@leshchuk/from-action-to-any-1e8d863dd4cf) by [@alekseyl](https://github.com/alekseyl)
+
+## Talks
+
+- One cable to rule them all, RubyKaigi 2018, [slides](https://speakerdeck.com/palkan/rubykaigi-2018-anycable-one-cable-to-rule-them-all) and [video](https://www.youtube.com/watch?v=jXCPuNICT8s) (EN)
+
+- Wroc_Love.rb 2018 [slides](https://speakerdeck.com/palkan/wroc-love-dot-rb-2018-cables-cables-cables) and [video](https://www.youtube.com/watch?v=AUxFFOehiy0) (EN)
+
+## Compatible WebSocket servers
+
+- [AnyCable Go](https://github.com/anycable/anycable-go)
+- [ErlyCable](https://github.com/anycable/erlycable)
 
 ## Contributing
 
