@@ -10,7 +10,13 @@ module ActionCable
       def initialize(*); end
 
       def broadcast(channel, payload)
-        AnyCable.broadcast(channel, payload)
+        ::AnyCable.broadcast(channel, payload)
+      end
+
+      def shutdown
+        # nothing to do
+        # we only need this method for development,
+        # 'cause code reloading triggers `server.restart` -> `pubsub.shutdown`
       end
     end
   end

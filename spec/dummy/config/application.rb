@@ -4,19 +4,12 @@ require_relative "boot"
 require "action_controller/railtie"
 require "action_cable/engine"
 require "global_id/railtie"
-require "active_record"
-
-ActiveRecord::Base.establish_connection(adapter: "sqlite3", database: File.join(PROJECT_ROOT, "tmp", "test_db.sqlite"))
-
-ActiveRecord::Schema.define do
-  create_table :users, force: true do |t|
-    t.string :name
-    t.string :secret
-  end
-end
+require "active_record/railtie"
 
 Bundler.require(*Rails.groups)
+
 require "anycable-rails"
+require "anycable/rails/actioncable/connection"
 
 module Dummy
   class Application < Rails::Application
@@ -31,5 +24,7 @@ module Dummy
     config.logger = Logger.new(STDOUT)
     config.log_level = :fatal
     config.eager_load = false
+
+    config.active_record.sqlite3.represent_boolean_as_integer = true
   end
 end

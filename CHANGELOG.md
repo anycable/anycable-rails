@@ -2,6 +2,23 @@
 
 ## 0.6.0-dev
 
+- Action Cable monkey-patches are only loaded in the context of AnyCable CLI. ([@palkan][])
+
+  No need to think about `requie` and `group` for `anycable-rails`, just add it to Gemfile.
+
+- Add `:any_cable` subscription adapter for Action Cable. ([@palkan][])
+
+  Use `:any_cable` adapter for Action Cable to broadcast data to AnyCable.
+
+  No more `pubsub` monkey-patches 🎉.
+
+- Added Rails executor/reloader support. ([@palkan][])
+
+- **[Breaking]** No more generators. ([@palkan][])
+
+  No need to generate AnyCable runner script since `anycable` gem ships with
+  the CLI.
+
 - Add dynamic (`AnyCable::CompatibilityError`) compatibility checks. ([@DmitryTsepelev][])
 
 - Added static (RuboCop) compatibility checks. ([@DmitryTsepelev][])

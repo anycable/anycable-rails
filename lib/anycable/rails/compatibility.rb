@@ -18,7 +18,7 @@ module AnyCable
         super
       end
 
-      %w[handle_subscribe perform_action].each do |mid|
+      %w[subscribe_to_channel perform_action].each do |mid|
         module_eval <<~CODE, __FILE__, __LINE__ + 1
           def #{mid}(*)
             __anycable_check_ivars__ { super }
