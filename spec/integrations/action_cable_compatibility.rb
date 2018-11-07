@@ -4,6 +4,26 @@ require "base_spec_helper"
 
 require File.expand_path("spec/dummy/config/environment", PROJECT_ROOT)
 
+module ActionCable
+  module Channel
+    class Base
+      # Make stream_from no-op
+      def stream_from(*)
+        # do nothing
+      end
+
+      def subscribe_to_channel
+        run_callbacks :subscribe do
+          subscribed
+        end
+
+        reject_subscription if subscription_rejected?
+        ensure_confirmation_sent
+      end
+    end
+  end
+end
+
 require "anycable/rails/compatibility"
 
 describe "Compatibility" do
@@ -66,7 +86,7 @@ describe "Compatibility" do
           channel.instance_variable_set(:@test, "test")
         end
 
-        expect { subject.handle_subscribe }.to raise_exception(
+        expect { subject.subscribe_to_channel }.to raise_exception(
           AnyCable::CompatibilityError,
           "Channel instance variables are not supported by AnyCable, but were set: @test"
         )

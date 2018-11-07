@@ -20,7 +20,10 @@ module AnyCable
     end
 
     class Railtie < ::Rails::Railtie # :nodoc:
-      initializer "anycable.disable_action_cable_mount", before: "action_cable.routes" do |app|
+      initializer "anycable.disable_action_cable_mount", after: "action_cable.set_configs" do |app|
+        # Disable Action Cable when AnyCable adapter is used
+        next unless ActionCable.server.config.cable.fetch("adapter", nil) == "any_cable"
+
         app.config.action_cable.mount_path = nil
       end
 
@@ -38,11 +41,11 @@ module AnyCable
         end
       end
 
-      initializer "anycable.release_connections" do |_app|
-        ActiveSupport.on_load(:active_record) do
-          require "anycable/rails/activerecord/release_connection"
-          AnyCable::RPCHandler.prepend AnyCable::Rails::ActiveRecord::ReleaseConnection
-        end
+      initializer "anycable.executor" do |app|
+        require "anycable/rails/middlewares/executor"
+        # see https://github.com/rails/rails/pull/33469/files
+        executor = app.config.reload_classes_only_on_change ? app.reloader : app.executor
+        AnyCable.middleware.use(AnyCable::Rails::Middlewares::Executor.new(executor))
       end
 
       initializer "anycable.connection_factory", after: "action_cable.set_configs" do |_app|
