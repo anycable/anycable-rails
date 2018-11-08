@@ -2,6 +2,8 @@
 
 ## 0.6.0-dev
 
+- Support tagged logging. ([@palkan][])
+
 - Action Cable monkey-patches are only loaded in the context of AnyCable CLI. ([@palkan][])
 
   No need to think about `requie` and `group` for `anycable-rails`, just add it to Gemfile.

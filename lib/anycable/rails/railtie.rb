@@ -2,33 +2,16 @@
 
 module AnyCable
   module Rails
-    # Use this proxy to quack like a TaggedLoggerProxy
-    class LoggerProxy
-      def initialize(logger)
-        @logger = logger
-      end
-
-      def add_tags(*_tags)
-        @logger.warn "Tagged logger is not supported by AnyCable. Skip"
-      end
-
-      %i[debug info warn error fatal unknown].each do |severity|
-        define_method(severity) do |message|
-          @logger.send severity, message
-        end
-      end
-    end
-
     class Railtie < ::Rails::Railtie # :nodoc:
       initializer "anycable.disable_action_cable_mount", after: "action_cable.set_configs" do |app|
         # Disable Action Cable when AnyCable adapter is used
-        next unless ActionCable.server.config.cable.fetch("adapter", nil) == "any_cable"
+        next unless ::ActionCable.server.config.cable&.fetch("adapter", nil) == "any_cable"
 
         app.config.action_cable.mount_path = nil
       end
 
-      initializer "anycable.logger", after: :initialize_logger do |_app|
-        AnyCable.logger = LoggerProxy.new(::Rails.logger)
+      initializer "anycable.logger", after: "action_cable.logger" do |_app|
+        AnyCable.logger = ActiveSupport::TaggedLogging.new(::ActionCable.server.config.logger)
 
         # Broadcast logs to STDOUT in development
         if ::Rails.env.development? &&

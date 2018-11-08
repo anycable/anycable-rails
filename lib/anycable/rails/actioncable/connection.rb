@@ -6,7 +6,12 @@ require "anycable/rails/actioncable/channel"
 
 module ActionCable
   module Connection
+    # rubocop: disable Metrics/ClassLength
     class Base # :nodoc:
+      # We store logger tags in identifiers to be able
+      # to re-use them in the subsequent calls
+      LOG_TAGS_IDENTIFIER = "__ltags__"
+
       using AnyCable::Refinements::Subscriptions
 
       attr_reader :socket
@@ -28,6 +33,8 @@ module ActionCable
 
       def initialize(socket, identifiers: "{}", subscriptions: [])
         @ids = ActiveSupport::JSON.decode(identifiers)
+
+        @ltags = ids.delete(LOG_TAGS_IDENTIFIER)
 
         @cached_ids = {}
         @env = socket.env
@@ -87,12 +94,14 @@ module ActionCable
       # Generate identifiers info.
       # Converts GlobalID compatible vars to corresponding global IDs params.
       def identifiers_hash
-        identifiers.each_with_object({}) do |id, acc|
+        obj = { LOG_TAGS_IDENTIFIER => fetch_ltags }
+
+        identifiers.each_with_object(obj) do |id, acc|
           obj = instance_variable_get("@#{id}")
           next unless obj
 
           acc[id] = obj.try(:to_gid_param) || obj
-        end
+        end.compact
       end
 
       def identifiers_json
@@ -102,7 +111,7 @@ module ActionCable
       # Fetch identifier and deserialize if neccessary
       def fetch_identifier(name)
         @cached_ids[name] ||= @cached_ids.fetch(name) do
-          val = @ids[name.to_s]
+          val = ids[name.to_s]
           next val unless val.is_a?(String)
 
           GlobalID::Locator.locate(val) || val
@@ -110,10 +119,12 @@ module ActionCable
       end
 
       def logger
-        AnyCable.logger
+        @logger ||= TaggedLoggerProxy.new(AnyCable.logger, tags: ltags || [])
       end
 
       private
+
+      attr_reader :ids, :ltags
 
       def started_request_message
         format(
@@ -132,6 +143,15 @@ module ActionCable
       def access_logs?
         AnyCable.config.access_logs_disabled == false
       end
+
+      def fetch_ltags
+        if instance_variable_defined?(:@logger)
+          logger.tags
+        else
+          ltags
+        end
+      end
     end
   end
+  # rubocop: enable Metrics/ClassLength
 end
