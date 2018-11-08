@@ -2,6 +2,8 @@
 
 ## 0.6.0-dev
 
+- Add WS server session ID to log tags if present. ([@palkan][])
+
 - Support tagged logging. ([@palkan][])
 
 - Action Cable monkey-patches are only loaded in the context of AnyCable CLI. ([@palkan][])

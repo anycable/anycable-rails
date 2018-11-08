@@ -22,6 +22,13 @@ module AnyCable
           console.level = ::Rails.logger.level
           ::Rails.logger.extend(ActiveSupport::Logger.broadcast(console))
         end
+
+        # Add tagging middleware
+        if AnyCable.logger.respond_to?(:tagged)
+          require "anycable/rails/middlewares/log_tagging"
+
+          AnyCable.middleware.use(AnyCable::Rails::Middlewares::LogTagging)
+        end
       end
 
       initializer "anycable.executor" do |app|
