@@ -9,6 +9,8 @@ describe "client connection", :with_grpc_server do
 
   subject { service.connect(request) }
 
+  before { ActionCable.server.config.disable_request_forgery_protection = true }
+
   context "no cookies" do
     let(:request) { AnyCable::ConnectionRequest.new }
 
@@ -65,6 +67,57 @@ describe "client connection", :with_grpc_server do
 
       it "logs access message (rejected)", log: :info do
         expect { subject }.to output(/Finished \"\/cable\?token=123\" \[AnyCable\].*\(Rejected\)/).to_stdout_from_any_process
+      end
+    end
+  end
+
+  context "request verification" do
+    let(:request) do
+      Anycable::ConnectionRequest.new(
+        headers: {
+          "Cookie" => "username=john",
+          "Origin" => "http://anycable.io"
+        },
+        path: "http://anycable.io/cable?token=123"
+      )
+    end
+
+    before { ActionCable.server.config.allow_same_origin_as_host = false }
+
+    context "with disabled protection" do
+      it "responds with success when protection is disabled" do
+        ActionCable.server.config.disable_request_forgery_protection = true
+        expect(subject.status).to eq :SUCCESS
+      end
+    end
+
+    context "with protection" do
+      before(:each) { ActionCable.server.config.disable_request_forgery_protection = false }
+
+      context "with single allowed origin" do
+        it "responds with success when accessed from an allowed origin" do
+          ActionCable.server.config.allowed_request_origins = "http://anycable.io"
+          expect(subject.status).to eq :SUCCESS
+        end
+
+        it "responds with error when accessed from a not allowed origin" do
+          ActionCable.server.config.allowed_request_origins = "http://anycable.com"
+          expect(subject.status).to eq :FAILURE
+        end
+      end
+
+      context "with multiple allowed origins" do
+        it "responds with success when accessed from an allowed origin" do
+          ActionCable.server.config.disable_request_forgery_protection = false
+          ActionCable.server.config.allowed_request_origins = %w[http://anycable.io http://www.anycable.io]
+          expect(subject.status).to eq :SUCCESS
+        end
+
+        it "responds with error when accessed from an allowed origin" do
+          ActionCable.server.config.disable_request_forgery_protection = false
+          ActionCable.server.config.allowed_request_origins = %w[http://anycable.com http://www.anycable.com]
+          expect(subject.status).to eq :FAILURE
+        end
       end
     end
   end

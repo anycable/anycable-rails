@@ -2,6 +2,8 @@
 
 ## 0.6.0-dev
 
+- [PR #56](https://github.com/anycable/anycable-rails/pull/56) Request verification based on ActionCable config. ([@DmitryTsepelev][])
+
 - Add WS server session ID to log tags if present. ([@palkan][])
 
 - Support tagged logging. ([@palkan][])
