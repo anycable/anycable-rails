@@ -47,13 +47,14 @@ module ActionCable
       end
 
       def handle_open
+        return reject_request unless allow_request_origin?
+
         logger.info started_request_message if access_logs?
 
         connect if respond_to?(:connect)
         send_welcome_message
       rescue ActionCable::Connection::Authorization::UnauthorizedError
-        logger.info finished_request_message("Rejected") if access_logs?
-        close
+        reject_request
       end
 
       def handle_close
@@ -151,7 +152,16 @@ module ActionCable
           ltags
         end
       end
+
+      def server
+        ActionCable.server
+      end
+
+      def reject_request
+        logger.info finished_request_message("Rejected") if access_logs?
+        close
+      end
     end
+    # rubocop:enable Metrics/ClassLength
   end
-  # rubocop: enable Metrics/ClassLength
 end
