@@ -41,9 +41,11 @@ module AnyCable
       end
     end)
 
-    ActionCable::Channel::Base.singleton_class.define_method(:periodically) do |*|
-      raise AnyCable::CompatibilityError, "Periodical timers are not supported by AnyCable"
-    end
+    ActionCable::Channel::Base.singleton_class.prepend(Module.new do
+      def periodically(*)
+        raise AnyCable::CompatibilityError, "Periodical timers are not supported by AnyCable"
+      end
+    end)
 
     ActionCable::RemoteConnections::RemoteConnection.prepend(Module.new do
       def disconnect
