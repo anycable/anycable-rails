@@ -106,6 +106,39 @@ describe "client connection", :with_grpc_server do
         end
       end
 
+      context "when no ORIGIN provided" do
+        let(:request) do
+          Anycable::ConnectionRequest.new(
+            headers: {
+              "Cookie" => "username=john"
+            },
+            path: "http://anycable.io/cable?token=123"
+          )
+        end
+
+        it "responds with success" do
+          ActionCable.server.config.allowed_request_origins = "http://example.io"
+          expect(subject.status).to eq :SUCCESS
+        end
+      end
+
+      context "when ORIGIN provided but blank" do
+        let(:request) do
+          Anycable::ConnectionRequest.new(
+            headers: {
+              "Cookie" => "username=john",
+              "Origin" => ""
+            },
+            path: "http://anycable.io/cable?token=123"
+          )
+        end
+
+        it "responds with failure" do
+          ActionCable.server.config.allowed_request_origins = "http://example.io"
+          expect(subject.status).to eq :FAILURE
+        end
+      end
+
       context "with multiple allowed origins" do
         it "responds with success when accessed from an allowed origin" do
           ActionCable.server.config.disable_request_forgery_protection = false
