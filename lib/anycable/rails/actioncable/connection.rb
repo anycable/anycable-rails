@@ -47,9 +47,9 @@ module ActionCable
       end
 
       def handle_open
-        return reject_request unless allow_request_origin?
-
         logger.info started_request_message if access_logs?
+
+        verify_origin!
 
         connect if respond_to?(:connect)
         send_welcome_message
@@ -155,6 +155,17 @@ module ActionCable
 
       def server
         ActionCable.server
+      end
+
+      def verify_origin!
+        return unless socket.env.key?("HTTP_ORIGIN")
+
+        return if allow_request_origin?
+
+        raise(
+          ActionCable::Connection::Authorization::UnauthorizedError,
+          "Origin is not allowed"
+        )
       end
 
       def reject_request
