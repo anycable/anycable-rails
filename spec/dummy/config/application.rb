@@ -9,7 +9,6 @@ require "active_record/railtie"
 Bundler.require(*Rails.groups)
 
 require "anycable-rails"
-require "anycable/rails/actioncable/connection"
 
 module Dummy
   class Application < Rails::Application
@@ -23,7 +22,7 @@ module Dummy
     config.api_only = true
     config.logger = Logger.new(STDOUT)
     config.log_level = :fatal
-    config.eager_load = false
+    config.eager_load = true
 
     config.active_record.sqlite3.represent_boolean_as_integer = true
   end

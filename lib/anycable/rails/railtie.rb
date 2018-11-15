@@ -40,6 +40,10 @@ module AnyCable
 
       initializer "anycable.connection_factory", after: "action_cable.set_configs" do |_app|
         ActiveSupport.on_load(:action_cable) do
+          if ::ActionCable.server.config.cable&.fetch("adapter", nil) == "any_cable"
+            require "anycable/rails/actioncable/connection"
+          end
+
           AnyCable.connection_factory = connection_class.call
         end
       end
