@@ -1,6 +1,8 @@
 # Change log
 
-## 0.6.0-dev
+## master
+
+## 0.6.0 (2018-11-15)
 
 - [PR #56](https://github.com/anycable/anycable-rails/pull/56) Request verification based on ActionCable config. ([@DmitryTsepelev][])
 
