@@ -8,8 +8,11 @@ module AnyCable
   # Rails handler for AnyCable
   module Rails
     require "anycable/rails/railtie"
+
     # Load Action Cable patches only when running RPC server
-    require "anycable/rails/actioncable/connection" if defined?(::AnyCable::CLI)
+    AnyCable.configure_server do
+      require "anycable/rails/actioncable/connection"
+    end
   end
 end
 
