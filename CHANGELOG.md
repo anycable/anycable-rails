@@ -2,12 +2,16 @@
 
 ## master
 
+## 0.6.1 (2018-11-15)
+
 - Fix regression introduced in [e64a366e](https://github.com/anycable/anycable-rails/commit/e64a366ea21293925e0c5c0b8e6595d65d5d0981#diff-fd0e56a6e825002eac978507c3581af7R14) ([@palkan][])
 
 `Connection` patch could be loaded after `identify_by` is called, thus breaking
 identifiers.
 
 ## 0.6.0 (2018-11-15)
+
+**NOTE**: this version has been yanked from RubyGems due to the regression bug. Use 0.6.1.
 
 - [PR #56](https://github.com/anycable/anycable-rails/pull/56) Request verification based on ActionCable config. ([@DmitryTsepelev][])
 
