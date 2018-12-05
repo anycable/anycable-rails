@@ -13,14 +13,15 @@ module AnyCable
       initializer "anycable.logger", after: "action_cable.logger" do |_app|
         AnyCable.logger = ActiveSupport::TaggedLogging.new(::ActionCable.server.config.logger)
 
-        # Broadcast logs to STDOUT in development
+        # Broadcast server logs to STDOUT in development
         if ::Rails.env.development? &&
-           !ActiveSupport::Logger.logger_outputs_to?(::Rails.logger, STDOUT) &&
-           !defined?(::Rails::Server)
-          console = ActiveSupport::Logger.new(STDOUT)
-          console.formatter = ::Rails.logger.formatter
-          console.level = ::Rails.logger.level
-          ::Rails.logger.extend(ActiveSupport::Logger.broadcast(console))
+           !ActiveSupport::Logger.logger_outputs_to?(::Rails.logger, STDOUT)
+          AnyCable.configure_server do
+            console = ActiveSupport::Logger.new(STDOUT)
+            console.formatter = ::Rails.logger.formatter
+            console.level = ::Rails.logger.level
+            AnyCable.logger.extend(ActiveSupport::Logger.broadcast(console))
+          end
         end
 
         # Add tagging middleware

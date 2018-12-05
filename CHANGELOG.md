@@ -2,6 +2,10 @@
 
 ## master
 
+- Broadcast logs to STDOUT in development only when server is running. ([@palkan][])
+
+  Fixes #59.
+
 ## 0.6.1 (2018-11-15)
 
 - Fix regression introduced in [e64a366e](https://github.com/anycable/anycable-rails/commit/e64a366ea21293925e0c5c0b8e6595d65d5d0981#diff-fd0e56a6e825002eac978507c3581af7R14) ([@palkan][])
