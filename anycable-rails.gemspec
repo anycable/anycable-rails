@@ -26,6 +26,6 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency "rspec", ">= 3.4"
   spec.add_development_dependency "sqlite3"
   spec.add_development_dependency "simplecov", ">= 0.3.8"
-  spec.add_development_dependency "rubocop", "~> 0.60.0"
+  spec.add_development_dependency "rubocop", "~> 0.61.1"
   spec.add_development_dependency "pry-byebug"
 end
