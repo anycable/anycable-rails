@@ -33,6 +33,7 @@ module AnyCable
       end
 
       initializer "anycable.executor" do |app|
+        require "anycable/rails/config"
         require "anycable/rails/middlewares/executor"
         # see https://github.com/rails/rails/pull/33469/files
         executor = app.config.reload_classes_only_on_change ? app.reloader : app.executor
