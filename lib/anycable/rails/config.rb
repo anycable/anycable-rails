@@ -1,4 +1,7 @@
 # frozen_string_literal: true
+#
+
+require 'anycable/config'
 
 # Extend AnyCable configuration with
 # `access_logs_disabled` options (defaults to true)
