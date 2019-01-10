@@ -4,13 +4,18 @@ cache: bundler
 notifications:
   email: false
 
+before_install: gem install bundler -v '~> 1'
+
 matrix:
   include:
-    - rvm: 2.4.3
+    - rvm: 2.4.5
       gemfile: Gemfile
-    - rvm: 2.5.0
+    - rvm: 2.5.3
       gemfile: Gemfile
-    - gemfile: gemfiles/rails5.gemfile
-    - gemfile: gemfiles/railsmaster.gemfile
+    - rvm: 2.5.3
+      gemfile: gemfiles/rails5.gemfile
+    - rvm: 2.5.3
+      gemfile: gemfiles/railsmaster.gemfile
   allow_failures:
-    - gemfile: gemfiles/railsmaster.gemfile
+    - rvm: 2.5.3
+      gemfile: gemfiles/railsmaster.gemfile
