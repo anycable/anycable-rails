@@ -2,6 +2,7 @@
 
 require "anycable"
 require "anycable/rails/version"
+require "anycable/rails/config"
 
 module AnyCable
   # Rails handler for AnyCable
