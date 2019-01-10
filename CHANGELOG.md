@@ -2,6 +2,10 @@
 
 ## master
 
+## 0.6.2 (2019-01-10)
+
+- Fixed `anycable` 0.6.1 compatibility. ([@palkan][])
+
 - Broadcast logs to STDOUT in development only when server is running. ([@palkan][])
 
   Fixes #59.
