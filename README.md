@@ -20,7 +20,7 @@ You can even use Action Cable in development and not be afraid of [compatibility
 
 ## Requirements
 
-- Ruby ~> 2.4;
+- Ruby ~> 2.4; **NOTE:** Ruby 2.6 requires additional installations steps unless `grpc`/`protobufs` libs with pre-built binaries haven't been released (see [#71](https://github.com/anycable/anycable-rails/issues/71))
 - Rails ~> 5.0;
 - Redis (see [other options]() for broadcasting)
 
