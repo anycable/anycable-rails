@@ -2,6 +2,8 @@
 
 ## master
 
+- Add `:anycable` subscription adapter alias. ([@sponomarev][])
+
 - Don't set AnyCable connection factory for incompatible adapter ([@sponomarev][])
 
   `anycable` server won't start with unpatched vanilla `ApplicationCable::Connection`.

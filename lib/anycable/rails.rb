@@ -8,6 +8,12 @@ module AnyCable
   # Rails handler for AnyCable
   module Rails
     require "anycable/rails/railtie"
+
+    ADAPTER_ALIASES = %w[any_cable anycable].freeze
+
+    def self.compatible_adapter?(adapter)
+      ADAPTER_ALIASES.include?(adapter)
+    end
   end
 end
 

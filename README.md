@@ -47,7 +47,7 @@ Next, specify AnyCable subscription adapter for Action Cable:
 ```yml
 # config/cable.yml
 production:
-  adapter: any_cable
+  adapter: any_cable # or anycable
 ```
 
 and specify AnyCable WebSocket server URL:
