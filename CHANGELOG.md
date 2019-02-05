@@ -2,6 +2,12 @@
 
 ## master
 
+- Don't set AnyCable connection factory for incompatible adapter ([@sponomarev][])
+
+  `anycable` server won't start with unpatched vanilla `ApplicationCable::Connection`.
+
+  Motivation in #74.
+
 ## 0.6.2 (2019-01-10)
 
 - Fixed `anycable` 0.6.1 compatibility. ([@palkan][])
@@ -107,3 +113,4 @@ Ignore tagged logger features ('cause we do not have _persistent_ logger).
 [@palkan]: https://github.com/palkan
 [@alekseyl]: https://github.com/alekseyl
 [@DmitryTsepelev]: https://github.com/DmitryTsepelev
+[@sponomarev]: https://github.com/sponomarev
