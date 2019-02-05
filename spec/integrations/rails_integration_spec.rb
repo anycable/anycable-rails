@@ -20,4 +20,8 @@ describe "rails integration" do
       expect(response.code).to eq "404"
     end
   end
+
+  it "assigns connection factory" do
+    expect(AnyCable.connection_factory).to eq(ApplicationCable::Connection)
+  end
 end

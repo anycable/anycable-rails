@@ -43,9 +43,8 @@ module AnyCable
         ActiveSupport.on_load(:action_cable) do
           if ::ActionCable.server.config.cable&.fetch("adapter", nil) == "any_cable"
             require "anycable/rails/actioncable/connection"
+            AnyCable.connection_factory = connection_class.call
           end
-
-          AnyCable.connection_factory = connection_class.call
         end
       end
     end
