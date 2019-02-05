@@ -4,6 +4,7 @@ AllCops:
     - 'lib/**/*.rb'
     - 'lib/**/*.rake'
     - 'spec/**/*.rb'
+    - '*.gemspec'
   Exclude:
     - 'bin/**/*'
     - 'tmp/**/*'
@@ -12,7 +13,6 @@ AllCops:
     - 'gemfiles/**/*'
     - 'Gemfile'
     - 'Rakefile'
-    - '*.gemspec'
   DisplayCopNames: true
   StyleGuideCopsOnly: false
   TargetRubyVersion: 2.4
@@ -28,7 +28,7 @@ Naming/FileName:
   Exclude:
     - 'lib/anycable-rails.rb'
 
-Style/StringLiterals: 
+Style/StringLiterals:
   EnforcedStyle: double_quotes
 
 Style/RegexpLiteral:
