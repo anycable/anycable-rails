@@ -37,10 +37,10 @@ module RuboCop
 
         def find_nested_ivars(node, &block)
           node.each_child_node do |child|
-            if child.begin_type? || child.block_type? || child.def_type?
-              find_nested_ivars(child, &block)
-            elsif child.ivasgn_type? || child.ivar_type?
+            if child.ivasgn_type? || child.ivar_type?
               yield(child)
+            elsif child.children.any?
+              find_nested_ivars(child, &block)
             end
           end
         end

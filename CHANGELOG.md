@@ -10,6 +10,8 @@
 
   Motivation in #74.
 
+- Fix instance detection inside complex cases in compatibility cops ([@sponomarev][])
+
 ## 0.6.2 (2019-01-10)
 
 - Fixed `anycable` 0.6.1 compatibility. ([@palkan][])
