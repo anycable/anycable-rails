@@ -31,6 +31,32 @@ describe RuboCop::Cop::AnyCable::InstanceVars do
     expect(cop.messages.first).to eq("Channel instance variables are not supported in AnyCable")
   end
 
+  it "registers offense for instance var definition inside condition in #subscribed" do
+    inspect_source(<<-RUBY.strip_indent)
+      class MyChannel < ApplicationCable::Channel
+        def subscribed
+          @instance_var = 1 if true
+        end
+      end
+    RUBY
+
+    expect(cop.offenses.size).to be(1)
+    expect(cop.messages.first).to eq("Channel instance variables are not supported in AnyCable")
+  end
+
+  it "registers offense for instance var definition inside multiple assignments in #subscribed" do
+    inspect_source(<<-RUBY.strip_indent)
+      class MyChannel < ApplicationCable::Channel
+        def subscribed
+          a = b = @instance_var = 1
+        end
+      end
+    RUBY
+
+    expect(cop.offenses.size).to be(1)
+    expect(cop.messages.first).to eq("Channel instance variables are not supported in AnyCable")
+  end
+
   it "registers offense for instance var definitions inside action" do
     inspect_source(<<-RUBY.strip_indent)
       class MyChannel < ApplicationCable::Channel
