@@ -2,6 +2,8 @@
 
 ## master
 
+## 0.6.3 (2019-03-26)
+
 - Fix connection factory reloading for development sake. ([@sponomarev][])
 
 - Add `:anycable` subscription adapter alias. ([@sponomarev][])
@@ -10,7 +12,7 @@
 
   `anycable` server won't start with unpatched vanilla `ApplicationCable::Connection`.
 
-  Motivation in #74.
+  Motivation in [#74](https://github.com/anycable/anycable-rails/issues/74).
 
 - Fix instance detection inside complex cases in compatibility cops ([@sponomarev][])
 
