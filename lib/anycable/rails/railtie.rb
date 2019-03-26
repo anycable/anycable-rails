@@ -40,12 +40,15 @@ module AnyCable
         AnyCable.middleware.use(AnyCable::Rails::Middlewares::Executor.new(executor))
       end
 
-      initializer "anycable.connection_factory", after: "action_cable.set_configs" do |_app|
+      initializer "anycable.connection_factory", after: "action_cable.set_configs" do |app|
         ActiveSupport.on_load(:action_cable) do
           adapter = ::ActionCable.server.config.cable&.fetch("adapter", nil)
           if AnyCable::Rails.compatible_adapter?(adapter)
             require "anycable/rails/actioncable/connection"
-            AnyCable.connection_factory = connection_class.call
+
+            app.config.to_prepare do
+              AnyCable.connection_factory = ActionCable.server.config.connection_class.call
+            end
           end
         end
       end

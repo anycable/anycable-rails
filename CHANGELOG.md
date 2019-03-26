@@ -2,6 +2,8 @@
 
 ## master
 
+- Fix connection factory reloading for development sake. ([@sponomarev][])
+
 - Add `:anycable` subscription adapter alias. ([@sponomarev][])
 
 - Don't set AnyCable connection factory for incompatible adapter ([@sponomarev][])
