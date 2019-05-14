@@ -14,6 +14,13 @@ Gem::Specification.new do |spec|
   spec.description   = "Rails adapter for AnyCable"
   spec.homepage      = "http://github.com/anycable/anycable-rails"
   spec.license       = "MIT"
+  spec.metadata = {
+    "bug_tracker_uri" => "http://github.com/anycable/anycable-rails/issues",
+    "changelog_uri" => "https://github.com/anycable/anycable-rails/blob/master/CHANGELOG.md",
+    "documentation_uri" => "https://docs.anycable.io/#/using_with_rails",
+    "homepage_uri" => "https://anycable.io/",
+    "source_code_uri" => "http://github.com/anycable/anycable-rails"
+  }
 
   spec.files         = `git ls-files README.md MIT-LICENSE CHANGELOG.md lib`.split
   spec.require_paths = ["lib"]
