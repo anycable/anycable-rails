@@ -16,6 +16,8 @@ matrix:
       gemfile: gemfiles/rails5.gemfile
     - rvm: 2.5.3
       gemfile: gemfiles/railsmaster.gemfile
+    - rvm: 2.6.3
+      gemfile: gemfiles/rails6.gemfile
   allow_failures:
     - rvm: 2.5.3
       gemfile: gemfiles/railsmaster.gemfile

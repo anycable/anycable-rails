@@ -61,6 +61,7 @@ Metrics/BlockLength:
   Exclude:
     - '*.gemspec'
     - 'spec/**/*.rb'
+    - 'anycable-rails.gemspec'
 
 Metrics/CyclomaticComplexity:
   Exclude:
