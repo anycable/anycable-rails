@@ -60,6 +60,7 @@ Metrics/AbcSize:
 Metrics/BlockLength:
   Exclude:
     - 'spec/**/*.rb'
+    - 'anycable-rails.gemspec'
 
 Metrics/CyclomaticComplexity:
   Exclude:
