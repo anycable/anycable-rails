@@ -2,6 +2,13 @@
 
 ## master
 
+- Fix Compatibility bug when using with AnyCable. ([@palkan][])
+
+  Compatibility patching (with `prepend` + `super`) conflicted with
+  the `ActionCable::Channel::Base` patching in the core functionality (which uses `alias`).
+
+  See [#95](https://github.com/anycable/anycable-rails/issues/95).
+
 ## 0.6.3 (2019-03-26)
 
 - Fix connection factory reloading for development sake. ([@sponomarev][])

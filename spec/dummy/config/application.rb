@@ -9,6 +9,7 @@ require "active_record/railtie"
 Bundler.require(*Rails.groups)
 
 require "anycable-rails"
+require "anycable/rails/compatibility"
 
 module Dummy
   class Application < Rails::Application

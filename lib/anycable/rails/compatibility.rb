@@ -18,7 +18,9 @@ module AnyCable
         super
       end
 
-      %w[subscribe_to_channel perform_action].each do |mid|
+      # Do not prepend `subscribe_to_channel` 'cause we make it no-op
+      # when AnyCable is running (see anycable/rails/actioncable/channel.rb)
+      %w[run_callbacks perform_action].each do |mid|
         module_eval <<~CODE, __FILE__, __LINE__ + 1
           def #{mid}(*)
             __anycable_check_ivars__ { super }
