@@ -2,6 +2,8 @@
 
 ## master
 
+## 0.6.4 (2019-06-26) 👶
+
 - Fix Compatibility bug when using with AnyCable. ([@palkan][])
 
   Compatibility patching (with `prepend` + `super`) conflicted with
