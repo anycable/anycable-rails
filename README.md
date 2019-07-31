@@ -64,7 +64,7 @@ config.action_cable.url = "ws://localhost:3334/cable"
 config.action_cable.url = "wss://ws.example.com/cable"
 ```
 
-hen, run AnyCable RPC server:
+Then, run AnyCable RPC server:
 
 ```ruby
 $ bundle exec anycable
