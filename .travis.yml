@@ -8,16 +8,18 @@ before_install: gem install bundler -v '~> 1'
 
 matrix:
   include:
-    - rvm: 2.4.5
+    - rvm: 2.5
       gemfile: Gemfile
-    - rvm: 2.5.3
+    - rvm: 2.6
       gemfile: Gemfile
-    - rvm: 2.5.3
+    - rvm: 2.4
       gemfile: gemfiles/rails5.gemfile
-    - rvm: 2.5.3
+    - rvm: 2.5
+      gemfile: gemfiles/rails5.gemfile
+    - rvm: 2.6
+      gemfile: gemfiles/rails5.gemfile
+    - rvm: 2.6
       gemfile: gemfiles/railsmaster.gemfile
-    - rvm: 2.6.3
-      gemfile: gemfiles/rails6.gemfile
   allow_failures:
-    - rvm: 2.5.3
+    - rvm: 2.6
       gemfile: gemfiles/railsmaster.gemfile
