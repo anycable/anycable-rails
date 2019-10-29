@@ -2,6 +2,8 @@
 
 ## master
 
+- Require a minimum version of Ruby when installing the gem. ([@bibendi][]) 
+
 ## 0.6.4 (2019-06-26) 👶
 
 - Fix Compatibility bug when using with AnyCable. ([@palkan][])
