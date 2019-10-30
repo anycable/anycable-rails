@@ -25,6 +25,8 @@ Gem::Specification.new do |spec|
   spec.files         = `git ls-files README.md MIT-LICENSE CHANGELOG.md lib`.split
   spec.require_paths = ["lib"]
 
+  spec.required_ruby_version = ">= 2.4"
+
   spec.add_dependency "anycable", "~> 0.6.0"
   spec.add_dependency "rails", ">= 5"
 

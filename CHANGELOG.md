@@ -2,6 +2,10 @@
 
 ## master
 
+- Require a minimum version of Ruby when installing the gem. ([@bibendi][])
+
+- Add ability to develop the gem with Docker. ([@bibendi][])
+
 ## 0.6.4 (2019-06-26) 👶
 
 - Fix Compatibility bug when using with AnyCable. ([@palkan][])
@@ -131,3 +135,4 @@ Ignore tagged logger features ('cause we do not have _persistent_ logger).
 [@alekseyl]: https://github.com/alekseyl
 [@DmitryTsepelev]: https://github.com/DmitryTsepelev
 [@sponomarev]: https://github.com/sponomarev
+[@bibendi]: https://github.com/bibendi

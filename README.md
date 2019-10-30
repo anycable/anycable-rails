@@ -107,5 +107,9 @@ See [documentation](https://docs.anycable.io/#/ruby/compatibility).
 
 Bug reports and pull requests are welcome on GitHub at https://github.com/anycable/anycable-rails.
 
+## Development
+
+If you are familiar with Docker, you can use [DIP](https://github.com/bibendi/dip) to start developing the gem quickly.
+
 ## License
 The gem is available as open source under the terms of the [MIT License](http://opensource.org/licenses/MIT).
