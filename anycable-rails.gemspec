@@ -22,7 +22,7 @@ Gem::Specification.new do |spec|
     "source_code_uri" => "http://github.com/anycable/anycable-rails"
   }
 
-  spec.files         = `git ls-files README.md MIT-LICENSE CHANGELOG.md lib`.split
+  spec.files         = Dir.glob("lib/**/*") + %w[README.md MIT-LICENSE CHANGELOG.md]
   spec.require_paths = ["lib"]
 
   spec.required_ruby_version = ">= 2.4"

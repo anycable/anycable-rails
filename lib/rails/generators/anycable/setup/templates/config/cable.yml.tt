@@ -1,0 +1,10 @@
+# List of available adapters: async, any_cable
+development:
+  adapter: <%%= ENV.fetch("CABLE_ADAPTER", "any_cable") %>
+
+test:
+  adapter: test
+
+production:
+  adapter: <%%= ENV.fetch("CABLE_ADAPTER", "any_cable") %>
+  channel_prefix: <%= app_name %>_production
