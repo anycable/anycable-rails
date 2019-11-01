@@ -25,13 +25,13 @@ module AnyCableRailsGenerators
         when 2
           return unless download_binary
         when 3
-          say_status :help, "🛈 You can read about how to install AnyCable WebSocket here 👉 https://docs.anycable.io/#/anycable-go/getting_started", :yellow
+          say_status :help, "⚠️ Please, read this guide on how to install AnyCable-Go server 👉 https://docs.anycable.io/#/anycable-go/getting_started", :yellow
           return
         else
           raise ArgumentError, "Unknown answer: #{answer}"
         end
 
-        say_status :info, "✔ AnyCable-Go WebSocket server has been installed"
+        say_status :info, "✅ AnyCable-Go WebSocket server has been successfully installed"
       end
 
       def proc_files
@@ -40,24 +40,24 @@ module AnyCableRailsGenerators
         if File.exist?(file_name)
           append_file file_name, 'anycable: bundle exec anycable --server-command "anycable-go --port 3334"'
         else
-          say_status :help, "🛈 We recommend using Hivemind - an app's process manager tool 👉 https://github.com/DarthSim/hivemind", :yellow
+          say_status :help, "💡 We recommend using Hivemind to manage multiple processes in development 👉 https://github.com/DarthSim/hivemind", :yellow
 
-          template file_name if yes? "Do you want to create '#{file_name}'?"
+          template file_name if yes? "Do you want to create a '#{file_name}' file?"
         end
       end
 
       private
 
       def download_binary
-        out_path = ask "Enter the path where to download the server", default: "/usr/local/bin", path: true
+        out_path = ask "Please, enter the path to download the AnyCable-Go binary to", default: "/usr/local/bin", path: true
         file_name = File.join(out_path, "anycable-go")
 
         sudo = ""
         unless File.writable?(out_path)
-          if yes? "Path is not writable. Do you have sudo privileges?"
+          if yes? "Path is not writable 😕. Do you have sudo privileges?"
             sudo = "sudo "
           else
-            say_status :error, "✘ AnyCable-Go WebSocket server has not been installed", :red
+            say_status :error, "❌ Failed to install AnyCable-Go WebSocket server", :red
             return false
           end
         end
@@ -66,7 +66,7 @@ module AnyCableRailsGenerators
                   ask("What is your OS name?", limited_to: OS_NAMES)
 
         cpu_name = CPU_NAMES.find(&current_cpu.method(:==)) ||
-                   ask("What is CPU architecture?", limited_to: CPU_NAMES)
+                   ask("What is your CPU architecture?", limited_to: CPU_NAMES)
 
         run "#{sudo}curl -L https://github.com/anycable/anycable-go/releases/download/#{SERVER_VERSION}/" \
             "anycable-go-#{SERVER_VERSION}-#{os_name}-#{cpu_name} -o #{file_name}", abort_on_failure: true

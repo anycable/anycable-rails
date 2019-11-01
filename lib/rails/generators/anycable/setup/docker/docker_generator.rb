@@ -7,12 +7,8 @@ module AnyCableRailsGenerators
       namespace "anycable:setup:docker"
 
       def info
-        say "Docker Compose configs can be tricky."
-        say "🛈 You can find an example of workable configs here 👉 https://github.com/evilmartians/evil_chat/tree/feature/anycable"
-      end
-
-      def compose_config
-        say "Code snippet for docker-compose.yml:"
+        say "Docker development configuration could vary."
+        say "Here is an example snippet for docker-compose.yml:"
         say <<~YML
           ─────────────────────────────────────────
           anycable-ws:
