@@ -62,11 +62,5 @@ module AnyCableRailsGenerators
     def finish
       say_status :info, "✅ AnyCable has been configured successfully!"
     end
-
-    private
-
-    def app_name
-      ::Rails.application.class.name.sub(/::Application$/, "").underscore
-    end
   end
 end
