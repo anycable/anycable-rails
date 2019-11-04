@@ -33,6 +33,7 @@ module AnyCableRailsGenerators
       end
 
       say_status :info, "✅ 'config.action_cable.url' has been configured"
+      say_status :help, "️️⚠️ Make sure you have `action_cable_meta_tag` in your application.html if you're using JS client"
     end
 
     def development_method
