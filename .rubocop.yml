@@ -47,29 +47,39 @@ Style/BlockDelimiters:
 Metrics/MethodLength:
   Exclude:
     - 'spec/**/*.rb'
+    - 'lib/rails/generators/**/*.rb'
 
 Metrics/LineLength:
   Max: 100
   Exclude:
     - 'spec/**/*.rb'
+    - 'lib/rails/generators/**/*.rb'
 
 Metrics/AbcSize:
   Exclude:
     - 'spec/**/*.rb'
+    - 'lib/rails/generators/**/*.rb'
 
 Metrics/BlockLength:
   Exclude:
     - '*.gemspec'
     - 'spec/**/*.rb'
     - 'anycable-rails.gemspec'
+    - 'lib/rails/generators/**/*.rb'
+
+Metrics/ClassLength:
+  Exclude:
+    - 'lib/rails/generators/**/*.rb'
 
 Metrics/CyclomaticComplexity:
   Exclude:
     - 'spec/**/*.rb'
+    - 'lib/rails/generators/**/*.rb'
 
 Metrics/PerceivedComplexity:
   Exclude:
     - 'spec/**/*.rb'
+    - 'lib/rails/generators/**/*.rb'
 
 Lint/HandleExceptions:
   Enabled: false
