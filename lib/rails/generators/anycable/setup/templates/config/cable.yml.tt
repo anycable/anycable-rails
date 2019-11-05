@@ -1,0 +1,11 @@
+# Make it possible to switch adapters by passing the CABLE_ADAPTER env variable.
+# For example, you can use it fallback to the standard Action Cable in staging/review
+# environments (by setting `CABLE_ADAPTER=redis`).
+development:
+  adapter: <%%= ENV.fetch("CABLE_ADAPTER", "any_cable") %>
+
+test:
+  adapter: test
+
+production:
+  adapter: <%%= ENV.fetch("CABLE_ADAPTER", "any_cable") %>

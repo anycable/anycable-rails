@@ -2,6 +2,8 @@
 
 ## master
 
+- Add set up generator to configure a Rails application by running `bin/rails g anycable:setup`. ([@bibendi][])
+
 - Require a minimum version of Ruby when installing the gem. ([@bibendi][])
 
 - Add ability to develop the gem with Docker. ([@bibendi][])

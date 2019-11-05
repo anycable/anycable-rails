@@ -42,12 +42,25 @@ gem "redis", ">= 4.0"
 
 (and don't forget to run `bundle install`).
 
-Next, specify AnyCable subscription adapter for Action Cable:
+### Interactive set up
+
+After the gem was installed, you can run an interactive wizard to configure your Rails application for using with AnyCable by running a generator:
+
+```sh
+bin/rails g anycable:setup
+```
+
+### Manual set up
+
+Specify AnyCable subscription adapter for Action Cable:
 
 ```yml
 # config/cable.yml
-production:
+development:
   adapter: any_cable # or anycable
+
+production:
+  adapter: any_cable
 ```
 
 and specify AnyCable WebSocket server URL:
