@@ -44,7 +44,7 @@ gem "redis", ">= 4.0"
 
 ### Interactive set up
 
-After gem was installed, you can run set up wizard to configure a Rails application by going through a few questions:
+After the gem was installed, you can run an interactive wizard to configure your Rails application for using with AnyCable by running a generator:
 
 ```sh
 bin/rails g anycable:setup

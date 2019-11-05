@@ -15,19 +15,19 @@ module AnyCableRailsGenerators
 
     class_option :method,
                  type: :string,
-                 desc: "Select your development environment to run particular installation method (options: #{METHODS.join(', ')})"
+                 desc: "Select your development environment (options: #{METHODS.join(', ')})"
     class_option :source,
                  type: :string,
-                 desc: "Install AnyCable-Go server from particular source (options: #{SERVER_SOURCES.join(', ')})"
+                 desc: "Choose a way of installing AnyCable-Go server (options: #{SERVER_SOURCES.join(', ')})"
     class_option :bin_path,
                  type: :string,
-                 desc: "Install AnyCable-Go server binary to directory (default: #{DEFAULT_BIN_PATH})"
+                 desc: "Where to download AnyCable-Go server binary (default: #{DEFAULT_BIN_PATH})"
     class_option :os,
                  type: :string,
-                 desc: "Download AnyCable-Go server binary for particular OS (options: #{OS_NAMES.join(', ')})"
+                 desc: "Specify the OS for AnyCable-Go server binary (options: #{OS_NAMES.join(', ')})"
     class_option :cpu,
                  type: :string,
-                 desc: "Download AnyCable-Go server binary for particular CPU architecture (options: #{CPU_NAMES.join(', ')})"
+                 desc: "Specify the CPU architecturefor AnyCable-Go server binary (options: #{CPU_NAMES.join(', ')})"
     class_option :skip_heroku,
                  type: :boolean,
                  desc: "Do not copy Heroku configs"
@@ -62,7 +62,7 @@ module AnyCableRailsGenerators
       end
 
       say_status :info, "✅ 'config.action_cable.url' has been configured"
-      say_status :help, "️️⚠️ Make sure you have `action_cable_meta_tag` in your application.html if you're using JS client"
+      say_status :help, "⚠️ Make sure you have `action_cable_meta_tag` in your application.html if you're using JS client"
     end
 
     def development_method
