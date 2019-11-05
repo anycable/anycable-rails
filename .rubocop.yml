@@ -67,6 +67,10 @@ Metrics/BlockLength:
     - 'anycable-rails.gemspec'
     - 'lib/rails/generators/**/*.rb'
 
+Metrics/ClassLength:
+  Exclude:
+    - 'lib/rails/generators/**/*.rb'
+
 Metrics/CyclomaticComplexity:
   Exclude:
     - 'spec/**/*.rb'
