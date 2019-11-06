@@ -111,7 +111,7 @@ module AnyCableRailsGenerators
             - '3334:3334'
           environment:
             PORT: 3334
-            REDIS_URL: redis://redis:6379/0
+            ANYCABLE_REDIS_URL: redis://redis:6379/0
             ANYCABLE_RPC_HOST: anycable-rpc:50051
           depends_on:
             - anycable-rpc
@@ -120,6 +120,10 @@ module AnyCableRailsGenerators
         anycable-rpc:
           <<: *backend
           command: bundle exec anycable
+          environment:
+            <<: *backend_environment
+            ANYCABLE_REDIS_URL: redis://redis:6379/0
+            ANYCABLE_RPC_HOST: 0.0.0.0:50051
           ports:
             - '50051'
         ─────────────────────────────────────────
