@@ -8,6 +8,8 @@
 
 - Add ability to develop the gem with Docker. ([@bibendi][])
 
+- Add ability to use Rack middlewares when build a request for a connection. ([@bibendi][])
+
 ## 0.6.4 (2019-06-26) 👶
 
 - Fix Compatibility bug when using with AnyCable. ([@palkan][])

@@ -16,6 +16,8 @@ module ActionCable
 
       attr_reader :socket
 
+      delegate :session, to: :request
+
       class << self
         def call(socket, **options)
           new(socket, options)
@@ -121,6 +123,14 @@ module ActionCable
 
       def logger
         @logger ||= TaggedLoggerProxy.new(AnyCable.logger, tags: ltags || [])
+      end
+
+      def request
+        @request ||= begin
+          environment = Rails.application.env_config.merge(env)
+          AnyCable::Rails::Rack.app.call(environment)
+          ActionDispatch::Request.new(environment)
+        end
       end
 
       private
