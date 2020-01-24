@@ -28,9 +28,14 @@ module ApplicationCable
     private
 
     def verify_user
-      return reject_unauthorized_connection unless cookies[:username].present?
+      return env["warden"]&.user if env["warden"]&.user
 
-      User.find_by(name: cookies[:username], secret: request.params[:token])
+      username = session[:username] || cookies[:username]
+      return reject_unauthorized_connection unless username
+
+      token = session[:token] || request.params[:token]
+
+      User.find_by(name: username, secret: token)
     end
   end
 end

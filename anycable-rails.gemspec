@@ -37,4 +37,5 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency "rubocop-md", "~> 0.3"
   spec.add_development_dependency "simplecov", ">= 0.3.8"
   spec.add_development_dependency "standard", "~> 0.1.7"
+  spec.add_development_dependency "warden"
 end

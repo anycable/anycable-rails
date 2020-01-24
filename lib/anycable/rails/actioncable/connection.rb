@@ -16,7 +16,7 @@ module ActionCable
 
       attr_reader :socket
 
-      delegate :session, to: :request
+      delegate :session, :env, to: :request
 
       class << self
         def call(socket, **options)
@@ -39,7 +39,6 @@ module ActionCable
         @ltags = ids.delete(LOG_TAGS_IDENTIFIER)
 
         @cached_ids = {}
-        @env = socket.env
         @coder = ActiveSupport::JSON
         @socket = socket
         @subscriptions = ActionCable::Connection::Subscriptions.new(self)
@@ -127,7 +126,7 @@ module ActionCable
 
       def request
         @request ||= begin
-          environment = Rails.application.env_config.merge(env)
+          environment = Rails.application.env_config.merge(socket.env)
           AnyCable::Rails::Rack.app.call(environment)
           ActionDispatch::Request.new(environment)
         end
