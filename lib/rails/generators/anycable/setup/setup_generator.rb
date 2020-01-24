@@ -181,12 +181,12 @@ module AnyCableRailsGenerators
       out ||= "/usr/local/bin" if options[:method] # User don't want interactive mode
       out ||= ask "Please, enter the path to download the AnyCable-Go binary to", default: DEFAULT_BIN_PATH, path: true
 
-      os_name = OS_NAMES.find(&Gem::Platform.local.os.method(:==)) ||
-                options[:os] ||
+      os_name = options[:os] ||
+                OS_NAMES.find(&Gem::Platform.local.os.method(:==)) ||
                 ask("What is your OS name?", limited_to: OS_NAMES)
 
-      cpu_name = CPU_NAMES.find(&current_cpu.method(:==)) ||
-                 options[:cpu] ||
+      cpu_name = options[:cpu] ||
+                 CPU_NAMES.find(&current_cpu.method(:==)) ||
                  ask("What is your CPU architecture?", limited_to: CPU_NAMES)
 
       download_exe(
