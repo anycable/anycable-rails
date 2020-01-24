@@ -20,7 +20,7 @@ You can even use Action Cable in development and not be afraid of [compatibility
 
 ## Requirements
 
-- Ruby >= 2.4; **NOTE:** for Ruby 2.6 use RC version of `google-protobuf` gem. In your Gemfile: `gem "google-protobuf", '>=3.7.0.rc.2'`
+- Ruby >= 2.5
 - Rails >= 5.0;
 - Redis (see [other options]() for broadcasting)
 
@@ -29,7 +29,6 @@ You can even use Action Cable in development and not be afraid of [compatibility
 <img src="https://trello-attachments.s3.amazonaws.com/5781e0ed48e4679e302833d3/820x987/5b6a305417b04e20e75f49c5816e027c/Anycable_vs_ActionCable_copy.jpg" width="400" />
 
 ## Usage
-
 
 Add `anycable-rails` gem to your Gemfile:
 

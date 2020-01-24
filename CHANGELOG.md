@@ -1,14 +1,16 @@
 # Change log
 
-## master
+## 🚧 1.0.0 (_coming soon_)
+
+- **Ruby 2.5+ is required**. ([@palkan][])
+
+- Add ability to use Rack middlewares when build a request for a connection. ([@bibendi][])
 
 - Add set up generator to configure a Rails application by running `bin/rails g anycable:setup`. ([@bibendi][])
 
 - Require a minimum version of Ruby when installing the gem. ([@bibendi][])
 
 - Add ability to develop the gem with Docker. ([@bibendi][])
-
-- Add ability to use Rack middlewares when build a request for a connection. ([@bibendi][])
 
 ## 0.6.4 (2019-06-26) 👶
 

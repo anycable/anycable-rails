@@ -16,8 +16,6 @@ matrix:
       gemfile: Gemfile
       env:
         BUNDLE_FORCE_RUBY_PLATFORM=1
-    - rvm: 2.4
-      gemfile: gemfiles/rails5.gemfile
     - rvm: 2.5
       gemfile: gemfiles/rails5.gemfile
     - rvm: 2.6
