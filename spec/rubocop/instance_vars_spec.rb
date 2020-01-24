@@ -6,7 +6,7 @@ describe RuboCop::Cop::AnyCable::InstanceVars do
   include_context "cop spec"
 
   it "registers offense for instance var declaration in #subscribed" do
-    inspect_source(<<-RUBY.strip_indent)
+    inspect_source(<<~RUBY)
       class MyChannel < ApplicationCable::Channel
         def subscribed
           @instance_var
@@ -19,7 +19,7 @@ describe RuboCop::Cop::AnyCable::InstanceVars do
   end
 
   it "registers offense for instance var definition inside block in #subscribed" do
-    inspect_source(<<-RUBY.strip_indent)
+    inspect_source(<<~RUBY)
       class MyChannel < ApplicationCable::Channel
         def subscribed
           5.times { @instance_var = 1 }
@@ -32,7 +32,7 @@ describe RuboCop::Cop::AnyCable::InstanceVars do
   end
 
   it "registers offense for instance var definition inside condition in #subscribed" do
-    inspect_source(<<-RUBY.strip_indent)
+    inspect_source(<<~RUBY)
       class MyChannel < ApplicationCable::Channel
         def subscribed
           @instance_var = 1 if true
@@ -45,7 +45,7 @@ describe RuboCop::Cop::AnyCable::InstanceVars do
   end
 
   it "registers offense for instance var definition inside multiple assignments in #subscribed" do
-    inspect_source(<<-RUBY.strip_indent)
+    inspect_source(<<~RUBY)
       class MyChannel < ApplicationCable::Channel
         def subscribed
           a = b = @instance_var = 1
@@ -58,7 +58,7 @@ describe RuboCop::Cop::AnyCable::InstanceVars do
   end
 
   it "registers offense for instance var definitions inside action" do
-    inspect_source(<<-RUBY.strip_indent)
+    inspect_source(<<~RUBY)
       class MyChannel < ApplicationCable::Channel
         def follow
           @instance_var = 1

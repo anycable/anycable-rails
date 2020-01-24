@@ -16,7 +16,7 @@ module AnyCable
 
         # Broadcast server logs to STDOUT in development
         if ::Rails.env.development? &&
-           !ActiveSupport::Logger.logger_outputs_to?(::Rails.logger, STDOUT)
+            !ActiveSupport::Logger.logger_outputs_to?(::Rails.logger, STDOUT)
           AnyCable.configure_server do
             console = ActiveSupport::Logger.new(STDOUT)
             console.formatter = ::Rails.logger.formatter

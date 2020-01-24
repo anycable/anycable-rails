@@ -10,7 +10,7 @@ describe "ActiveRecord connections release", :with_grpc_server, :rpc_command do
   describe "#perform" do
     let!(:user) { User.create!(name: "ar_test") }
     let(:command) { "message" }
-    let(:data) { { action: "find", id: user.id } }
+    let(:data) { {action: "find", id: user.id} }
 
     it "responds with result" do
       # warmup
@@ -22,7 +22,7 @@ describe "ActiveRecord connections release", :with_grpc_server, :rpc_command do
         response = service.command(request)
         expect(response.status).to eq :SUCCESS
         expect(response.transmissions.size).to eq 1
-        expect(response.transmissions.first).to include({ "name" => "ar_test" }.to_json)
+        expect(response.transmissions.first).to include({"name" => "ar_test"}.to_json)
       end
 
       connections = ActiveRecord::Base.connection_pool.connections.count(&:active?)

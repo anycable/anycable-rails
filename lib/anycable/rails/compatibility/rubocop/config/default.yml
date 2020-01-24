@@ -9,4 +9,3 @@ AnyCable/StreamFrom:
 AnyCable/PeriodicalTimers:
   Include:
     - "**/channels/**/*.rb"
-    

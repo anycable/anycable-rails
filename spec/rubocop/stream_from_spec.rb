@@ -6,7 +6,7 @@ describe RuboCop::Cop::AnyCable::StreamFrom do
   include_context "cop spec"
 
   it "registers offense for #stream_from with block" do
-    inspect_source(<<-RUBY.strip_indent)
+    inspect_source(<<~RUBY)
       class MyChannel < ApplicationCable::Channel
         def follow
           stream_from("all") {}
@@ -19,7 +19,7 @@ describe RuboCop::Cop::AnyCable::StreamFrom do
   end
 
   it "registers offense for #stream_from with callback" do
-    inspect_source(<<-RUBY.strip_indent)
+    inspect_source(<<~RUBY)
       class MyChannel < ApplicationCable::Channel
         def follow
           stream_from("all", -> {})
@@ -32,7 +32,7 @@ describe RuboCop::Cop::AnyCable::StreamFrom do
   end
 
   it "registers offense for #stream_from with not JSON coder" do
-    inspect_source(<<-RUBY.strip_indent)
+    inspect_source(<<~RUBY)
       class MyChannel < ApplicationCable::Channel
         def follow
           stream_from("all", coder: SomeCoder)
@@ -45,7 +45,7 @@ describe RuboCop::Cop::AnyCable::StreamFrom do
   end
 
   it "does not register offense for #stream_from with JSON coder" do
-    inspect_source(<<-RUBY.strip_indent)
+    inspect_source(<<~RUBY)
       class MyChannel < ApplicationCable::Channel
         def follow
           stream_from("all", coder: ActiveSupport::JSON)

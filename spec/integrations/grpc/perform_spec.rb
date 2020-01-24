@@ -9,18 +9,18 @@ describe "client messages", :with_grpc_server, :rpc_command do
 
   describe "#perform" do
     let(:command) { "message" }
-    let(:data) { { action: "add", a: 1, b: 2 } }
+    let(:data) { {action: "add", a: 1, b: 2} }
 
     subject { service.command(request) }
 
     it "responds with result" do
       expect(subject.status).to eq :SUCCESS
       expect(subject.transmissions.size).to eq 1
-      expect(subject.transmissions.first).to include({ "result" => 3 }.to_json)
+      expect(subject.transmissions.first).to include({"result" => 3}.to_json)
     end
 
     context "with multiple stream_from" do
-      let(:data) { { action: "follow" } }
+      let(:data) { {action: "follow"} }
 
       it "responds with streams", :aggregate_failures do
         expect(subject.status).to eq :SUCCESS
@@ -30,7 +30,7 @@ describe "client messages", :with_grpc_server, :rpc_command do
     end
 
     context "with exception" do
-      let(:data) { { action: "fail" } }
+      let(:data) { {action: "fail"} }
 
       it "responds with error" do
         expect(subject.status).to eq :ERROR

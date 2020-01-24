@@ -6,7 +6,7 @@ describe RuboCop::Cop::AnyCable::RemoteDisconnect do
   include_context "cop spec"
 
   it "registers offense for remote disconnection attempt" do
-    inspect_source(<<-RUBY.strip_indent)
+    inspect_source(<<~RUBY)
       class MyChannel < ApplicationCable::Channel
         def subscribed
           ActionCable.server.remote_connections.where(current_user: user).disconnect

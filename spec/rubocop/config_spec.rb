@@ -8,7 +8,7 @@ describe "Rubocop default config" do
   def run_rubocop(path)
     cops_path = File.expand_path("lib/anycable/rails/compatibility/rubocop.rb", PROJECT_ROOT)
     output, _status = Open3.capture2(
-      "bundle exec rubocop -d -r #{cops_path} #{path}",
+      "bundle exec rubocop --force-default-config -d -r #{cops_path} #{path}",
       chdir: File.join(__dir__, "fixtures")
     )
     output

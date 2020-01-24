@@ -14,7 +14,7 @@ describe AnyCableRailsGenerators::SetupGenerator, type: :generator do
     prepare_destination
 
     FileUtils.cp_r File.expand_path("../../fixtures/basic_rails_app", __dir__),
-                   File.expand_path("../../../tmp", __dir__)
+      File.expand_path("../../../tmp", __dir__)
 
     FileUtils.rm(removed_files.map { |f| File.join(base_root, f) }) if removed_files.any?
   end
@@ -70,8 +70,8 @@ describe AnyCableRailsGenerators::SetupGenerator, type: :generator do
         gen = generator(%w[--method local --source binary --os linux --cpu amd64 --skip-heroku --skip-procfile-dev false])
         expect(gen)
           .to receive(:download_exe).with(/releases\/download\/v\d+\.\d+\.\d+\/anycable-go-v\d+\.\d+\.\d+-linux-amd64/,
-                                          to: "/usr/local/bin",
-                                          file_name: "anycable-go")
+            to: "/usr/local/bin",
+            file_name: "anycable-go")
         silence_stream(STDOUT) { gen.invoke_all }
       end
     end

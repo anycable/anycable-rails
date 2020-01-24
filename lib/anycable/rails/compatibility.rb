@@ -12,7 +12,7 @@ module AnyCable
 
         if callback.present? || block_given?
           raise AnyCable::CompatibilityError,
-                "Custom stream callbacks are not supported by AnyCable"
+            "Custom stream callbacks are not supported by AnyCable"
         end
 
         super
@@ -35,8 +35,8 @@ module AnyCable
 
         unless diff.empty?
           raise AnyCable::CompatibilityError,
-                "Channel instance variables are not supported by AnyCable, " \
-                "but were set: #{diff.join(', ')}"
+            "Channel instance variables are not supported by AnyCable, " \
+            "but were set: #{diff.join(", ")}"
         end
 
         res
@@ -52,7 +52,7 @@ module AnyCable
     ActionCable::RemoteConnections::RemoteConnection.prepend(Module.new do
       def disconnect
         raise AnyCable::CompatibilityError,
-              "Disconnecting remote clients is not supported by AnyCable yet"
+          "Disconnecting remote clients is not supported by AnyCable yet"
       end
     end)
   end

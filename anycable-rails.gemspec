@@ -5,15 +5,15 @@ $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
 require "anycable/rails/version"
 
 Gem::Specification.new do |spec|
-  spec.name          = "anycable-rails"
-  spec.version       = AnyCable::Rails::VERSION
-  spec.authors       = ["palkan"]
-  spec.email         = ["dementiev.vm@gmail.com"]
+  spec.name = "anycable-rails"
+  spec.version = AnyCable::Rails::VERSION
+  spec.authors = ["palkan"]
+  spec.email = ["dementiev.vm@gmail.com"]
 
-  spec.summary       = "Rails adapter for AnyCable"
-  spec.description   = "Rails adapter for AnyCable"
-  spec.homepage      = "http://github.com/anycable/anycable-rails"
-  spec.license       = "MIT"
+  spec.summary = "Rails adapter for AnyCable"
+  spec.description = "Rails adapter for AnyCable"
+  spec.homepage = "http://github.com/anycable/anycable-rails"
+  spec.license = "MIT"
   spec.metadata = {
     "bug_tracker_uri" => "http://github.com/anycable/anycable-rails/issues",
     "changelog_uri" => "https://github.com/anycable/anycable-rails/blob/master/CHANGELOG.md",
@@ -22,7 +22,7 @@ Gem::Specification.new do |spec|
     "source_code_uri" => "http://github.com/anycable/anycable-rails"
   }
 
-  spec.files         = Dir.glob("lib/**/*") + %w[README.md MIT-LICENSE CHANGELOG.md]
+  spec.files = Dir.glob("lib/**/*") + %w[README.md MIT-LICENSE CHANGELOG.md]
   spec.require_paths = ["lib"]
 
   spec.required_ruby_version = ">= 2.4"
@@ -35,6 +35,7 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency "pry-byebug"
   spec.add_development_dependency "rake", "~> 10.0"
   spec.add_development_dependency "rspec", ">= 3.4"
-  spec.add_development_dependency "rubocop", "~> 0.67.0"
+  spec.add_development_dependency "rubocop-md", "~> 0.3"
   spec.add_development_dependency "simplecov", ">= 0.3.8"
+  spec.add_development_dependency "standard", "~> 0.1.7"
 end

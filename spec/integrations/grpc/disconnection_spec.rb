@@ -8,7 +8,7 @@ describe "disconnection", :with_grpc_server, :rpc_command do
   let!(:user) { User.create!(name: "disco", secret: "123") }
   let(:url) { "http://example.io/cable?token=123" }
   let(:subscriptions) { [] }
-  let(:headers) { { "Cookie" => "username=disco;" } }
+  let(:headers) { {"Cookie" => "username=disco;"} }
 
   let(:request) do
     AnyCable::DisconnectRequest.new(
@@ -63,7 +63,7 @@ describe "disconnection", :with_grpc_server, :rpc_command do
 
     context "with multiple channels" do
       let(:subscriptions) { [channel_id_json, channel_id2_json] }
-      let(:channel_id2_json) { { channel: "TestChannel" }.to_json }
+      let(:channel_id2_json) { {channel: "TestChannel"}.to_json }
 
       it "invokes #unsubscribed for each channel" do
         expect { subject }

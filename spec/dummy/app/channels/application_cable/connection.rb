@@ -8,7 +8,7 @@ module ApplicationCable
       end
 
       def log_event(source, data)
-        events_log << { source: source, data: data }
+        events_log << {source: source, data: data}
       end
     end
 

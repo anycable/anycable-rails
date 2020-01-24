@@ -5,11 +5,11 @@ shared_context "rpc command", rpc_command: true do
   let(:url) { "" }
   let(:command) { "" }
   let(:channel) { "" }
-  let(:conn_id) { { current_user: user.to_gid_param, url: url } }
+  let(:conn_id) { {current_user: user.to_gid_param, url: url} }
   let(:data) { {} }
 
   let(:channel_params) { {} }
-  let(:channel_id) { { channel: channel }.merge(channel_params) }
+  let(:channel_id) { {channel: channel}.merge(channel_params) }
   let(:channel_id_json) { channel_id.to_json }
 
   let(:request) do

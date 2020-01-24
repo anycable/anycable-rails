@@ -97,7 +97,7 @@ module ActionCable
       # Generate identifiers info.
       # Converts GlobalID compatible vars to corresponding global IDs params.
       def identifiers_hash
-        obj = { LOG_TAGS_IDENTIFIER => fetch_ltags }
+        obj = {LOG_TAGS_IDENTIFIER => fetch_ltags}
 
         identifiers.each_with_object(obj) do |id, acc|
           obj = instance_variable_get("@#{id}")

@@ -6,7 +6,7 @@ describe RuboCop::Cop::AnyCable::PeriodicalTimers do
   include_context "cop spec"
 
   it "registers offense for #periodically call" do
-    inspect_source(<<-RUBY.strip_indent)
+    inspect_source(<<~RUBY)
       class MyChannel < ApplicationCable::Channel
         periodically(:do_something, every: 2.seconds)
       end
@@ -17,7 +17,7 @@ describe RuboCop::Cop::AnyCable::PeriodicalTimers do
   end
 
   it "registers offense for #periodically call explicit self" do
-    inspect_source(<<-RUBY.strip_indent)
+    inspect_source(<<~RUBY)
       class MyChannel < ApplicationCable::Channel
         self.periodically(:do_something, every: 2.seconds)
       end

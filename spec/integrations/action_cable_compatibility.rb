@@ -29,7 +29,8 @@ require "anycable/rails/compatibility"
 describe "Compatibility" do
   describe "Channel" do
     class CompatibilityChannel < ActionCable::Channel::Base
-      def follow; end
+      def follow
+      end
     end
 
     let(:socket) { instance_double("socket", subscribe: nil) }

@@ -14,26 +14,26 @@ module AnyCableRailsGenerators
     DEFAULT_BIN_PATH = "/usr/local/bin"
 
     class_option :method,
-                 type: :string,
-                 desc: "Select your development environment (options: #{METHODS.join(', ')})"
+      type: :string,
+      desc: "Select your development environment (options: #{METHODS.join(", ")})"
     class_option :source,
-                 type: :string,
-                 desc: "Choose a way of installing AnyCable-Go server (options: #{SERVER_SOURCES.join(', ')})"
+      type: :string,
+      desc: "Choose a way of installing AnyCable-Go server (options: #{SERVER_SOURCES.join(", ")})"
     class_option :bin_path,
-                 type: :string,
-                 desc: "Where to download AnyCable-Go server binary (default: #{DEFAULT_BIN_PATH})"
+      type: :string,
+      desc: "Where to download AnyCable-Go server binary (default: #{DEFAULT_BIN_PATH})"
     class_option :os,
-                 type: :string,
-                 desc: "Specify the OS for AnyCable-Go server binary (options: #{OS_NAMES.join(', ')})"
+      type: :string,
+      desc: "Specify the OS for AnyCable-Go server binary (options: #{OS_NAMES.join(", ")})"
     class_option :cpu,
-                 type: :string,
-                 desc: "Specify the CPU architecturefor AnyCable-Go server binary (options: #{CPU_NAMES.join(', ')})"
+      type: :string,
+      desc: "Specify the CPU architecturefor AnyCable-Go server binary (options: #{CPU_NAMES.join(", ")})"
     class_option :skip_heroku,
-                 type: :boolean,
-                 desc: "Do not copy Heroku configs"
+      type: :boolean,
+      desc: "Do not copy Heroku configs"
     class_option :skip_procfile_dev,
-                 type: :boolean,
-                 desc: "Do not create Procfile.dev"
+      type: :boolean,
+      desc: "Do not create Procfile.dev"
 
     def welcome
       say "👋 Welcome to AnyCable interactive installer."
@@ -182,12 +182,12 @@ module AnyCableRailsGenerators
       out ||= ask "Please, enter the path to download the AnyCable-Go binary to", default: DEFAULT_BIN_PATH, path: true
 
       os_name = options[:os] ||
-                OS_NAMES.find(&Gem::Platform.local.os.method(:==)) ||
-                ask("What is your OS name?", limited_to: OS_NAMES)
+        OS_NAMES.find(&Gem::Platform.local.os.method(:==)) ||
+        ask("What is your OS name?", limited_to: OS_NAMES)
 
       cpu_name = options[:cpu] ||
-                 CPU_NAMES.find(&current_cpu.method(:==)) ||
-                 ask("What is your CPU architecture?", limited_to: CPU_NAMES)
+        CPU_NAMES.find(&current_cpu.method(:==)) ||
+        ask("What is your CPU architecture?", limited_to: CPU_NAMES)
 
       download_exe(
         "https://github.com/anycable/anycable-go/releases/download/#{SERVER_VERSION}/" \

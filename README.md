@@ -79,7 +79,7 @@ config.action_cable.url = "wss://ws.example.com/cable"
 
 Then, run AnyCable RPC server:
 
-```ruby
+```sh
 $ bundle exec anycable
 
 # don't forget to provide Rails env
