@@ -2,6 +2,8 @@ source 'https://rubygems.org'
 
 gemspec
 
+gem "pry-byebug", platform: :mri
+
 local_gemfile = "#{File.dirname(__FILE__)}/Gemfile.local"
 
 if File.exist?(local_gemfile)
