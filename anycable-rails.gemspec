@@ -27,7 +27,7 @@ Gem::Specification.new do |spec|
 
   spec.required_ruby_version = ">= 2.5"
 
-  spec.add_dependency "anycable", "~> 0.6.0"
+  spec.add_dependency "anycable", ">= 0.6.0"
   spec.add_dependency "rails", ">= 5"
 
   spec.add_development_dependency "ammeter", "~> 1.1"
