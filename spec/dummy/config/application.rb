@@ -17,7 +17,9 @@ module Dummy
     config.log_level = :fatal
     config.eager_load = true
 
-    config.active_record.sqlite3.represent_boolean_as_integer = true
+    if Rails::VERSION::MAJOR < 6
+      config.active_record.sqlite3.represent_boolean_as_integer = true
+    end
 
     config.session_store :cookie_store, key: "__anycable_dummy"
 

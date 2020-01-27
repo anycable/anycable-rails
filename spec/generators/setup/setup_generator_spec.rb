@@ -7,7 +7,6 @@ describe AnyCableRailsGenerators::SetupGenerator, type: :generator do
   destination File.expand_path("../../../tmp/basic_rails_app", __dir__)
 
   let(:gen) { generator }
-  let(:base_root) { File.expand_path("../../../tmp/basic_rails_app", __dir__) }
   let(:removed_files) { [] }
 
   before do
@@ -16,7 +15,7 @@ describe AnyCableRailsGenerators::SetupGenerator, type: :generator do
     FileUtils.cp_r File.expand_path("../../fixtures/basic_rails_app", __dir__),
       File.expand_path("../../../tmp", __dir__)
 
-    FileUtils.rm(removed_files.map { |f| File.join(base_root, f) }) if removed_files.any?
+    FileUtils.rm(removed_files.map { |f| File.join(destination_root, f) }) if removed_files.any?
   end
 
   context "when skip install environment" do
@@ -76,11 +75,40 @@ describe AnyCableRailsGenerators::SetupGenerator, type: :generator do
       end
     end
 
-    context "when installin from Homebrew" do
+    context "when installing from Homebrew" do
       it "runs commands" do
         gen = generator(%w[--method local --source brew --skip-heroku --skip-procfile-dev false])
         expect(gen).to receive(:install_from_brew)
         silence_stream(STDOUT) { gen.invoke_all }
+      end
+    end
+  end
+
+  context "config/initializers/anycable.rb" do
+    subject do
+      run_generator %w[--method skip --skip-heroku]
+      file("config/initializers/anycable.rb")
+    end
+
+    context "when no devise.rb" do
+      it "doesn't create anycable.rb initializer" do
+        expect(subject).not_to exist
+      end
+    end
+
+    context "when has devise.rb" do
+      before do
+        File.write(
+          File.join(destination_root, "config/initializers/devise.rb"),
+          <<~CODE
+            # devise config
+          CODE
+        )
+      end
+
+      it "creates anycable.rb initializer" do
+        expect(subject)
+          .to contain("AnyCable::Rails::Rack.middleware.use Warden::Manager")
       end
     end
   end

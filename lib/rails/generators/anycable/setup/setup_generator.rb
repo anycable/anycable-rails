@@ -62,7 +62,8 @@ module AnyCableRailsGenerators
       end
 
       say_status :info, "✅ 'config.action_cable.url' has been configured"
-      say_status :help, "⚠️ Make sure you have `action_cable_meta_tag` in your application.html if you're using JS client"
+      say_status :help, "⚠️ If you're using JS client make sure you have " \
+                        "`action_cable_meta_tag` included before any <script> tag in your application.html"
     end
 
     def development_method
@@ -91,6 +92,18 @@ module AnyCableRailsGenerators
       inside("bin") { template "heroku-web" }
 
       say_status :help, "️️⚠️ Please, read the required steps to configure Heroku applications 👉 https://docs.anycable.io/#/deployment/heroku", :yellow
+    end
+
+    def devise
+      in_root do
+        return unless File.file?("config/initializers/devise.rb")
+      end
+
+      inside("config/initializers") do
+        template "anycable.rb"
+      end
+
+      say_status :info, "✅ config/initializers/anycable.rb with Devise configuration has been added"
     end
 
     def finish
