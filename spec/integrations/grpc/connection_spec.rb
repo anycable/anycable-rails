@@ -2,17 +2,22 @@
 
 require "spec_helper"
 
-describe "client connection", :with_grpc_server do
-  include_context "rpc stub"
+describe "client connection" do
+  include_context "anycable:rpc:server"
+  include_context "anycable:rpc:stub"
 
   let!(:user) { User.create!(name: "john", secret: "123") }
+
+  let(:request) do
+    AnyCable::ConnectionRequest.new(env: env)
+  end
 
   subject { service.connect(request) }
 
   before { ActionCable.server.config.disable_request_forgery_protection = true }
 
   context "no cookies" do
-    let(:request) { AnyCable::ConnectionRequest.new }
+    let(:request) { AnyCable::ConnectionRequest.new(env: env) }
 
     it "responds with error if no cookies" do
       expect(subject.status).to eq :FAILURE
@@ -21,15 +26,12 @@ describe "client connection", :with_grpc_server do
 
   context "with cookies and path info" do
     let(:cookies) { "username=john" }
-
-    let(:request) do
-      AnyCable::ConnectionRequest.new(
-        headers: {
-          "Cookie" => cookies
-        },
-        path: "http://example.io/cable?token=123"
-      )
+    let(:headers) do
+      {
+        "Cookie" => cookies
+      }
     end
+    let(:url) { "http://example.io/cable?token=123" }
 
     it "responds with success, correct identifiers and 'welcome' message", :aggregate_failures do
       expect(subject.status).to eq :SUCCESS
@@ -72,15 +74,13 @@ describe "client connection", :with_grpc_server do
   end
 
   context "request verification" do
-    let(:request) do
-      Anycable::ConnectionRequest.new(
-        headers: {
-          "Cookie" => "username=john",
-          "Origin" => "http://anycable.io"
-        },
-        path: "http://anycable.io/cable?token=123"
-      )
+    let(:headers) do
+      {
+        "Cookie" => "username=john",
+        "Origin" => "http://anycable.io"
+      }
     end
+    let(:url) { "http://anycable.io/cable?token=123" }
 
     before { ActionCable.server.config.allow_same_origin_as_host = false }
 
@@ -107,14 +107,12 @@ describe "client connection", :with_grpc_server do
       end
 
       context "when no ORIGIN provided" do
-        let(:request) do
-          Anycable::ConnectionRequest.new(
-            headers: {
-              "Cookie" => "username=john"
-            },
-            path: "http://anycable.io/cable?token=123"
-          )
+        let(:headers) do
+          {
+            "Cookie" => "username=john"
+          }
         end
+        let(:url) { "http://anycable.io/cable?token=123" }
 
         it "responds with success" do
           ActionCable.server.config.allowed_request_origins = "http://example.io"
@@ -123,15 +121,13 @@ describe "client connection", :with_grpc_server do
       end
 
       context "when ORIGIN provided but blank" do
-        let(:request) do
-          Anycable::ConnectionRequest.new(
-            headers: {
-              "Cookie" => "username=john",
-              "Origin" => ""
-            },
-            path: "http://anycable.io/cable?token=123"
-          )
+        let(:headers) do
+          {
+            "Cookie" => "username=john",
+            "Origin" => ""
+          }
         end
+        let(:url) { "http://anycable.io/cable?token=123" }
 
         it "responds with failure" do
           ActionCable.server.config.allowed_request_origins = "http://example.io"

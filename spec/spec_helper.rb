@@ -8,6 +8,7 @@ Rails.application.eager_load!
 
 require "active_support/testing/stream"
 require "ammeter/init"
+require "anycable/rspec"
 
 Dir["#{__dir__}/support/**/*.rb"].each { |f| require f }
 

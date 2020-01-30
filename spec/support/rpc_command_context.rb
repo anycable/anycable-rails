@@ -1,23 +1,13 @@
 # frozen_string_literal: true
 
-shared_context "rpc command", rpc_command: true do
+shared_context "rpc_command" do
+  include_context "anycable:rpc:command"
+
   let(:user) { User.create!(name: "john", secret: "123") }
   let(:url) { "" }
-  let(:command) { "" }
-  let(:channel) { "" }
-  let(:conn_id) { {current_user: user.to_gid_param, url: url} }
-  let(:data) { {} }
+  let(:identifiers) { {current_user: user.to_gid_param, url: url} }
 
   let(:channel_params) { {} }
-  let(:channel_id) { {channel: channel}.merge(channel_params) }
-  let(:channel_id_json) { channel_id.to_json }
-
-  let(:request) do
-    AnyCable::CommandMessage.new(
-      command: command,
-      identifier: channel_id_json,
-      connection_identifiers: conn_id.to_json,
-      data: data.to_json
-    )
-  end
+  let(:channel_identifier) { {channel: channel_class}.merge(channel_params) }
+  let(:channel_id) { channel_identifier.to_json }
 end

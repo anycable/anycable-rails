@@ -2,10 +2,11 @@
 
 require "spec_helper"
 
-describe "ActiveRecord connections release", :with_grpc_server, :rpc_command do
-  include_context "rpc stub"
+describe "ActiveRecord connections release" do
+  include_context "anycable:rpc:server"
+  include_context "rpc_command"
 
-  let(:channel) { "ChatChannel" }
+  let(:channel_class) { "ChatChannel" }
 
   describe "#perform" do
     let!(:user) { User.create!(name: "ar_test") }

@@ -2,10 +2,11 @@
 
 require "spec_helper"
 
-describe "client messages", :with_grpc_server, :rpc_command do
-  include_context "rpc stub"
+describe "client messages" do
+  include_context "anycable:rpc:server"
+  include_context "rpc_command"
 
-  let(:channel) { "TestChannel" }
+  let(:channel_class) { "TestChannel" }
 
   describe "#perform" do
     let(:command) { "message" }

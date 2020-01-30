@@ -2,8 +2,9 @@
 
 require "spec_helper"
 
-describe "disconnection", :with_grpc_server, :rpc_command do
-  include_context "rpc stub"
+describe "disconnection" do
+  include_context "anycable:rpc:server"
+  include_context "rpc_command"
 
   let!(:user) { User.create!(name: "disco", secret: "123") }
   let(:url) { "http://example.io/cable?token=123" }
@@ -12,10 +13,9 @@ describe "disconnection", :with_grpc_server, :rpc_command do
 
   let(:request) do
     AnyCable::DisconnectRequest.new(
-      identifiers: conn_id.to_json,
+      identifiers: identifiers.to_json,
       subscriptions: subscriptions,
-      path: url,
-      headers: headers
+      env: env
     )
   end
 
@@ -49,33 +49,33 @@ describe "disconnection", :with_grpc_server, :rpc_command do
   end
 
   describe "Channel#unsubscribed" do
-    let(:subscriptions) { [channel_id_json] }
-    let(:channel) { "ChatChannel" }
+    let(:subscriptions) { [channel_id] }
+    let(:channel_class) { "ChatChannel" }
 
     it "invokes #unsubscribed for channel" do
       expect { subject }
-        .to change { log.select { |entry| entry[:source] == channel_id_json }.size }
+        .to change { log.select { |entry| entry[:source] == channel_id }.size }
         .by(1)
 
-      channel_logs = log.select { |entry| entry[:source] == channel_id_json }
+      channel_logs = log.select { |entry| entry[:source] == channel_id }
       expect(channel_logs.last[:data]).to eq(user: "disco", type: "unsubscribed")
     end
 
     context "with multiple channels" do
-      let(:subscriptions) { [channel_id_json, channel_id2_json] }
-      let(:channel_id2_json) { {channel: "TestChannel"}.to_json }
+      let(:channel2_id) { {channel: "TestChannel"}.to_json }
+      let(:subscriptions) { [channel_id, channel2_id] }
 
       it "invokes #unsubscribed for each channel" do
         expect { subject }
-          .to change { log.select { |entry| entry[:source] == channel_id_json }.size }
+          .to change { log.select { |entry| entry[:source] == channel_id }.size }
           .by(1)
-          .and change { log.select { |entry| entry[:source] == channel_id2_json }.size }
+          .and change { log.select { |entry| entry[:source] == channel2_id }.size }
           .by(1)
 
-        channel_logs = log.select { |entry| entry[:source] == channel_id_json }
+        channel_logs = log.select { |entry| entry[:source] == channel_id }
         expect(channel_logs.last[:data]).to eq(user: "disco", type: "unsubscribed")
 
-        channel2_logs = log.select { |entry| entry[:source] == channel_id2_json }
+        channel2_logs = log.select { |entry| entry[:source] == channel2_id }
         expect(channel2_logs.last[:data]).to eq(user: "disco", type: "unsubscribed")
       end
     end

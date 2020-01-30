@@ -3,8 +3,9 @@
 require "spec_helper"
 require "action_controller/test_case"
 
-describe "rack middleware support", :with_grpc_server do
-  include_context "rpc stub"
+describe "rack middleware support" do
+  include_context "anycable:rpc:server"
+  include_context "anycable:rpc:stub"
 
   include ActionDispatch::Integration::Runner
   include ActionDispatch::IntegrationTest::Behavior
@@ -25,9 +26,11 @@ describe "rack middleware support", :with_grpc_server do
       expect(response.cookies).to include("__anycable_dummy")
 
       request = AnyCable::ConnectionRequest.new(
-        headers: {
-          "Cookie" => response.cookies.map { |k, v| "#{k}=#{v}" }.join("&")
-        }
+        env: AnyCable::Env.new(
+          headers: {
+            "Cookie" => response.cookies.map { |k, v| "#{k}=#{v}" }.join("&")
+          }
+        )
       )
 
       response = service.connect(request)
@@ -45,9 +48,11 @@ describe "rack middleware support", :with_grpc_server do
       expect(response.cookies).to include("__anycable_dummy")
 
       request = AnyCable::ConnectionRequest.new(
-        headers: {
-          "Cookie" => response.cookies.map { |k, v| "#{k}=#{v}" }.join("&")
-        }
+        env: AnyCable::Env.new(
+          headers: {
+            "Cookie" => response.cookies.map { |k, v| "#{k}=#{v}" }.join("&")
+          }
+        )
       )
 
       response = service.connect(request)
