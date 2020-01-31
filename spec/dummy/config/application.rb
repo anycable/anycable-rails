@@ -21,7 +21,8 @@ module Dummy
       config.active_record.sqlite3.represent_boolean_as_integer = true
     end
 
-    config.session_store :cookie_store, key: "__anycable_dummy"
+    config.cache_store = :memory_store
+    config.session_store :cache_store, key: "__anycable_dummy"
 
     config.middleware.use Warden::Manager
 

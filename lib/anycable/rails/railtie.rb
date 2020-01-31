@@ -46,6 +46,9 @@ module AnyCable
           if AnyCable::Rails.compatible_adapter?(adapter)
             require "anycable/rails/actioncable/connection"
 
+            require "anycable/rails/actioncable/connection/persistent_session"
+            ::ActionCable::Connection::Base.prepend(::ActionCable::Connection::PersistentSession)
+
             app.config.to_prepare do
               AnyCable.connection_factory = ActionCable.server.config.connection_class.call
             end

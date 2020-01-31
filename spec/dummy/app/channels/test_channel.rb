@@ -21,4 +21,10 @@ class TestChannel < ApplicationCable::Channel
   def fail
     non_existent_method(1)
   end
+
+  def tick
+    session[:count] ||= 0
+    session[:count] += 1
+    transmit result: session[:count]
+  end
 end

@@ -4,7 +4,7 @@ require "spec_helper"
 
 describe AnyCable::Rails::Rack do
   it "uses Session middleware" do
-    expect(described_class.default_middleware_stack.middlewares).to include(ActionDispatch::Session::CookieStore)
+    expect(described_class.default_middleware_stack.middlewares).to include(ActionDispatch::Session::CacheStore)
   end
 
   it "acts as rack application" do
