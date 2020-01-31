@@ -41,6 +41,9 @@ describe "client connection" do
         "url" => "http://example.io/cable?token=123"
       )
       expect(subject.transmissions.first).to eq JSON.dump("type" => "welcome")
+      expect(JSON.parse(subject.cstate["__ltags__"])).to eq(
+        ["ActionCable", "john"]
+      )
     end
 
     it "logs access message (started)", log: :info do

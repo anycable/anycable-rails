@@ -34,6 +34,11 @@ describe "disconnection" do
       expect { subject }.to output(/Finished \"\/cable\?token=123\" \[AnyCable\].*\(Closed\)/).to_stdout_from_any_process
     end
 
+    it "logs with tags when set", log: :info do
+      request.cstate["__ltags__"] = ["u:john"].to_json
+      expect { subject }.to output(/\[u:john\] Finished \"\/cable\?token=123\" \[AnyCable\].*\(Closed\)/).to_stdout_from_any_process
+    end
+
     context "when access logs disabled" do
       around do |ex|
         was_disabled = AnyCable.config.access_logs_disabled

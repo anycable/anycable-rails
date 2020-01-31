@@ -8,7 +8,7 @@ module ActionCable
   module Connection
     # rubocop: disable Metrics/ClassLength
     class Base # :nodoc:
-      # We store logger tags in identifiers to be able
+      # We store logger tags in the connection state to be able
       # to re-use them in the subsequent calls
       LOG_TAGS_IDENTIFIER = "__ltags__"
 
@@ -36,7 +36,10 @@ module ActionCable
       def initialize(socket, identifiers: "{}", subscriptions: [])
         @ids = ActiveSupport::JSON.decode(identifiers)
 
-        @ltags = ids.delete(LOG_TAGS_IDENTIFIER)
+        @ltags = socket.cstate.read(LOG_TAGS_IDENTIFIER).then do |raw_tags|
+          next unless raw_tags
+          ActiveSupport::JSON.decode(raw_tags)
+        end
 
         @cached_ids = {}
         @coder = ActiveSupport::JSON
@@ -53,6 +56,9 @@ module ActionCable
         verify_origin!
 
         connect if respond_to?(:connect)
+
+        socket.cstate.write(LOG_TAGS_IDENTIFIER, fetch_ltags.to_json)
+
         send_welcome_message
       rescue ActionCable::Connection::Authorization::UnauthorizedError
         reject_request
@@ -96,9 +102,7 @@ module ActionCable
       # Generate identifiers info.
       # Converts GlobalID compatible vars to corresponding global IDs params.
       def identifiers_hash
-        obj = {LOG_TAGS_IDENTIFIER => fetch_ltags}
-
-        identifiers.each_with_object(obj) do |id, acc|
+        identifiers.each_with_object({}) do |id, acc|
           obj = instance_variable_get("@#{id}")
           next unless obj
 
