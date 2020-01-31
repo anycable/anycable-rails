@@ -181,6 +181,10 @@ module ActionCable
         logger.info finished_request_message("Rejected") if access_logs?
         close
       end
+
+      def request_loaded?
+        instance_variable_defined?(:@request)
+      end
     end
     # rubocop:enable Metrics/ClassLength
   end
