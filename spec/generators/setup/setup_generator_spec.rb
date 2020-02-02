@@ -19,14 +19,34 @@ describe AnyCableRailsGenerators::SetupGenerator, type: :generator do
   end
 
   context "when skip install environment" do
-    before { run_generator %w[--method skip --skip-heroku] }
+    subject { run_generator %w[--method skip --skip-heroku] }
 
     it "copies config files" do
+      subject
       expect(file("config/cable.yml")).to exist
-      expect(file("config/anycable.yml")).to exist
+      expect(file("config/anycable.yml")).to contain("persistent_session_enabled: false")
+    end
+
+    context "when stimulus_reflex is in the deps" do
+      before do
+        File.write(
+          File.join(destination_root, "Gemfile.lock"),
+          <<~CODE
+            GEM
+              specs:
+                stimulus_reflex
+          CODE
+        )
+      end
+
+      it "anycable.yml enables persistent sessions" do
+        subject
+        expect(file("config/anycable.yml")).to contain("persistent_session_enabled: true")
+      end
     end
 
     it "patch environment configs" do
+      subject
       expect(file("config/environments/development.rb"))
         .to contain('config.action_cable.url = ENV.fetch("CABLE_URL", "ws://localhost:3334/cable").presence')
 
