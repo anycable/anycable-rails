@@ -4,6 +4,13 @@
 
 - **Ruby 2.5+ is required**. ([@palkan][])
 
+- Add ability to persist _dirty_ `request.session` between RPC calls. ([@palkan][])
+
+This feature emulates the Action Cable behaviour where it's possible to use `request.session` as a shared Hash-like store.
+This could be used by some applications (e.g., [StimulusReflex](https://github.com/hopsoft/stimulus_reflex)-based).
+
+You must turn this feature on by setting `persistent_session_enabled: true` in the AnyCable configuration.
+
 - Add ability to use Rack middlewares when build a request for a connection. ([@bibendi][])
 
 - Add set up generator to configure a Rails application by running `bin/rails g anycable:setup`. ([@bibendi][])
