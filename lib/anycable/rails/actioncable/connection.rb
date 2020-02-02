@@ -3,6 +3,7 @@
 require "action_cable/connection"
 require "anycable/rails/refinements/subscriptions"
 require "anycable/rails/actioncable/channel"
+require "anycable/rails/session_proxy"
 
 module ActionCable
   module Connection
@@ -16,7 +17,7 @@ module ActionCable
 
       attr_reader :socket
 
-      delegate :session, :env, to: :request
+      delegate :env, :session, to: :request
 
       class << self
         def call(socket, **options)
@@ -59,6 +60,8 @@ module ActionCable
 
         socket.cstate.write(LOG_TAGS_IDENTIFIER, fetch_ltags.to_json)
 
+        commit_session!
+
         send_welcome_message
       rescue ActionCable::Connection::Authorization::UnauthorizedError
         reject_request
@@ -75,19 +78,22 @@ module ActionCable
       # rubocop:disable Metrics/MethodLength
       def handle_channel_command(identifier, command, data)
         channel = subscriptions.fetch(identifier)
-        case command
-        when "subscribe"
-          channel.handle_subscribe
-          !channel.subscription_rejected?
-        when "unsubscribe"
-          subscriptions.remove_subscription(channel)
-          true
-        when "message"
-          channel.perform_action ActiveSupport::JSON.decode(data)
-          true
-        else
-          false
-        end
+        res =
+          case command
+          when "subscribe"
+            channel.handle_subscribe
+            !channel.subscription_rejected?
+          when "unsubscribe"
+            subscriptions.remove_subscription(channel)
+            true
+          when "message"
+            channel.perform_action ActiveSupport::JSON.decode(data)
+            true
+          else
+            false
+          end
+        commit_session!
+        res
       end
       # rubocop:enable Metrics/MethodLength
 
@@ -132,6 +138,12 @@ module ActionCable
         @request ||= begin
           environment = Rails.application.env_config.merge(socket.env)
           AnyCable::Rails::Rack.app.call(environment)
+
+          if socket.session
+            environment[Rack::RACK_SESSION] =
+              AnyCable::Rails::SessionProxy.new(environment[Rack::RACK_SESSION], socket.session)
+          end
+
           ActionDispatch::Request.new(environment)
         end
       end
@@ -188,6 +200,12 @@ module ActionCable
 
       def request_loaded?
         instance_variable_defined?(:@request)
+      end
+
+      def commit_session!
+        return unless request_loaded? && request.session.loaded?
+
+        socket.session = request.session.to_json
       end
     end
     # rubocop:enable Metrics/ClassLength
