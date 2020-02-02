@@ -112,6 +112,21 @@ module AnyCableRailsGenerators
 
     private
 
+    def stimulus_reflex?
+      !gemfile_lock&.match?(/^\s+stimulus_reflex\b/).nil?
+    end
+
+    def gemfile_lock
+      @gemfile_lock ||= begin
+        res = nil
+        in_root do
+          next unless File.file?("Gemfile.lock")
+          res = File.read("Gemfile.lock")
+        end
+        res
+      end
+    end
+
     def install_for_docker
       say_status :help, "️️⚠️ Docker development configuration could vary", :yellow
 

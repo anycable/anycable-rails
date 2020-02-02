@@ -12,6 +12,8 @@
 default: &default
   # Turn on/off access logs ("Started..." and "Finished...")
   access_logs_disabled: false
+  # Persist "dirty" session between RPC calls (might be required for StimulusReflex apps)
+  persistent_session_enabled: <%= stimulus_reflex? %>
   # This is the host and the port to run AnyCable RPC server on.
   # You must configure your WebSocket server to connect to it, e.g.:
   #   $ anycable-go --rpc-host="<rpc hostname>:50051"
