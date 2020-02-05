@@ -39,6 +39,7 @@ describe "subscriptions" do
 
       it "responds with error" do
         expect(subject).to be_error
+        expect(subject.error_msg).to eq "Channel not found: FakeChannel"
       end
     end
   end
