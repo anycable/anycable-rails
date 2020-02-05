@@ -36,8 +36,9 @@ describe "subscriptions", :with_grpc_server, :rpc_command do
     context "unknown channel" do
       let(:channel) { "FakeChannel" }
 
-      it "responds with error" do
+      fit "responds with error" do
         expect(subject.status).to eq :ERROR
+        expect(subject.error_msg).to eq "Channel not found: FakeChannel"
       end
     end
   end
