@@ -2,6 +2,13 @@
 
 ## master
 
+## 0.6.5 (2020-02-05)
+
+- Make channel not found exception more descriptive. ([@palkan][])
+
+Previusly, we returned `Undefined method handle_subscribe for nil` when Action Cable
+couldn't resolve the channel class. Now we return `Channel not found: <name>`.
+
 - Require a minimum version of Ruby when installing the gem. ([@bibendi][])
 
 - Add ability to develop the gem with Docker. ([@bibendi][])
