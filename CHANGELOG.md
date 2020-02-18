@@ -4,6 +4,10 @@
 
 - **Ruby 2.5+ is required**. ([@palkan][])
 
+- Support `disconnect` messages. ([@palkan][])
+
+Added in Rails 6 (see [PR#34194](https://github.com/rails/rails/pull/34194)).
+
 - Add ability to persist _dirty_ `request.session` between RPC calls. ([@palkan][])
 
 This feature emulates the Action Cable behaviour where it's possible to use `request.session` as a shared Hash-like store.

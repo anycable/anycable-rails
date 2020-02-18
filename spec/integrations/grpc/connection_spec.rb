@@ -22,6 +22,13 @@ describe "client connection" do
     it "responds with error if no cookies" do
       expect(subject).to be_failure
     end
+
+    it "transmits disconnect message" do
+      expect(subject).to be_failure
+      expect(JSON.parse(subject.transmissions.first)).to eq(
+        {"type" => "disconnect", "reason" => "unauthorized", "reconnect" => false}
+      )
+    end
   end
 
   context "with cookies and path info" do
@@ -106,6 +113,11 @@ describe "client connection" do
         it "responds with error when accessed from a not allowed origin" do
           ActionCable.server.config.allowed_request_origins = "http://anycable.com"
           expect(subject).to be_failure
+          expect(JSON.parse(subject.transmissions.first)).to eq(
+            "type" => "disconnect",
+            "reason" => "invalid_request",
+            "reconnect" => false
+          )
         end
       end
 

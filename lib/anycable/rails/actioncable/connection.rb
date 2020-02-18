@@ -54,7 +54,7 @@ module ActionCable
       def handle_open
         logger.info started_request_message if access_logs?
 
-        verify_origin!
+        verify_origin! || return
 
         connect if respond_to?(:connect)
 
@@ -62,7 +62,9 @@ module ActionCable
 
         send_welcome_message
       rescue ActionCable::Connection::Authorization::UnauthorizedError
-        reject_request
+        reject_request(
+          ActionCable::INTERNAL[:disconnect_reasons]&.[](:unauthorized) || "unauthorized"
+        )
       end
 
       def handle_close
@@ -92,7 +94,12 @@ module ActionCable
       end
       # rubocop:enable Metrics/MethodLength
 
-      def close
+      def close(reason: nil, reconnect: nil)
+        transmit(
+          type: ActionCable::INTERNAL[:message_types].fetch(:disconnect, "disconnect"),
+          reason: reason,
+          reconnect: reconnect
+        )
         socket.close
       end
 
@@ -168,19 +175,22 @@ module ActionCable
       end
 
       def verify_origin!
-        return unless socket.env.key?("HTTP_ORIGIN")
+        return true unless socket.env.key?("HTTP_ORIGIN")
 
-        return if allow_request_origin?
+        return true if allow_request_origin?
 
-        raise(
-          ActionCable::Connection::Authorization::UnauthorizedError,
-          "Origin is not allowed"
+        reject_request(
+          ActionCable::INTERNAL[:disconnect_reasons]&.[](:invalid_request) || "invalid_request"
         )
+        false
       end
 
-      def reject_request
+      def reject_request(reason, reconnect = false)
         logger.info finished_request_message("Rejected") if access_logs?
-        close
+        close(
+          reason: reason,
+          reconnect: reconnect
+        )
       end
 
       def build_rack_request
