@@ -37,7 +37,7 @@ module ActionCable
       def initialize(socket, identifiers: "{}", subscriptions: [])
         @ids = ActiveSupport::JSON.decode(identifiers)
 
-        @ltags = socket.cstate.read(LOG_TAGS_IDENTIFIER).then do |raw_tags|
+        @ltags = socket.cstate.read(LOG_TAGS_IDENTIFIER).yield_self do |raw_tags|
           next unless raw_tags
           ActiveSupport::JSON.decode(raw_tags)
         end
