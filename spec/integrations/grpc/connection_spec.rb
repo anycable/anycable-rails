@@ -20,7 +20,7 @@ describe "client connection" do
     let(:request) { AnyCable::ConnectionRequest.new(env: env) }
 
     it "responds with error if no cookies" do
-      expect(subject.status).to eq :FAILURE
+      expect(subject).to be_failure
     end
   end
 
@@ -34,7 +34,7 @@ describe "client connection" do
     let(:url) { "http://example.io/cable?token=123" }
 
     it "responds with success, correct identifiers and 'welcome' message", :aggregate_failures do
-      expect(subject.status).to eq :SUCCESS
+      expect(subject).to be_success
       identifiers = JSON.parse(subject.identifiers)
       expect(identifiers).to include(
         "current_user" => user.to_gid_param,
@@ -90,7 +90,7 @@ describe "client connection" do
     context "with disabled protection" do
       it "responds with success when protection is disabled" do
         ActionCable.server.config.disable_request_forgery_protection = true
-        expect(subject.status).to eq :SUCCESS
+        expect(subject).to be_success
       end
     end
 
@@ -100,12 +100,12 @@ describe "client connection" do
       context "with single allowed origin" do
         it "responds with success when accessed from an allowed origin" do
           ActionCable.server.config.allowed_request_origins = "http://anycable.io"
-          expect(subject.status).to eq :SUCCESS
+          expect(subject).to be_success
         end
 
         it "responds with error when accessed from a not allowed origin" do
           ActionCable.server.config.allowed_request_origins = "http://anycable.com"
-          expect(subject.status).to eq :FAILURE
+          expect(subject).to be_failure
         end
       end
 
@@ -119,7 +119,7 @@ describe "client connection" do
 
         it "responds with success" do
           ActionCable.server.config.allowed_request_origins = "http://example.io"
-          expect(subject.status).to eq :SUCCESS
+          expect(subject).to be_success
         end
       end
 
@@ -134,7 +134,7 @@ describe "client connection" do
 
         it "responds with failure" do
           ActionCable.server.config.allowed_request_origins = "http://example.io"
-          expect(subject.status).to eq :FAILURE
+          expect(subject).to be_failure
         end
       end
 
@@ -142,13 +142,13 @@ describe "client connection" do
         it "responds with success when accessed from an allowed origin" do
           ActionCable.server.config.disable_request_forgery_protection = false
           ActionCable.server.config.allowed_request_origins = %w[http://anycable.io http://www.anycable.io]
-          expect(subject.status).to eq :SUCCESS
+          expect(subject).to be_success
         end
 
         it "responds with error when accessed from an allowed origin" do
           ActionCable.server.config.disable_request_forgery_protection = false
           ActionCable.server.config.allowed_request_origins = %w[http://anycable.com http://www.anycable.com]
-          expect(subject.status).to eq :FAILURE
+          expect(subject).to be_failure
         end
       end
     end

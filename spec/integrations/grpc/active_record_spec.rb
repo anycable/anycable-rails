@@ -21,7 +21,7 @@ describe "ActiveRecord connections release" do
 
       5.times do
         response = service.command(request)
-        expect(response.status).to eq :SUCCESS
+        expect(response).to be_success
         expect(response.transmissions.size).to eq 1
         expect(response.transmissions.first).to include({"name" => "ar_test"}.to_json)
       end

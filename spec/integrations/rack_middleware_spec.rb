@@ -37,7 +37,7 @@ describe "rack middleware support" do
 
     it "is accessible in connection" do
       response = service.connect(request)
-      expect(response.status).to eq :SUCCESS
+      expect(response).to be_success
       expect(JSON.parse(response.identifiers)).to include("current_user" => user.to_gid_param)
     end
 
@@ -53,7 +53,7 @@ describe "rack middleware support" do
       it "persists session after each command" do
         first_call = service.command(request)
 
-        expect(first_call.status).to eq :SUCCESS
+        expect(first_call).to be_success
         expect(first_call.transmissions.size).to eq 1
         expect(first_call.transmissions.first).to include({"result" => 1}.to_json)
         expect(first_call.session).not_to be_nil
@@ -64,7 +64,7 @@ describe "rack middleware support" do
 
         second_call = service.command(request)
 
-        expect(second_call.status).to eq :SUCCESS
+        expect(second_call).to be_success
         expect(second_call.transmissions.size).to eq 1
         expect(second_call.transmissions.first).to include({"result" => 2}.to_json)
         expect(second_call.session).not_to be_nil
@@ -74,7 +74,7 @@ describe "rack middleware support" do
       it "overrides yet unwrapped session values" do
         first_call = service.command(request)
 
-        expect(first_call.status).to eq :SUCCESS
+        expect(first_call).to be_success
         expect(JSON.parse(first_call.session).fetch("tock")).to eq "tock"
 
         request.session = first_call.session
@@ -82,7 +82,7 @@ describe "rack middleware support" do
         request.data = data.to_json
 
         second_call = service.command(request)
-        expect(first_call.status).to eq :SUCCESS
+        expect(first_call).to be_success
         expect(JSON.parse(second_call.session).fetch("tock")).to eq "tack"
       end
     end
@@ -93,7 +93,7 @@ describe "rack middleware support" do
 
     it "is accessible in connection" do
       response = service.connect(request)
-      expect(response.status).to eq :SUCCESS
+      expect(response).to be_success
       expect(JSON.parse(response.identifiers)).to include("current_user" => user.to_gid_param)
     end
   end
