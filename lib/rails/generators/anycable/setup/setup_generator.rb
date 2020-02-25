@@ -7,7 +7,8 @@ module AnyCableRailsGenerators
     source_root File.expand_path("templates", __dir__)
 
     METHODS = %w[skip local docker].freeze
-    SERVER_VERSION = "v0.6.4"
+    # TODO(release): change to latest release
+    SERVER_VERSION = "v1.0.0.preview1"
     OS_NAMES = %w[linux darwin freebsd win].freeze
     CPU_NAMES = %w[amd64 arm64 386 arm].freeze
     SERVER_SOURCES = %w[skip brew binary].freeze
@@ -219,7 +220,7 @@ module AnyCableRailsGenerators
 
       download_exe(
         "https://github.com/anycable/anycable-go/releases/download/#{SERVER_VERSION}/" \
-        "anycable-go-#{SERVER_VERSION}-#{os_name}-#{cpu_name}",
+        "anycable-go-#{os_name}-#{cpu_name}",
         to: out,
         file_name: "anycable-go"
       )

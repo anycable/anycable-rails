@@ -88,7 +88,7 @@ describe AnyCableRailsGenerators::SetupGenerator, type: :generator do
       it "runs curl with valid url" do
         gen = generator(%w[--method local --source binary --os linux --cpu amd64 --skip-heroku --skip-procfile-dev false])
         expect(gen)
-          .to receive(:download_exe).with(/releases\/download\/v\d+\.\d+\.\d+\/anycable-go-v\d+\.\d+\.\d+-linux-amd64/,
+          .to receive(:download_exe).with(/releases\/download\/v\d+\.\d+\.\d+(\.\w+)?\/anycable-go-linux-amd64/,
             to: "/usr/local/bin",
             file_name: "anycable-go")
         silence_stream(STDOUT) { gen.invoke_all }
