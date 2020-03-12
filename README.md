@@ -124,4 +124,9 @@ Bug reports and pull requests are welcome on GitHub at https://github.com/anycab
 If you are familiar with Docker, you can use [DIP](https://github.com/bibendi/dip) to start developing the gem quickly.
 
 ## License
+
 The gem is available as open source under the terms of the [MIT License](http://opensource.org/licenses/MIT).
+
+## Security Contact
+
+To report a security vulnerability, please contact us at `anycable@evilmartians.com`. We will coordinate the fix and disclosure.
