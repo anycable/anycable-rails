@@ -1,0 +1,10 @@
+source "https://rubygems.org"
+
+# TEMP: while 1.0 in development
+gem "anycable", github: "anycable/anycable", branch: "1.0-dev"
+
+gem "rails", "~> 6.0"
+gem "rspec-rails", "~> 4.0.0"
+gem "sqlite3", "~> 1.4"
+
+gemspec path: ".."

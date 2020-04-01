@@ -6,6 +6,8 @@ gem "pry-byebug", platform: :mri
 
 local_gemfile = "#{File.dirname(__FILE__)}/Gemfile.local"
 
+eval_gemfile "gemfiles/rubocop.gemfile"
+
 if File.exist?(local_gemfile)
   eval(File.read(local_gemfile)) # rubocop:disable Lint/Eval
 else
