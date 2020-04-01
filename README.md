@@ -1,4 +1,6 @@
-[![GitPitch](https://gitpitch.com/assets/badge.svg)](https://gitpitch.com/anycable/anycable/master?grs=github) [![Gem Version](https://badge.fury.io/rb/anycable-rails.svg)](https://rubygems.org/gems/anycable-rails) [![Build Status](https://travis-ci.org/anycable/anycable-rails.svg?branch=master)](https://travis-ci.org/anycable/anycable-rails)
+[![GitPitch](https://gitpitch.com/assets/badge.svg)](https://gitpitch.com/anycable/anycable/master?grs=github)
+[![Gem Version](https://badge.fury.io/rb/anycable-rails.svg)](https://rubygems.org/gems/anycable-rails)
+[![Build](https://github.com/anycable/anycable-rails/workflows/Build/badge.svg)](https://github.com/anycable/anycable-rails/actions)
 [![Gitter](https://img.shields.io/badge/gitter-join%20chat%20%E2%86%92-brightgreen.svg)](https://gitter.im/anycable/Lobby)
 [![Documentation](https://img.shields.io/badge/docs-link-brightgreen.svg)](https://docs.anycable.io/#/ruby/rails)
 
@@ -14,17 +16,16 @@ You can even use Action Cable in development and not be afraid of [compatibility
 
 📑 [Documentation](https://docs.anycable.io).
 
-
 <a href="https://evilmartians.com/">
 <img src="https://evilmartians.com/badges/sponsored-by-evil-martians.svg" alt="Sponsored by Evil Martians" width="236" height="54"></a>
 
 ## Requirements
 
 - Ruby >= 2.5
-- Rails >= 5.0;
-- Redis (see [other options]() for broadcasting)
+- Rails >= 5.0
+- Redis (see [other options](https://github.com/anycable/anycable/issues/2) for broadcasting)
 
-## How It Works?
+## How It Works
 
 <img src="https://trello-attachments.s3.amazonaws.com/5781e0ed48e4679e302833d3/820x987/5b6a305417b04e20e75f49c5816e027c/Anycable_vs_ActionCable_copy.jpg" width="400" />
 
@@ -117,7 +118,7 @@ See [documentation](https://docs.anycable.io/#/ruby/compatibility).
 
 ## Contributing
 
-Bug reports and pull requests are welcome on GitHub at https://github.com/anycable/anycable-rails.
+Bug reports and pull requests are welcome on GitHub at [https://github.com/anycable/anycable-rails](https://github.com/anycable/anycable-rails).
 
 ## Development
 

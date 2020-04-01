@@ -92,13 +92,13 @@ identifiers.
 
 - Added static (RuboCop) compatibility checks. ([@DmitryTsepelev][])
 
-  See https://github.com/anycable/anycable-rails/issues/52
+  See [#52](https://github.com/anycable/anycable-rails/issues/52)
 
 ## 0.5.4 (2018-06-13)
 
 - Fix duplicate logs in development. ([@palkan][])
 
-  Fixes https://github.com/anycable/anycable_demo/issues/5.
+  Fixes [#5](https://github.com/anycable/anycable_demo/issues/5).
 
 ## 0.5.3
 
@@ -142,7 +142,7 @@ Ignore tagged logger features ('cause we do not have _persistent_ logger).
 
 ## 0.4.4
 
-- Fix bug with ActiveRecord connections (https://github.com/anycable/anycable/issues/9). ([@palkan][])
+- Fix bug with ActiveRecord connections ([#9](https://github.com/anycable/anycable/issues/9)). ([@palkan][])
 
 ## 0.4.0
 
