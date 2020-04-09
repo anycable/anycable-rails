@@ -1,8 +1,6 @@
 # frozen_string_literal: true
 
-lib = File.expand_path("lib", __dir__)
-$LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
-require "anycable/rails/version"
+require_relative "lib/anycable/rails/version"
 
 Gem::Specification.new do |spec|
   spec.name = "anycable-rails"
@@ -27,7 +25,7 @@ Gem::Specification.new do |spec|
 
   spec.required_ruby_version = ">= 2.5"
 
-  spec.add_dependency "anycable", "~> 1.0.0.preview1"
+  spec.add_dependency "anycable", "~> 1.0.0.preview2"
   spec.add_dependency "rails", ">= 5"
 
   spec.add_development_dependency "ammeter", "~> 1.1"
