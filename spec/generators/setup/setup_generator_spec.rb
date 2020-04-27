@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 require "spec_helper"
-require_relative "../../../lib/rails/generators/anycable/setup/setup_generator"
+require_relative "../../../lib/generators/anycable/setup/setup_generator"
 
 describe AnyCableRailsGenerators::SetupGenerator, type: :generator do
   destination File.expand_path("../../../tmp/basic_rails_app", __dir__)
@@ -19,7 +19,7 @@ describe AnyCableRailsGenerators::SetupGenerator, type: :generator do
   end
 
   context "when skip install environment" do
-    subject { run_generator %w[--method skip --skip-heroku] }
+    subject { run_generator %w[--devenv skip --skip-heroku] }
 
     it "copies config files" do
       subject
@@ -57,7 +57,7 @@ describe AnyCableRailsGenerators::SetupGenerator, type: :generator do
 
   context "when docker environment" do
     it "shows a Docker Compose snippet" do
-      gen = generator(%w[--method docker --skip-heroku])
+      gen = generator(%w[--devenv docker --skip-heroku])
       expect(gen).to receive(:install_for_docker)
       silence_stream(STDOUT) { gen.invoke_all }
     end
@@ -65,7 +65,7 @@ describe AnyCableRailsGenerators::SetupGenerator, type: :generator do
 
   context "when local environment" do
     context "when do not install the server" do
-      before { run_generator %w[--method local --source skip --skip-heroku --skip-procfile-dev false] }
+      before { run_generator %w[--devenv local --source skip --skip-heroku --skip-procfile-dev false] }
 
       context "when Procfile.dev exists" do
         it "patches" do
@@ -86,18 +86,16 @@ describe AnyCableRailsGenerators::SetupGenerator, type: :generator do
 
     context "when downloading binary" do
       it "runs curl with valid url" do
-        gen = generator(%w[--method local --source binary --os linux --cpu amd64 --skip-heroku --skip-procfile-dev false])
+        gen = generator(%w[--devenv local --source binary --os linux --cpu amd64 --skip-heroku --skip-procfile-dev false])
         expect(gen)
-          .to receive(:download_exe).with(/releases\/download\/v\d+\.\d+\.\d+(\.\w+)?\/anycable-go-linux-amd64/,
-            to: "/usr/local/bin",
-            file_name: "anycable-go")
+          .to receive(:generate).with("anycable:download", "--os linux --cpu amd64 --bin-path=/usr/local/bin")
         silence_stream(STDOUT) { gen.invoke_all }
       end
     end
 
     context "when installing from Homebrew" do
       it "runs commands" do
-        gen = generator(%w[--method local --source brew --skip-heroku --skip-procfile-dev false])
+        gen = generator(%w[--devenv local --source brew --skip-heroku --skip-procfile-dev false])
         expect(gen).to receive(:install_from_brew)
         silence_stream(STDOUT) { gen.invoke_all }
       end
@@ -106,7 +104,7 @@ describe AnyCableRailsGenerators::SetupGenerator, type: :generator do
 
   context "config/initializers/anycable.rb" do
     subject do
-      run_generator %w[--method skip --skip-heroku]
+      run_generator %w[--devenv skip --skip-heroku]
       file("config/initializers/anycable.rb")
     end
 

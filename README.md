@@ -47,7 +47,7 @@ gem "redis", ">= 4.0"
 After the gem was installed, you can run an interactive wizard to configure your Rails application for using with AnyCable by running a generator:
 
 ```sh
-bin/rails g anycable:setup
+bundle exec rails g anycable:setup
 ```
 
 ### Manual set up
