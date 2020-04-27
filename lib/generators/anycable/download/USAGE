@@ -1,0 +1,14 @@
+Description:
+    Install AnyCable-Go web server.
+
+Example:
+    rails generate anycable:download
+
+    This will ask:
+        Where to store a binary file.
+    This will create:
+        `<bin_path>/anycable-go`.
+
+    rails generate anycable:download --bin-path=/usr/local/bin
+
+    rails generate anycable:download --version=1.0.0

@@ -2,6 +2,8 @@
 
 ## 🚧 1.0.0 (_coming soon_)
 
+- Add `anycable:download` generator to download `anycable-go` binary. ([@palkan][])
+
 - **Ruby 2.5+ is required**. ([@palkan][])
 
 - Support `disconnect` messages. ([@palkan][])

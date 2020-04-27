@@ -1,40 +1,37 @@
 # frozen_string_literal: true
 
+require "generators/anycable/with_os_helpers"
+
 module AnyCableRailsGenerators
   # Entry point for interactive installation
   class SetupGenerator < ::Rails::Generators::Base
     namespace "anycable:setup"
     source_root File.expand_path("templates", __dir__)
 
-    METHODS = %w[skip local docker].freeze
-    # TODO(release): change to latest release
-    SERVER_VERSION = "v1.0.0.preview1"
-    OS_NAMES = %w[linux darwin freebsd win].freeze
-    CPU_NAMES = %w[amd64 arm64 386 arm].freeze
+    DEVELOPMENT_METHODS = %w[skip local docker].freeze
     SERVER_SOURCES = %w[skip brew binary].freeze
-    DEFAULT_BIN_PATH = "/usr/local/bin"
 
-    class_option :method,
+    class_option :devenv,
       type: :string,
-      desc: "Select your development environment (options: #{METHODS.join(", ")})"
+      desc: "Select your development environment (options: #{DEVELOPMENT_METHODS.join(", ")})"
     class_option :source,
       type: :string,
       desc: "Choose a way of installing AnyCable-Go server (options: #{SERVER_SOURCES.join(", ")})"
-    class_option :bin_path,
-      type: :string,
-      desc: "Where to download AnyCable-Go server binary (default: #{DEFAULT_BIN_PATH})"
-    class_option :os,
-      type: :string,
-      desc: "Specify the OS for AnyCable-Go server binary (options: #{OS_NAMES.join(", ")})"
-    class_option :cpu,
-      type: :string,
-      desc: "Specify the CPU architecturefor AnyCable-Go server binary (options: #{CPU_NAMES.join(", ")})"
     class_option :skip_heroku,
       type: :boolean,
       desc: "Do not copy Heroku configs"
     class_option :skip_procfile_dev,
       type: :boolean,
       desc: "Do not create Procfile.dev"
+
+    include WithOSHelpers
+
+    class_option :bin_path,
+      type: :string,
+      desc: "Where to download AnyCable-Go server binary (default: #{DEFAULT_BIN_PATH})"
+    class_option :version,
+      type: :string,
+      desc: "Specify the AnyCable-Go version (defaults to latest release)"
 
     def welcome
       say "👋 Welcome to AnyCable interactive installer."
@@ -68,13 +65,13 @@ module AnyCableRailsGenerators
     end
 
     def development_method
-      answer = METHODS.index(options[:method]) || 99
+      answer = DEVELOPMENT_METHODS.index(options[:devenv]) || 99
 
-      until METHODS[answer.to_i]
+      until DEVELOPMENT_METHODS[answer.to_i]
         answer = ask "Which environment do you use for development? (1) Local, (2) Docker, (0) Skip"
       end
 
-      case env = METHODS[answer.to_i]
+      case env = DEVELOPMENT_METHODS[answer.to_i]
       when "skip"
         say_status :help, "⚠️ Please, read this guide on how to install AnyCable-Go server 👉 https://docs.anycable.io/#/anycable-go/getting_started", :yellow
       else
@@ -206,63 +203,22 @@ module AnyCableRailsGenerators
     end
 
     def install_from_binary
-      out = options[:bin_path] if options[:bin_path]
-      out ||= "/usr/local/bin" if options[:method] # User don't want interactive mode
-      out ||= ask "Please, enter the path to download the AnyCable-Go binary to", default: DEFAULT_BIN_PATH, path: true
+      bin_path ||= DEFAULT_BIN_PATH if options[:devenv] # User don't want interactive mode
+      bin_path ||= ask "Please, enter the path to download the AnyCable-Go binary to", default: DEFAULT_BIN_PATH, path: true
 
-      os_name = options[:os] ||
-        OS_NAMES.find(&Gem::Platform.local.os.method(:==)) ||
-        ask("What is your OS name?", limited_to: OS_NAMES)
-
-      cpu_name = options[:cpu] ||
-        CPU_NAMES.find(&current_cpu.method(:==)) ||
-        ask("What is your CPU architecture?", limited_to: CPU_NAMES)
-
-      download_exe(
-        "https://github.com/anycable/anycable-go/releases/download/#{SERVER_VERSION}/" \
-        "anycable-go-#{os_name}-#{cpu_name}",
-        to: out,
-        file_name: "anycable-go"
-      )
+      generate "anycable:download", download_options(bin_path: bin_path)
 
       true
     end
 
-    def download_exe(url, to:, file_name:)
-      file_path = File.join(to, file_name)
-
-      run "#{sudo(to)}curl -L #{url} -o #{file_path}", abort_on_failure: true
-      run "#{sudo(to)}chmod +x #{file_path}", abort_on_failure: true
-      run "#{file_path} -v", abort_on_failure: true
-    end
-
-    def sudo!(path)
-      sudo = ""
-      unless File.writable?(path)
-        if yes? "Path is not writable 😕. Do you have sudo privileges?"
-          sudo = "sudo "
-        else
-          say_status :error, "❌ Failed to install AnyCable-Go WebSocket server", :red
-          raise StandardError, "Path #{path} is not writable!"
-        end
-      end
-
-      sudo
-    end
-
-    def current_cpu
-      case Gem::Platform.local.cpu
-      when "x86_64", "x64"
-        "amd64"
-      when "x86_32", "x86", "i386", "i486", "i686"
-        "i386"
-      when "aarch64", "aarch64_be", /armv8/
-        "arm64"
-      when "arm", /armv7/, /armv6/
-        "arm"
-      else
-        "unknown"
-      end
+    def download_options(**params)
+      opts = options.merge(params)
+      [].tap do |args|
+        args << "--os #{opts[:os]}" if opts[:os]
+        args << "--cpu #{opts[:cpu]}" if opts[:cpu]
+        args << "--bin-path=#{opts[:bin_path]}" if opts[:bin_path]
+        args << "--version #{opts[:version]}" if opts[:version]
+      end.join(" ")
     end
   end
 end
