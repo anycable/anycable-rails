@@ -5,8 +5,6 @@ module AnyCable
     # Wrap `request.session` to lazily load values provided
     # in the RPC call (set by the previous calls)
     class SessionProxy
-      delegate_missing_to :@rack_session
-
       attr_reader :rack_session, :socket_session
 
       def initialize(rack_session, socket_session)
@@ -39,6 +37,20 @@ module AnyCable
 
       def keys
         rack_session.keys + socket_session.keys
+      end
+
+      # Delegate both publuc and private methods to rack_session
+      def respond_to_missing?(name, include_private = false)
+        return false if name == :marshal_dump || name == :_dump
+        rack_session.respond_to?(name, include_private) || super
+      end
+
+      def method_missing(method, *args, &block)
+        if rack_session.respond_to?(method, true)
+          rack_session.send(method, *args, &block)
+        else
+          super
+        end
       end
 
       private

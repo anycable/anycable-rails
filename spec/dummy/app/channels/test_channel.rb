@@ -23,6 +23,7 @@ class TestChannel < ApplicationCable::Channel
   end
 
   def tick(data)
+    session.send(:load!)
     session[:count] ||= 0
     session[:count] += 1
     session[:tock] = data["tick"] || :tock
