@@ -1,7 +1,7 @@
 source "https://rubygems.org"
 
 # TEMP: while 1.0 in development
-gem "anycable", github: "anycable/anycable", branch: "1.0-dev"
+gem "anycable", github: "anycable/anycable"
 
 gem "rails", github: "rails/rails"
 gem "rspec-rails", "~> 3.8.0"

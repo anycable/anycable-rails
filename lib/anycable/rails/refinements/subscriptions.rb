@@ -9,7 +9,7 @@ module AnyCable
           add("identifier" => identifier) unless subscriptions[identifier]
 
           unless subscriptions[identifier]
-            raise "Channel not found: #{ActiveSupport::JSON.decode(identifier).fetch('channel')}"
+            raise "Channel not found: #{ActiveSupport::JSON.decode(identifier).fetch("channel")}"
           end
 
           subscriptions[identifier]
