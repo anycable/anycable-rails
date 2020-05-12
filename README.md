@@ -2,7 +2,7 @@
 [![Gem Version](https://badge.fury.io/rb/anycable-rails.svg)](https://rubygems.org/gems/anycable-rails)
 [![Build](https://github.com/anycable/anycable-rails/workflows/Build/badge.svg)](https://github.com/anycable/anycable-rails/actions)
 [![Gitter](https://img.shields.io/badge/gitter-join%20chat%20%E2%86%92-brightgreen.svg)](https://gitter.im/anycable/Lobby)
-[![Documentation](https://img.shields.io/badge/docs-link-brightgreen.svg)](https://docs.anycable.io/#/ruby/rails)
+[![Documentation](https://img.shields.io/badge/docs-link-brightgreen.svg)](https://docs.anycable.io/v1/#/ruby/rails)
 
 # AnyCable Rails
 
@@ -12,9 +12,11 @@ With AnyCable you can use channels, client-side JS, broadcasting - (almost) all 
 
 You can even use Action Cable in development and not be afraid of [compatibility issues](#compatibility).
 
-💾 [Example Application](https://github.com/anycable/anycable_demo)
+**Important** This is a readme for the upcoming v1.0 release. For v0.6.x see the readme from the [0-6-stable](https://github.com/anycable/anycable-rails/tree/0-6-stable) branch.
 
-📑 [Documentation](https://docs.anycable.io).
+<!-- 💾 [Example Application](https://github.com/anycable/anycable_demo) -->
+
+📑 [Documentation](https://docs.anycable.io/v1/#/ruby/rails).
 
 <a href="https://evilmartians.com/">
 <img src="https://evilmartians.com/badges/sponsored-by-evil-martians.svg" alt="Sponsored by Evil Martians" width="236" height="54"></a>
@@ -22,12 +24,8 @@ You can even use Action Cable in development and not be afraid of [compatibility
 ## Requirements
 
 - Ruby >= 2.5
-- Rails >= 5.0
+- Rails >= 5.2
 - Redis (see [other options](https://github.com/anycable/anycable/issues/2) for broadcasting)
-
-## How It Works
-
-<img src="https://trello-attachments.s3.amazonaws.com/5781e0ed48e4679e302833d3/820x987/5b6a305417b04e20e75f49c5816e027c/Anycable_vs_ActionCable_copy.jpg" width="400" />
 
 ## Usage
 
@@ -39,8 +37,6 @@ gem "anycable-rails"
 # when using Redis broadcast adapter
 gem "redis", ">= 4.0"
 ```
-
-(and don't forget to run `bundle install`).
 
 ### Interactive set up
 
@@ -87,34 +83,17 @@ $ bundle exec anycable
 $ RAILS_ENV=production bundle exec anycable
 ```
 
-And, finally, run AnyCable WebSocket server, e.g. [anycable-go](https://docs.anycable.io/#/anycable-go/getting_started):
+And, finally, run AnyCable WebSocket server, e.g. [anycable-go](https://docs.anycable.io/v1/#/anycable-go/getting_started):
 
 ```sh
 anycable-go --host=localhost --port=3334
 ```
 
-See [documentation](https://docs.anycable.io/#/ruby/rails) for more information on AnyCable + Rails usage.
+See [documentation](https://docs.anycable.io/v1/#/ruby/rails) for more information on AnyCable + Rails usage.
 
 ## Action Cable Compatibility
 
-See [documentation](https://docs.anycable.io/#/ruby/compatibility).
-
-## Links
-
-- [AnyCable: Action Cable on steroids!](https://evilmartians.com/chronicles/anycable-actioncable-on-steroids)
-
-- [From Action to Any](https://medium.com/@leshchuk/from-action-to-any-1e8d863dd4cf) by [@alekseyl](https://github.com/alekseyl)
-
-## Talks
-
-- One cable to rule them all, RubyKaigi 2018, [slides](https://speakerdeck.com/palkan/rubykaigi-2018-anycable-one-cable-to-rule-them-all) and [video](https://www.youtube.com/watch?v=jXCPuNICT8s) (EN)
-
-- Wroc_Love.rb 2018 [slides](https://speakerdeck.com/palkan/wroc-love-dot-rb-2018-cables-cables-cables) and [video](https://www.youtube.com/watch?v=AUxFFOehiy0) (EN)
-
-## Compatible WebSocket servers
-
-- [AnyCable Go](https://github.com/anycable/anycable-go)
-- [ErlyCable](https://github.com/anycable/erlycable)
+See [documentation](https://docs.anycable.io/v1/#/ruby/compatibility).
 
 ## Contributing
 
