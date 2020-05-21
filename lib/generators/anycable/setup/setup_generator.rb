@@ -131,19 +131,19 @@ module AnyCableRailsGenerators
       say "Here is an example snippet for docker-compose.yml:"
       say <<~YML
         ─────────────────────────────────────────
-        anycable-ws:
-          image: anycable/anycable-go:v0.6.4
+        ws:
+          image: anycable/anycable-go:1.0.0.preview1
           ports:
             - '3334:3334'
           environment:
             PORT: 3334
             ANYCABLE_REDIS_URL: redis://redis:6379/0
-            ANYCABLE_RPC_HOST: anycable-rpc:50051
+            ANYCABLE_RPC_HOST: anycable:50051
           depends_on:
             - anycable-rpc
             - redis
 
-        anycable-rpc:
+        anycable:
           <<: *backend
           command: bundle exec anycable
           environment:
