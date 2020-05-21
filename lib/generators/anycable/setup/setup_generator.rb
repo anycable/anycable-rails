@@ -86,8 +86,14 @@ module AnyCableRailsGenerators
         return
       end
 
-      template "Procfile"
-      inside("bin") { template "heroku-web" }
+      in_root do
+        next unless File.file?("Procfile")
+
+        contents = File.read("Procfile")
+        contents.sub!(/^web: (.*)$/, %q(web: [[ "$ANYCABLE_DEPLOYMENT" == "true" ]] && bundle exec anycable --server-command="anycable-go" || \1))
+        File.write("Procfile", contents)
+        say_status :info, "✅ Procfile updated"
+      end
 
       say_status :help, "️️⚠️ Please, read the required steps to configure Heroku applications 👉 https://docs.anycable.io/#/deployment/heroku", :yellow
     end

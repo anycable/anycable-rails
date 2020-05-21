@@ -63,6 +63,34 @@ describe AnyCableRailsGenerators::SetupGenerator, type: :generator do
     end
   end
 
+  context "when Heroku deployment" do
+    subject { run_generator %w[--devenv skip --skip-heroku=false] }
+
+    before do
+      File.write(
+        File.join(destination_root, "Procfile"),
+        <<~CODE
+          web: bundle exec puma -C config/puma.rb
+          worker: bundle exec lowkiq
+          release: bundle exec rails db:migrate
+        CODE
+      )
+    end
+
+    it "updates Procfile", :aggregate_failures do
+      subject
+      expect(file("Procfile")).to contain(
+        'web: [[ "$ANYCABLE_DEPLOYMENT" == "true" ]] && bundle exec anycable --server-command="anycable-go" || bundle exec puma -C config/puma.rb'
+      )
+      expect(file("Procfile")).to contain(
+        "worker: bundle exec lowkiq"
+      )
+      expect(file("Procfile")).to contain(
+        "release: bundle exec rails db:migrate"
+      )
+    end
+  end
+
   context "when local environment" do
     context "when do not install the server" do
       before { run_generator %w[--devenv local --source skip --skip-heroku --skip-procfile-dev false] }
