@@ -8,6 +8,7 @@ module AnyCableRailsGenerators
     namespace "anycable:setup"
     source_root File.expand_path("templates", __dir__)
 
+    DOCS_ROOT = "https://docs.anycable.io/v1/#"
     DEVELOPMENT_METHODS = %w[skip local docker].freeze
     SERVER_SOURCES = %w[skip brew binary].freeze
 
@@ -73,7 +74,7 @@ module AnyCableRailsGenerators
 
       case env = DEVELOPMENT_METHODS[answer.to_i]
       when "skip"
-        say_status :help, "⚠️ Please, read this guide on how to install AnyCable-Go server 👉 https://docs.anycable.io/#/anycable-go/getting_started", :yellow
+        say_status :help, "⚠️ Please, read this guide on how to install AnyCable-Go server 👉 #{DOCS_ROOT}/anycable-go/getting_started", :yellow
       else
         send "install_for_#{env}"
       end
@@ -95,7 +96,7 @@ module AnyCableRailsGenerators
         say_status :info, "✅ Procfile updated"
       end
 
-      say_status :help, "️️⚠️ Please, read the required steps to configure Heroku applications 👉 https://docs.anycable.io/#/deployment/heroku", :yellow
+      say_status :help, "️️⚠️ Please, read the required steps to configure Heroku applications 👉 #{DOCS_ROOT}/deployment/heroku", :yellow
     end
 
     def devise
@@ -176,7 +177,7 @@ module AnyCableRailsGenerators
 
       case answer.to_i
       when 0
-        say_status :help, "⚠️ Please, read this guide on how to install AnyCable-Go server 👉 https://docs.anycable.io/#/anycable-go/getting_started", :yellow
+        say_status :help, "⚠️ Please, read this guide on how to install AnyCable-Go server 👉 #{DOCS_ROOT}/anycable-go/getting_started", :yellow
         return
       else
         return unless send("install_from_#{SERVER_SOURCES[answer.to_i]}")
