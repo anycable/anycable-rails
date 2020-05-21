@@ -117,7 +117,7 @@ module AnyCableRailsGenerators
     private
 
     def stimulus_reflex?
-      !gemfile_lock&.match?(/^\s+stimulus_reflex\b/).nil?
+      !!gemfile_lock&.match?(/^\s+stimulus_reflex\b/)
     end
 
     def gemfile_lock
