@@ -53,6 +53,11 @@ module AnyCable
         end
       end
 
+      # This method is used by StimulusReflex to obtain `@by`
+      def instance_variable_get(name)
+        super || rack_session.instance_variable_get(name)
+      end
+
       private
 
       def restore!
