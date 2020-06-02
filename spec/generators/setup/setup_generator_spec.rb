@@ -48,10 +48,10 @@ describe AnyCableRailsGenerators::SetupGenerator, type: :generator do
     it "patch environment configs" do
       subject
       expect(file("config/environments/development.rb"))
-        .to contain('config.action_cable.url = ENV.fetch("CABLE_URL", "ws://localhost:3334/cable").presence')
+        .to contain('config.action_cable.url = ENV.fetch("CABLE_URL", "ws://localhost:8080/cable") if AnyCable::Rails.enabled?')
 
       expect(file("config/environments/production.rb"))
-        .to contain('config.action_cable.url = ENV["CABLE_URL"].presence')
+        .to contain('config.action_cable.url = ENV.fetch("CABLE_URL") if AnyCable::Rails.enabled?')
     end
   end
 

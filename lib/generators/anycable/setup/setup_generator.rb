@@ -49,14 +49,14 @@ module AnyCableRailsGenerators
       environment(nil, env: :development) do
         <<~SNIPPET
           # Specify AnyCable WebSocket server URL to use by JS client
-          config.action_cable.url = ENV.fetch("CABLE_URL", "ws://localhost:3334/cable").presence
+          config.action_cable.url = ENV.fetch("CABLE_URL", "ws://localhost:8080/cable") if AnyCable::Rails.enabled?
         SNIPPET
       end
 
       environment(nil, env: :production) do
         <<~SNIPPET
           # Specify AnyCable WebSocket server URL to use by JS client
-          config.action_cable.url = ENV["CABLE_URL"].presence
+          config.action_cable.url = ENV.fetch("CABLE_URL") if AnyCable::Rails.enabled?
         SNIPPET
       end
 
@@ -141,9 +141,8 @@ module AnyCableRailsGenerators
         ws:
           image: anycable/anycable-go:1.0.0.preview1
           ports:
-            - '3334:3334'
+            - '8080:8080'
           environment:
-            PORT: 3334
             ANYCABLE_REDIS_URL: redis://redis:6379/0
             ANYCABLE_RPC_HOST: anycable:50051
           depends_on:
