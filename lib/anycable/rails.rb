@@ -12,6 +12,11 @@ module AnyCable
 
     ADAPTER_ALIASES = %w[any_cable anycable].freeze
 
+    def self.enabled?
+      adapter = ::ActionCable.server.config.cable&.fetch("adapter", nil)
+      compatible_adapter?(adapter)
+    end
+
     def self.compatible_adapter?(adapter)
       ADAPTER_ALIASES.include?(adapter)
     end

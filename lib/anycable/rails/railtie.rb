@@ -4,9 +4,7 @@ module AnyCable
   module Rails
     class Railtie < ::Rails::Railtie # :nodoc:
       initializer "anycable.disable_action_cable_mount", after: "action_cable.set_configs" do |app|
-        # Disable Action Cable default route when AnyCable adapter is used
-        adapter = ::ActionCable.server.config.cable&.fetch("adapter", nil)
-        next unless AnyCable::Rails.compatible_adapter?(adapter)
+        next unless AnyCable::Rails.enabled?
 
         app.config.action_cable.mount_path = nil
       end
@@ -42,8 +40,7 @@ module AnyCable
 
       initializer "anycable.connection_factory", after: "action_cable.set_configs" do |app|
         ActiveSupport.on_load(:action_cable) do
-          adapter = ::ActionCable.server.config.cable&.fetch("adapter", nil)
-          if AnyCable::Rails.compatible_adapter?(adapter)
+          if AnyCable::Rails.enabled?
             require "anycable/rails/actioncable/connection"
 
             if AnyCable.config.persistent_session_enabled
