@@ -10,12 +10,13 @@ module AnyCable
       end
 
       initializer "anycable.logger", after: "action_cable.logger" do |_app|
-        AnyCable.logger = ActiveSupport::TaggedLogging.new(::ActionCable.server.config.logger)
+        AnyCable.logger = ::ActionCable.server.config.logger
 
-        # Broadcast server logs to STDOUT in development
-        if ::Rails.env.development? &&
-            !ActiveSupport::Logger.logger_outputs_to?(::Rails.logger, STDOUT)
-          AnyCable.configure_server do
+        AnyCable.configure_server do
+          AnyCable.logger = ActiveSupport::TaggedLogging.new(::ActionCable.server.config.logger)
+          # Broadcast server logs to STDOUT in development
+          if ::Rails.env.development? &&
+              !ActiveSupport::Logger.logger_outputs_to?(::Rails.logger, STDOUT)
             console = ActiveSupport::Logger.new(STDOUT)
             console.formatter = ::Rails.logger.formatter
             console.level = ::Rails.logger.level

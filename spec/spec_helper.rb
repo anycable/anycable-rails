@@ -6,6 +6,9 @@ require File.expand_path("spec/dummy/config/environment", PROJECT_ROOT)
 
 Rails.application.eager_load!
 
+# This code is called from the server callback in Railtie
+AnyCable.logger = ActiveSupport::TaggedLogging.new(::ActionCable.server.config.logger)
+
 require "active_support/testing/stream"
 require "ammeter/init"
 require "anycable/rspec"

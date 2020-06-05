@@ -21,7 +21,7 @@ module ActionCable
 
       class << self
         def call(socket, **options)
-          new(socket, options)
+          new(socket, nil, options)
         end
 
         def identified_by(*identifiers)
@@ -34,7 +34,14 @@ module ActionCable
         end
       end
 
-      def initialize(socket, identifiers: "{}", subscriptions: [])
+      def initialize(socket, env, identifiers: "{}", subscriptions: [])
+        if env
+          # If env is set, then somehow we're in the context of Action Cable
+          # Return and print a warning in #process
+          @request = ActionDispatch::Request.new(env)
+          return
+        end
+
         @ids = ActiveSupport::JSON.decode(identifiers)
 
         @ltags = socket.cstate.read(LOG_TAGS_IDENTIFIER).yield_self do |raw_tags|
@@ -49,6 +56,18 @@ module ActionCable
 
         # Initialize channels if any
         subscriptions.each { |id| @subscriptions.fetch(id) }
+      end
+
+      def process
+        # Use Rails logger here to print to stdout in development
+        logger.error invalid_request_message
+        logger.info finished_request_message
+        [404, {"Content-Type" => "text/plain"}, ["Page not found"]]
+      end
+
+      def invalid_request_message
+        "You're trying to connect to Action Cable server while using AnyCable. " \
+        "See https://docs.anycable.io/v1/#/troubleshooting?id=server-raises-an-argumenterror-exception-when-client-tries-to-connect"
       end
 
       def handle_open
