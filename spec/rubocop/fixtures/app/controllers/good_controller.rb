@@ -10,8 +10,4 @@ class GoodController < ActionController::Base # :nodoc:
       transmit msg
     end
   end
-
-  def destroy
-    ActionCable.server.remote_connections.where(current_user: user).disconnect
-  end
 end

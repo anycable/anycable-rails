@@ -4,7 +4,6 @@ require "rubocop"
 require "pathname"
 
 require_relative "rubocop/cops/anycable/stream_from"
-require_relative "rubocop/cops/anycable/remote_disconnect"
 require_relative "rubocop/cops/anycable/periodical_timers"
 require_relative "rubocop/cops/anycable/instance_vars"
 

@@ -118,18 +118,4 @@ describe "Compatibility" do
       end
     end
   end
-
-  describe "RemoteConnection#disconnect" do
-    let(:user) { User.new(name: "john", secret: "123") }
-    let(:url) { "" }
-
-    subject { ActionCable.server.remote_connections.where(current_user: user, url: url) }
-
-    it "throws CompatibilityError when called" do
-      expect { subject.disconnect }.to raise_exception(
-        AnyCable::CompatibilityError,
-        "Disconnecting remote clients is not supported by AnyCable yet"
-      )
-    end
-  end
 end

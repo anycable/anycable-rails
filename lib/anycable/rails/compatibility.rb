@@ -48,12 +48,5 @@ module AnyCable
         raise AnyCable::CompatibilityError, "Periodical timers are not supported by AnyCable"
       end
     end)
-
-    ActionCable::RemoteConnections::RemoteConnection.prepend(Module.new do
-      def disconnect
-        raise AnyCable::CompatibilityError,
-          "Disconnecting remote clients is not supported by AnyCable yet"
-      end
-    end)
   end
 end
