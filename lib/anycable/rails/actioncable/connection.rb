@@ -1,8 +1,10 @@
 # frozen_string_literal: true
 
 require "action_cable/connection"
+require "anycable/rails/actioncable/connection/serializable_identification"
 require "anycable/rails/refinements/subscriptions"
 require "anycable/rails/actioncable/channel"
+require "anycable/rails/actioncable/remote_connections"
 require "anycable/rails/session_proxy"
 
 module ActionCable
@@ -15,6 +17,8 @@ module ActionCable
 
       using AnyCable::Refinements::Subscriptions
 
+      include SerializableIdentification
+
       attr_reader :socket
 
       delegate :env, :session, to: :request
@@ -22,15 +26,6 @@ module ActionCable
       class << self
         def call(socket, **options)
           new(socket, nil, options)
-        end
-
-        def identified_by(*identifiers)
-          super
-          Array(identifiers).each do |identifier|
-            define_method(identifier) do
-              instance_variable_get(:"@#{identifier}") || fetch_identifier(identifier)
-            end
-          end
         end
       end
 
@@ -124,31 +119,6 @@ module ActionCable
 
       def transmit(cable_message)
         socket.transmit encode(cable_message)
-      end
-
-      # Generate identifiers info.
-      # Converts GlobalID compatible vars to corresponding global IDs params.
-      def identifiers_hash
-        identifiers.each_with_object({}) do |id, acc|
-          obj = instance_variable_get("@#{id}")
-          next unless obj
-
-          acc[id] = obj.try(:to_gid_param) || obj
-        end.compact
-      end
-
-      def identifiers_json
-        identifiers_hash.to_json
-      end
-
-      # Fetch identifier and deserialize if neccessary
-      def fetch_identifier(name)
-        @cached_ids[name] ||= @cached_ids.fetch(name) do
-          val = ids[name.to_s]
-          next val unless val.is_a?(String)
-
-          GlobalID::Locator.locate(val) || val
-        end
       end
 
       def logger
