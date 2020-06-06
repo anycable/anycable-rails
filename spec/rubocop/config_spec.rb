@@ -30,7 +30,6 @@ describe "Rubocop default config" do
     res = run_rubocop("app/controllers/good_controller.rb")
 
     expect(res).to include("Inspecting 1 file")
-    expect(res).to include("1 offense detected")
-    expect(res).to include("AnyCable/RemoteDisconnect")
+    expect(res).to include("no offenses detected")
   end
 end
