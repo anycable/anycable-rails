@@ -1,5 +1,5 @@
 test:
   rpc_host: "localhost:50123"
-  redis_url: "redis://localhost:6379/2"
+  broadcast_adapter: http
   access_logs_disabled: false
   persistent_session_enabled: true
