@@ -12,7 +12,7 @@
 
 
 <!--
-  Otherwise, describe the changes: 
+  Otherwise, describe the changes:
 
 ### What is the purpose of this pull request?
 
@@ -22,10 +22,8 @@
 
 -->
 
-<!--
-    Please ensure your PR is ready:
+### Checklist
 
-    - Include tests for this change
-    - Add Changelog entry
-    - Update documentation for this change (if appropriate)
--->
+- [ ] I've added tests for this change
+- [ ] I've added a Changelog entry
+- [ ] I've updated [documentation](https://github.com/anycable/docs.anycable.io/)—Link to PR
