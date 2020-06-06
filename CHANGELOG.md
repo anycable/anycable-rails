@@ -2,6 +2,8 @@
 
 ## 🚧 1.0.0 (_coming soon_)
 
+- Add `RemoteConnections` support. ([@palkan][])
+
 - Add `AnyCable::Rails.enabled?` method which returns true if Action Cable uses AnyCable adapter. ([@palkan][])
 
 - Add `anycable:download` generator to download `anycable-go` binary. ([@palkan][])
