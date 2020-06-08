@@ -14,6 +14,10 @@ class TestChannel < ApplicationCable::Channel
     stream_from "all"
   end
 
+  def unfollow_all
+    stop_stream_from "all"
+  end
+
   def add(data)
     transmit result: (data["a"].to_i + data["b"].to_i)
   end

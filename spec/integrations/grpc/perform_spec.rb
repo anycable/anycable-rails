@@ -37,5 +37,15 @@ describe "client messages" do
         expect(subject).to be_error
       end
     end
+
+    describe "#stop_stream_from" do
+      let(:data) { {action: "unfollow_all"} }
+
+      it "responds with stopped streams", :aggregate_failures do
+        expect(subject).to be_success
+        expect(subject.stopped_streams).to contain_exactly("all")
+        expect(subject.stop_streams).to eq false
+      end
+    end
   end
 end

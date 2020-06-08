@@ -28,6 +28,10 @@ module ActionCable
         connection.socket.subscribe identifier, broadcasting
       end
 
+      def stop_stream_from(broadcasting)
+        connection.socket.unsubscribe identifier, broadcasting
+      end
+
       def stop_all_streams
         connection.socket.unsubscribe_from_all identifier
       end
