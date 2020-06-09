@@ -2,6 +2,10 @@
 
 ## 🚧 1.0.0 (_coming soon_)
 
+- Add `state_attr_accessor` for channels. ([@palkan][])
+
+Just like `attr_accessor` but "persists" the state between RPC calls.
+
 - Add `Channel#stop_stream_from` support. ([@palkan][])
 
 - Add `RemoteConnections` support. ([@palkan][])

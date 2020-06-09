@@ -5,6 +5,8 @@ require "anycable/rails/version"
 require "anycable/rails/config"
 require "anycable/rails/rack"
 
+require "globalid"
+
 module AnyCable
   # Rails handler for AnyCable
   module Rails
@@ -12,13 +14,40 @@ module AnyCable
 
     ADAPTER_ALIASES = %w[any_cable anycable].freeze
 
-    def self.enabled?
-      adapter = ::ActionCable.server.config.cable&.fetch("adapter", nil)
-      compatible_adapter?(adapter)
-    end
+    class << self
+      def enabled?
+        adapter = ::ActionCable.server.config.cable&.fetch("adapter", nil)
+        compatible_adapter?(adapter)
+      end
 
-    def self.compatible_adapter?(adapter)
-      ADAPTER_ALIASES.include?(adapter)
+      def compatible_adapter?(adapter)
+        ADAPTER_ALIASES.include?(adapter)
+      end
+
+      # Serialize connection/channel state variable to string
+      # using GlobalID where possible or JSON (if json: true)
+      def serialize(obj, json: false)
+        obj.try(:to_gid_param) || (json ? obj.to_json : obj)
+      end
+
+      # Deserialize previously serialized value from string to
+      # Ruby object.
+      # If the resulting object is a Hash, make it indifferent
+      def deserialize(str, json: false)
+        str.yield_self do |val|
+          next unless val.is_a?(String)
+
+          gval = GlobalID::Locator.locate(val)
+          return gval if gval
+
+          next val unless json
+
+          JSON.parse(val)
+        end.yield_self do |val|
+          next val.with_indifferent_access if val.is_a?(Hash)
+          val
+        end
+      end
     end
   end
 end

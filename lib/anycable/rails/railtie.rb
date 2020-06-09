@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require "anycable/rails/channel_state"
+
 module AnyCable
   module Rails
     class Railtie < ::Rails::Railtie # :nodoc:

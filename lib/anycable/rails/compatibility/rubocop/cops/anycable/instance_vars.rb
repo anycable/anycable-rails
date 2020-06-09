@@ -25,7 +25,7 @@ module RuboCop
       #   end
       #
       class InstanceVars < RuboCop::Cop::Cop
-        MSG = "Channel instance variables are not supported in AnyCable"
+        MSG = "Channel instance variables are not supported in AnyCable. Use `state_attr_accessor` instead"
 
         def on_class(node)
           find_nested_ivars(node) do |nested_ivar|

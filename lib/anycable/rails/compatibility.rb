@@ -33,6 +33,10 @@ module AnyCable
         res = yield
         diff = instance_variables - was_ivars
 
+        if self.class.respond_to?(:channel_state_attributes)
+          diff.delete_if { |ivar| self.class.channel_state_attributes.include?(:"#{ivar.to_s.sub(/^@/, "")}") }
+        end
+
         unless diff.empty?
           raise AnyCable::CompatibilityError,
             "Channel instance variables are not supported by AnyCable, " \

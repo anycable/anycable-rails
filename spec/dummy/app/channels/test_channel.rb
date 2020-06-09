@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class TestChannel < ApplicationCable::Channel
+  state_attr_accessor :counter, :another_user, :topics
+
   def subscribed
     if current_user.secret != "123"
       reject
@@ -32,5 +34,20 @@ class TestChannel < ApplicationCable::Channel
     session[:count] += 1
     session[:tock] = data["tick"] || :tock
     transmit result: session[:count]
+  end
+
+  def itick
+    self.counter ||= 0
+    self.counter += 1
+    transmit result: counter
+  end
+
+  def chat_with(data)
+    self.another_user = User.find(data["user_id"])
+    self.topics = data["topics"]
+  end
+
+  def send_message(data)
+    transmit user: another_user.name, topic: topics[data["topic"]], message: data["text"]
   end
 end

@@ -23,7 +23,7 @@ module ActionCable
           obj = instance_variable_get("@#{id}")
           next unless obj
 
-          acc[id] = obj.try(:to_gid_param) || obj
+          acc[id] = AnyCable::Rails.serialize(obj)
         end.compact
       end
 
@@ -34,10 +34,7 @@ module ActionCable
       # Fetch identifier and deserialize if neccessary
       def fetch_identifier(name)
         @cached_ids[name] ||= @cached_ids.fetch(name) do
-          val = ids[name.to_s]
-          next val unless val.is_a?(String)
-
-          GlobalID::Locator.locate(val) || val
+          AnyCable::Rails.deserialize(ids[name.to_s])
         end
       end
     end

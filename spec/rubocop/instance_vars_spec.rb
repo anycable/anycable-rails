@@ -15,7 +15,7 @@ describe RuboCop::Cop::AnyCable::InstanceVars do
     RUBY
 
     expect(cop.offenses.size).to be(1)
-    expect(cop.messages.first).to eq("Channel instance variables are not supported in AnyCable")
+    expect(cop.messages.first).to include("Channel instance variables are not supported in AnyCable")
   end
 
   it "registers offense for instance var definition inside block in #subscribed" do
@@ -28,7 +28,7 @@ describe RuboCop::Cop::AnyCable::InstanceVars do
     RUBY
 
     expect(cop.offenses.size).to be(1)
-    expect(cop.messages.first).to eq("Channel instance variables are not supported in AnyCable")
+    expect(cop.messages.first).to include("Channel instance variables are not supported in AnyCable")
   end
 
   it "registers offense for instance var definition inside condition in #subscribed" do
@@ -41,7 +41,7 @@ describe RuboCop::Cop::AnyCable::InstanceVars do
     RUBY
 
     expect(cop.offenses.size).to be(1)
-    expect(cop.messages.first).to eq("Channel instance variables are not supported in AnyCable")
+    expect(cop.messages.first).to include("Channel instance variables are not supported in AnyCable")
   end
 
   it "registers offense for instance var definition inside multiple assignments in #subscribed" do
@@ -54,7 +54,7 @@ describe RuboCop::Cop::AnyCable::InstanceVars do
     RUBY
 
     expect(cop.offenses.size).to be(1)
-    expect(cop.messages.first).to eq("Channel instance variables are not supported in AnyCable")
+    expect(cop.messages.first).to include("Channel instance variables are not supported in AnyCable")
   end
 
   it "registers offense for instance var definitions inside action" do
@@ -67,6 +67,6 @@ describe RuboCop::Cop::AnyCable::InstanceVars do
     RUBY
 
     expect(cop.offenses.size).to be(1)
-    expect(cop.messages.first).to eq("Channel instance variables are not supported in AnyCable")
+    expect(cop.messages.first).to include("Channel instance variables are not supported in AnyCable")
   end
 end
