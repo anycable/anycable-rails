@@ -18,11 +18,37 @@ describe RuboCop::Cop::AnyCable::StreamFrom do
     expect(cop.messages.first).to eq("Custom stream callbacks are not supported in AnyCable")
   end
 
-  it "registers offense for #stream_from with callback" do
+  it "registers offense for #stream_for with block" do
+    inspect_source(<<~RUBY)
+      class MyChannel < ApplicationCable::Channel
+        def follow
+          stream_for(user) {}
+        end
+      end
+    RUBY
+
+    expect(cop.offenses.size).to be(1)
+    expect(cop.messages.first).to eq("Custom stream callbacks are not supported in AnyCable")
+  end
+
+  it "registers offense for #stream_from with lambda" do
     inspect_source(<<~RUBY)
       class MyChannel < ApplicationCable::Channel
         def follow
           stream_from("all", -> {})
+        end
+      end
+    RUBY
+
+    expect(cop.offenses.size).to be(1)
+    expect(cop.messages.first).to eq("Custom stream callbacks are not supported in AnyCable")
+  end
+
+  it "registers offense for #stream_for with lambda" do
+    inspect_source(<<~RUBY)
+      class MyChannel < ApplicationCable::Channel
+        def follow
+          stream_for(user, -> {})
         end
       end
     RUBY
@@ -36,6 +62,19 @@ describe RuboCop::Cop::AnyCable::StreamFrom do
       class MyChannel < ApplicationCable::Channel
         def follow
           stream_from("all", coder: SomeCoder)
+        end
+      end
+    RUBY
+
+    expect(cop.offenses.size).to be(1)
+    expect(cop.messages.first).to eq("Custom coders are not supported in AnyCable")
+  end
+
+  it "registers offense for #stream_for with not JSON coder" do
+    inspect_source(<<~RUBY)
+      class MyChannel < ApplicationCable::Channel
+        def follow
+          stream_for(user, coder: SomeCoder)
         end
       end
     RUBY

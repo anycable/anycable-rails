@@ -1,11 +1,14 @@
 AnyCable/InstanceVars:
+  Enabled: true
   Include:
     - "**/channels/**/*.rb"
 
 AnyCable/StreamFrom:
+  Enabled: true
   Include:
     - "**/channels/**/*.rb"
 
 AnyCable/PeriodicalTimers:
+  Enabled: true
   Include:
     - "**/channels/**/*.rb"

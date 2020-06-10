@@ -11,7 +11,7 @@ module RuboCop
       #   # bad
       #   class MyChannel < ApplicationCable::Channel
       #     def follow
-      #       stream_from("all") {}
+      #       stream_for(room) {}
       #     end
       #   end
       #
@@ -36,15 +36,15 @@ module RuboCop
       #
       class StreamFrom < RuboCop::Cop::Cop
         def_node_matcher :stream_from_with_block?, <<-PATTERN
-          (block (send _ :stream_from ...) ...)
+          (block {(send _ :stream_from ...) (send _ :stream_for ...)} ...)
         PATTERN
 
         def_node_matcher :stream_from_with_callback?, <<-PATTERN
-          (send _ :stream_from str_type? (block (send nil? :lambda) ...))
+          {(send _ :stream_from str_type? (block (send nil? :lambda) ...)) (send _ :stream_for ... (block (send nil? :lambda) ...))}
         PATTERN
 
         def_node_matcher :args_of_stream_from, <<-PATTERN
-          (send _ :stream_from str_type? $...)
+          {(send _ :stream_from str_type? $...)  (send _ :stream_for $...)}
         PATTERN
 
         def_node_matcher :coder_symbol?, "(pair (sym :coder) ...)"
