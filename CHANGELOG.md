@@ -1,6 +1,6 @@
 # Change log
 
-## 🚧 1.0.0 (_coming soon_)
+## 1.0.0.rc1 (2020-06-10)
 
 - Add `state_attr_accessor` for channels. ([@palkan][])
 
