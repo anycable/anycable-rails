@@ -121,6 +121,10 @@ module AnyCableRailsGenerators
       !!gemfile_lock&.match?(/^\s+stimulus_reflex\b/)
     end
 
+    def redis?
+      !!gemfile_lock&.match?(/^\s+redis\b/)
+    end
+
     def gemfile_lock
       @gemfile_lock ||= begin
         res = nil

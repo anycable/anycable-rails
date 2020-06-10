@@ -20,6 +20,13 @@ default: &default
   rpc_host: "127.0.0.1:50051"
   # Whether to enable gRPC level logging or not
   log_grpc: false
+  <%- if redis? -%>
+  # Use Redis to broadcast messages to AnyCable server
+  broadcast_adapter: redis
+  <%- else -%>
+  # Use HTTP adapter for a quick start (since redis gem is not present in the project)
+  broadcast_adapter: http
+  <%- end -%>
   # Use the same channel name for WebSocket server, e.g.:
   #   $ anycable-go --redis-channel="__anycable__"
   redis_channel: "__anycable__"
@@ -30,3 +37,7 @@ development:
 
 production:
   <<: *default
+  <%- if !redis? -%>
+  # Use Redis in production
+  broadcast_adapter: redis
+  <%- end -%>

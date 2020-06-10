@@ -9,7 +9,7 @@ module AnyCableRailsGenerators
 
     include WithOSHelpers
 
-    # TODO(release): change to latest release
+    # TODO: change to latest release
     VERSION = "1.0.0.preview1"
 
     class_option :bin_path,
