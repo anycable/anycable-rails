@@ -178,4 +178,27 @@ describe AnyCableRailsGenerators::SetupGenerator, type: :generator do
       end
     end
   end
+
+  context "when RuboCop is present" do
+    before do
+      File.write(
+        File.join(destination_root, "Gemfile.lock"),
+        <<~CODE
+          GEM
+            specs:
+              rubocop
+        CODE
+      )
+    end
+
+    it "runs compatibility checks" do
+      gen = generator %w[--devenv skip --skip-heroku]
+      expect(gen)
+        .to receive(:run).with(
+          "bundle exec rubocop -r 'anycable/rails/compatibility/rubocop' " \
+          "--only AnyCable/InstanceVars,AnyCable/PeriodicalTimers,AnyCable/InstanceVars"
+        )
+      silence_stream(STDOUT) { gen.invoke_all }
+    end
+  end
 end

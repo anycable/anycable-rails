@@ -61,7 +61,7 @@ module AnyCableRailsGenerators
       end
 
       say_status :info, "✅ 'config.action_cable.url' has been configured"
-      say_status :help, "⚠️ If you're using JS client make sure you have " \
+      say_status :help, "⚠️  If you're using JS client make sure you have " \
                         "`action_cable_meta_tag` included before any <script> tag in your application.html"
     end
 
@@ -74,7 +74,7 @@ module AnyCableRailsGenerators
 
       case env = DEVELOPMENT_METHODS[answer.to_i]
       when "skip"
-        say_status :help, "⚠️ Please, read this guide on how to install AnyCable-Go server 👉 #{DOCS_ROOT}/anycable-go/getting_started", :yellow
+        say_status :help, "⚠️  Please, read this guide on how to install AnyCable-Go server 👉 #{DOCS_ROOT}/anycable-go/getting_started", :yellow
       else
         send "install_for_#{env}"
       end
@@ -82,7 +82,7 @@ module AnyCableRailsGenerators
 
     def heroku
       if options[:skip_heroku].nil?
-        return unless yes? "Do you use Heroku for deployment?"
+        return unless yes? "Do you use Heroku for deployment? [Yn]"
       elsif options[:skip_heroku]
         return
       end
@@ -96,7 +96,7 @@ module AnyCableRailsGenerators
         say_status :info, "✅ Procfile updated"
       end
 
-      say_status :help, "️️⚠️ Please, read the required steps to configure Heroku applications 👉 #{DOCS_ROOT}/deployment/heroku", :yellow
+      say_status :help, "️️⚠️  Please, read the required steps to configure Heroku applications 👉 #{DOCS_ROOT}/deployment/heroku", :yellow
     end
 
     def devise
@@ -109,6 +109,14 @@ module AnyCableRailsGenerators
       end
 
       say_status :info, "✅ config/initializers/anycable.rb with Devise configuration has been added"
+    end
+
+    def rubocop_compatibility
+      return unless rubocop?
+
+      say_status :info, "🤖 Running static compatibility checks with RuboCop"
+      res = run "bundle exec rubocop -r 'anycable/rails/compatibility/rubocop' --only AnyCable/InstanceVars,AnyCable/PeriodicalTimers,AnyCable/InstanceVars"
+      say_status :help, "⚠️  Please, take a look at the icompatibilities above and fix them. See https://docs.anycable.io/v1/#/ruby/compatibility" unless res
     end
 
     def finish
@@ -125,6 +133,10 @@ module AnyCableRailsGenerators
       !!gemfile_lock&.match?(/^\s+redis\b/)
     end
 
+    def rubocop?
+      !!gemfile_lock&.match?(/^\s+rubocop\b/)
+    end
+
     def gemfile_lock
       @gemfile_lock ||= begin
         res = nil
@@ -137,7 +149,7 @@ module AnyCableRailsGenerators
     end
 
     def install_for_docker
-      say_status :help, "️️⚠️ Docker development configuration could vary", :yellow
+      say_status :help, "️️⚠️  Docker development configuration could vary", :yellow
 
       say "Here is an example snippet for docker-compose.yml:"
       say <<~YML
@@ -180,7 +192,7 @@ module AnyCableRailsGenerators
 
       case answer.to_i
       when 0
-        say_status :help, "⚠️ Please, read this guide on how to install AnyCable-Go server 👉 #{DOCS_ROOT}/anycable-go/getting_started", :yellow
+        say_status :help, "⚠️  Please, read this guide on how to install AnyCable-Go server 👉 #{DOCS_ROOT}/anycable-go/getting_started", :yellow
         return
       else
         return unless send("install_from_#{SERVER_SOURCES[answer.to_i]}")
