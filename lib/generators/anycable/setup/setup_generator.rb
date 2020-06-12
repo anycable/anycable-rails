@@ -111,6 +111,12 @@ module AnyCableRailsGenerators
       say_status :info, "✅ config/initializers/anycable.rb with Devise configuration has been added"
     end
 
+    def stimulus_reflex
+      return unless stimulus_reflex?
+
+      say_status :help, "⚠️  Please, check out the documentation on using AnyCable with Stimulus Reflex: https://docs.anycable.io/v1/#/ruby/stimulus_reflex"
+    end
+
     def rubocop_compatibility
       return unless rubocop?
 

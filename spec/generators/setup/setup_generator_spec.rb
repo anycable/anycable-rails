@@ -24,26 +24,7 @@ describe AnyCableRailsGenerators::SetupGenerator, type: :generator do
     it "copies config files" do
       subject
       expect(file("config/cable.yml")).to exist
-      expect(file("config/anycable.yml")).to contain("persistent_session_enabled: false")
       expect(file("config/anycable.yml")).to contain("broadcast_adapter: http")
-    end
-
-    context "when stimulus_reflex is in the deps" do
-      before do
-        File.write(
-          File.join(destination_root, "Gemfile.lock"),
-          <<~CODE
-            GEM
-              specs:
-                stimulus_reflex
-          CODE
-        )
-      end
-
-      it "anycable.yml enables persistent sessions" do
-        subject
-        expect(file("config/anycable.yml")).to contain("persistent_session_enabled: true")
-      end
     end
 
     context "when redis is in the deps" do
