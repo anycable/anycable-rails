@@ -1,5 +1,16 @@
 # Change log
 
+## master
+
+- Fix connection identifiers deserialization regression. ([@palkan][])
+
+Using non-strings or non-GlobalId-encoded objects was broken.
+
+- Improve `anycable:setup` generator. ([@palkan][])
+
+Update Docker snippet, do not enable persistent sessions automatically,
+fix setting `config.action_cable.url` in environment configuration.
+
 ## 1.0.0.rc1 (2020-06-10)
 
 - Add `state_attr_accessor` for channels. ([@palkan][])
