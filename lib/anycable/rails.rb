@@ -35,7 +35,7 @@ module AnyCable
       # If the resulting object is a Hash, make it indifferent
       def deserialize(str, json: false)
         str.yield_self do |val|
-          next unless val.is_a?(String)
+          next val unless val.is_a?(String)
 
           gval = GlobalID::Locator.locate(val)
           return gval if gval
