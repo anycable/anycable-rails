@@ -21,7 +21,7 @@ module ActionCable
       end
 
       def commit_session!
-        return unless request_loaded? && request.session.loaded?
+        return unless request_loaded? && request.session.respond_to?(:loaded?) && request.session.loaded?
 
         socket.session = request.session.to_json
       end
