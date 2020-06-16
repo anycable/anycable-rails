@@ -2,6 +2,8 @@
 
 ## master
 
+## 1.0.0.rc2 (2020-06-16)
+
 - Fix connection identifiers deserialization regression. ([@palkan][])
 
 Using non-strings or non-GlobalId-encoded objects was broken.
