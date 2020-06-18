@@ -62,6 +62,12 @@ describe AnyCableRailsGenerators::SetupGenerator, type: :generator do
       expect(gen).to receive(:install_for_docker)
       silence_stream(STDOUT) { gen.invoke_all }
     end
+
+    it "doesn't add redis_url: localhost to anycable.yml" do
+      gen = generator(%w[--devenv docker --skip-heroku])
+      silence_stream(STDOUT) { gen.invoke_all }
+      expect(file("config/anycable.yml")).to_not contain(/redis_url:.*localhost:6379/)
+    end
   end
 
   context "when Heroku deployment" do

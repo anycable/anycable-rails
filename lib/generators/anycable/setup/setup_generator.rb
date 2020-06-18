@@ -159,6 +159,9 @@ module AnyCableRailsGenerators
     end
 
     def install_for_docker
+      # Remove localhost from configuraiton
+      gsub_file "config/anycable.yml", /^.*redis_url:.*localhost[^\n]+\n/, ""
+
       say_status :help, "️️⚠️  Docker development configuration could vary", :yellow
 
       say "Here is an example snippet for docker-compose.yml:"
@@ -174,8 +177,8 @@ module AnyCableRailsGenerators
             ANYCABLE_RPC_HOST: anycable:50051
             ANYCABLE_DEBUG: 1
           depends_on:
-            - anycable
-            - redis
+            redis:
+              condition: service_healthy
 
         anycable:
           <<: *backend
@@ -184,8 +187,13 @@ module AnyCableRailsGenerators
             <<: *backend_environment
             ANYCABLE_REDIS_URL: redis://redis:6379/0
             ANYCABLE_RPC_HOST: 0.0.0.0:50051
+            ANYCABLE_DEBUG: 1
           ports:
             - '50051'
+          depends_on:
+            <<: *backend_depends_on
+            ws:
+              condition: service_started
         ─────────────────────────────────────────
       YML
     end
