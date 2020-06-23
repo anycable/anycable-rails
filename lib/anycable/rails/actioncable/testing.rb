@@ -22,6 +22,8 @@ ActionCable::Channel::ConnectionStub.prepend(Module.new do
   def socket
     @socket ||= AnyCable::Socket.new(env: {})
   end
+
+  alias_method :anycable_socket, :socket
 end)
 
 ActionCable::Connection::TestConnection.prepend(Module.new do
