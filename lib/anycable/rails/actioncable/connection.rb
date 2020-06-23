@@ -21,6 +21,8 @@ module ActionCable
 
       attr_reader :socket
 
+      alias anycable_socket socket
+
       delegate :env, :session, to: :request
 
       class << self
