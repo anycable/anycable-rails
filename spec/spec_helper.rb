@@ -4,6 +4,8 @@ require "base_spec_helper"
 
 require File.expand_path("spec/dummy/config/environment", PROJECT_ROOT)
 
+require "rspec/rails"
+
 Rails.application.eager_load!
 
 # This code is called from the server callback in Railtie

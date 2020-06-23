@@ -28,3 +28,7 @@ module ActionCable
     end
   end
 end
+
+::ActionCable::Connection::Base.prepend(
+  ::ActionCable::Connection::PersistentSession
+)
