@@ -35,7 +35,7 @@ module ApplicationCable
 
       token = session[:token] || request.params[:token]
 
-      User.find_by(name: username, secret: token)
+      User.find_by!(name: username, secret: token)
     end
   end
 end
