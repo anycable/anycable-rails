@@ -1,8 +1,5 @@
 source "https://rubygems.org"
 
-# TEMP: while 1.0 in development
-gem "anycable", github: "anycable/anycable"
-
 gem "rails", "~> 5.0"
 gem "rspec-rails", "~> 3.5"
 gem "sqlite3", "~> 1.3"
