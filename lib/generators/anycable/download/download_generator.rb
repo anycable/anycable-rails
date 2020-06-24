@@ -9,8 +9,7 @@ module AnyCableRailsGenerators
 
     include WithOSHelpers
 
-    # TODO: change to latest release
-    VERSION = "1.0.0.preview1"
+    VERSION = "latest"
 
     class_option :bin_path,
       type: :string,
@@ -35,20 +34,27 @@ module AnyCableRailsGenerators
     private
 
     def release_url(version)
+      return latest_release_url(version) if version == "latest"
+
       if Gem::Version.new(version).segments.first >= 1
-        new_release_url(version)
+        new_release_url("v#{version}")
       else
-        legacy_release_url(version)
+        legacy_release_url("v#{version}")
       end
     end
 
     def legacy_release_url(version)
-      "https://github.com/anycable/anycable-go/releases/download/v#{version}/" \
+      "https://github.com/anycable/anycable-go/releases/download/#{version}/" \
         "anycable-go-v#{version}-#{os_name}-#{cpu_name}"
     end
 
     def new_release_url(version)
-      "https://github.com/anycable/anycable-go/releases/download/v#{version}/" \
+      "https://github.com/anycable/anycable-go/releases/download/#{version}/" \
+        "anycable-go-#{os_name}-#{cpu_name}"
+    end
+
+    def latest_release_url(version)
+      "https://github.com/anycable/anycable-go/releases/latest/download/" \
         "anycable-go-#{os_name}-#{cpu_name}"
     end
 

@@ -18,7 +18,7 @@ describe AnyCableRailsGenerators::DownloadGenerator, type: :generator do
   it "runs curl with valid url" do
     gen = generator(%w[--os linux --cpu amd64])
     expect(gen)
-      .to receive(:download_exe).with(%r{/releases/download/v\d+.\d+.\d+(.\w+)?/anycable-go-linux-amd64},
+      .to receive(:download_exe).with(%r{/releases/latest/download/anycable-go-linux-amd64},
         to: "/usr/local/bin",
         file_name: "anycable-go")
     gen.invoke_all
@@ -28,7 +28,7 @@ describe AnyCableRailsGenerators::DownloadGenerator, type: :generator do
     it "runs curl with valid url" do
       gen = generator(%w[--os linux --cpu amd64 --bin-path=/usr/cat/bin])
       expect(gen)
-        .to receive(:download_exe).with(%r{/releases/download/v\d+.\d+.\d+(.\w+)?/anycable-go-linux-amd64},
+        .to receive(:download_exe).with(%r{/releases/latest/download/anycable-go-linux-amd64},
           to: "/usr/cat/bin",
           file_name: "anycable-go")
       silence_stream(STDOUT) { gen.invoke_all }

@@ -1,5 +1,5 @@
 Description:
-    Install AnyCable-Go web server.
+    Install AnyCable-Go web server locally (the latest version by default).
 
 Example:
     rails generate anycable:download
