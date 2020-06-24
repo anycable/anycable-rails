@@ -2,6 +2,8 @@
 
 ## master
 
+## 1.0.0.rc3 (2020-06-24)
+
 - Make AnyCable patches compatible with Action Cable testing. ([@palkan][])
 
 - Do not add localhost `redis_url` to `anycable.yml` when Docker development method is chosen in `anycable:setup`. ([@palkan][])
