@@ -2,7 +2,7 @@
 
 ## master
 
-## 1.0.0.rc3 (2020-06-24)
+## 1.0.0.rc4 (2020-06-24)
 
 - Make AnyCable patches compatible with Action Cable testing. ([@palkan][])
 
