@@ -62,12 +62,6 @@ describe AnyCableRailsGenerators::SetupGenerator, type: :generator do
       expect(gen).to receive(:install_for_docker)
       silence_stream(STDOUT) { gen.invoke_all }
     end
-
-    it "doesn't add redis_url: localhost to anycable.yml" do
-      gen = generator(%w[--devenv docker --skip-heroku])
-      silence_stream(STDOUT) { gen.invoke_all }
-      expect(file("config/anycable.yml")).to_not contain(/redis_url:.*localhost:6379/)
-    end
   end
 
   context "when Heroku deployment" do
@@ -100,21 +94,48 @@ describe AnyCableRailsGenerators::SetupGenerator, type: :generator do
 
   context "when local environment" do
     context "when do not install the server" do
-      before { run_generator %w[--devenv local --source skip --skip-heroku --skip-procfile-dev false] }
+      subject do
+        run_generator %w[--devenv local --source skip --skip-heroku --skip-procfile-dev false]
+        file("Procfile.dev")
+      end
 
       context "when Procfile.dev exists" do
         it "patches" do
-          expect(file("Procfile.dev"))
-            .to contain('anycable: bundle exec anycable --server-command "anycable-go --port 3334"')
+          expect(subject)
+            .to contain("anycable: bundle exec anycable")
+          expect(subject)
+            .to contain("ws: anycable-go --port=8080 --broadcast_adapter=http")
         end
       end
 
-      context "when Procfile.dev absents" do
+      context "when Procfile.dev is absent" do
         let(:removed_files) { %w[Procfile.dev] }
 
         it "creates" do
-          expect(file("Procfile.dev"))
-            .to contain('anycable: bundle exec anycable --server-command "anycable-go --port 3334"')
+          expect(subject)
+            .to contain("anycable: bundle exec anycable")
+          expect(subject)
+            .to contain("ws: anycable-go --port=8080 --broadcast_adapter=http")
+        end
+
+        context "when redis is in the deps" do
+          before do
+            File.write(
+              File.join(destination_root, "Gemfile.lock"),
+              <<~CODE
+                GEM
+                  specs:
+                    redis
+              CODE
+            )
+          end
+
+          it "creates" do
+            expect(subject)
+              .to contain("anycable: bundle exec anycable")
+            expect(subject)
+              .to contain("ws: anycable-go --port=8080\n")
+          end
         end
       end
     end

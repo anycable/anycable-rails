@@ -1,0 +1,6 @@
+server: bundle exec rails s
+<%- if webpacker? -%>
+assets: bundle exec bin/webpack-dev-server
+<%- end -%>
+anycable: bundle exec anycable
+ws: anycable-go<%= anycable_go_options %>

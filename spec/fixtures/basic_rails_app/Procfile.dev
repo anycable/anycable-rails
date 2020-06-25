@@ -1,3 +1,2 @@
 server: bin/rails server
 assets: bin/webpack-dev-server
-anycable: bundle exec anycable --server-command "anycable-go --port 3334"

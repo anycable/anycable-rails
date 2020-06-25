@@ -143,6 +143,10 @@ module AnyCableRailsGenerators
       !!gemfile_lock&.match?(/^\s+redis\b/)
     end
 
+    def webpacker?
+      !!gemfile_lock&.match?(/^\s+webpacker\b/)
+    end
+
     def rubocop?
       !!gemfile_lock&.match?(/^\s+rubocop\b/)
     end
@@ -224,8 +228,8 @@ module AnyCableRailsGenerators
     def template_proc_files
       file_name = "Procfile.dev"
 
-      if File.exist?(file_name)
-        append_file file_name, 'anycable: bundle exec anycable --server-command "anycable-go --port 3334"'
+      if file_exists?(file_name)
+        append_file file_name, "anycable: bundle exec anycable\nws: anycable-go#{anycable_go_options}", force: true
       else
         say_status :help, "💡 We recommend using Hivemind to manage multiple processes in development 👉 https://github.com/DarthSim/hivemind", :yellow
 
@@ -261,6 +265,16 @@ module AnyCableRailsGenerators
         args << "--bin-path=#{opts[:bin_path]}" if opts[:bin_path]
         args << "--version #{opts[:version]}" if opts[:version]
       end.join(" ")
+    end
+
+    def anycable_go_options
+      redis? ? " --port=8080" : " --port=8080 --broadcast_adapter=http"
+    end
+
+    def file_exists?(name)
+      in_root do
+        return File.file?(name)
+      end
     end
   end
 end

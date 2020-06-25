@@ -30,10 +30,17 @@ default: &default
   # Use the same channel name for WebSocket server, e.g.:
   #   $ anycable-go --redis-channel="__anycable__"
   redis_channel: "__anycable__"
+  <%- if redis? -%>
+  # You can use REDIS_URL env var to configure Redis URL.
+  # Localhost is used by default.
+  # redis_url: "redis://localhost:6379/1"
+  <%- end -%>
 
 development:
   <<: *default
-  redis_url: "redis://localhost:6379/1"
+
+test:
+  <<: *default
 
 production:
   <<: *default
