@@ -15,8 +15,8 @@ module ActionCable
         return super unless socket.session
 
         super.tap do |req|
-          req.env[Rack::RACK_SESSION] =
-            AnyCable::Rails::SessionProxy.new(req.env[Rack::RACK_SESSION], socket.session)
+          req.env[::Rack::RACK_SESSION] =
+            AnyCable::Rails::SessionProxy.new(req.env[::Rack::RACK_SESSION], socket.session)
         end
       end
 
