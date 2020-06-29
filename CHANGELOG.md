@@ -2,6 +2,8 @@
 
 ## master
 
+- Support `rescue_from` in connections (Rails 6.1). ([@palkan][])
+
 ## 1.0.0.rc4 (2020-06-24)
 
 - Make AnyCable patches compatible with Action Cable testing. ([@palkan][])

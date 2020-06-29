@@ -38,6 +38,20 @@ describe "client messages" do
       end
     end
 
+    if ActionCable::Connection::Base.respond_to?(:rescue_from)
+      context "with rescue_from" do
+        let(:log) { ApplicationCable::Connection.events_log }
+        let(:data) { {action: "chat_with", user_id: -1} }
+
+        it "catches error with rescue_from" do
+          expect { subject }
+            .to change { log.select { |entry| entry[:source] == "error" }.size }
+            .by(1)
+          expect(subject).to be_failure
+        end
+      end
+    end
+
     describe "#stop_stream_from" do
       let(:data) { {action: "unfollow_all"} }
 

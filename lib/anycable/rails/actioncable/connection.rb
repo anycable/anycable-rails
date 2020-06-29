@@ -198,3 +198,16 @@ module ActionCable
     # rubocop:enable Metrics/ClassLength
   end
 end
+
+# Support rescue_from
+# https://github.com/rails/rails/commit/d2571e560c62116f60429c933d0c41a0e249b58b
+if ActionCable::Connection::Base.respond_to?(:rescue_from)
+  ActionCable::Connection::Base.prepend(Module.new do
+    def handle_channel_command(*)
+      super
+    rescue Exception => e # rubocop:disable Lint/RescueException
+      rescue_with_handler(e) || raise
+      false
+    end
+  end)
+end

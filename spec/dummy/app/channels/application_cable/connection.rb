@@ -12,6 +12,10 @@ module ApplicationCable
       end
     end
 
+    if respond_to?(:rescue_from)
+      rescue_from ActiveRecord::RecordNotFound, with: :track_error
+    end
+
     identified_by :current_user
     identified_by :url
 
@@ -36,6 +40,10 @@ module ApplicationCable
       token = session[:token] || request.params[:token]
 
       User.find_by!(name: username, secret: token)
+    end
+
+    def track_error(e)
+      self.class.log_event("error", message: e.message)
     end
   end
 end
