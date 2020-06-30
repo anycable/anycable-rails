@@ -2,15 +2,13 @@
 
 ## master
 
-- Support `rescue_from` in connections (Rails 6.1). ([@palkan][])
+## 1.0.0 (2020-07-01)
 
-## 1.0.0.rc4 (2020-06-24)
+- Support `rescue_from` in connections (Rails 6.1). ([@palkan][])
 
 - Make AnyCable patches compatible with Action Cable testing. ([@palkan][])
 
 - Do not add localhost `redis_url` to `anycable.yml` when Docker development method is chosen in `anycable:setup`. ([@palkan][])
-
-## 1.0.0.rc2 (2020-06-16)
 
 - Fix connection identifiers deserialization regression. ([@palkan][])
 
@@ -20,8 +18,6 @@ Using non-strings or non-GlobalId-encoded objects was broken.
 
 Update Docker snippet, do not enable persistent sessions automatically,
 fix setting `config.action_cable.url` in environment configuration.
-
-## 1.0.0.rc1 (2020-06-10)
 
 - Add `state_attr_accessor` for channels. ([@palkan][])
 
