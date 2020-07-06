@@ -59,14 +59,6 @@ module AnyCable
           end
         end
       end
-
-      initializer "anycable.testing" do |app|
-        next unless ::Rails.env.test?
-
-        ActiveSupport.on_load(:action_cable) do
-          require "anycable/rails/actioncable/testing"
-        end
-      end
     end
   end
 end

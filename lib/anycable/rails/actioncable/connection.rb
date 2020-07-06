@@ -211,3 +211,5 @@ if ActionCable::Connection::Base.respond_to?(:rescue_from)
     end
   end)
 end
+
+require "anycable/rails/actioncable/testing" if ::Rails.env.test?
