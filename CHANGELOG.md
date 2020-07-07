@@ -2,6 +2,10 @@
 
 ## master
 
+## 1.0.1 (2020-07-07)
+
+- Fixed patching Action Cable testing classes. ([@palkan][])
+
 ## 1.0.0 (2020-07-01)
 
 - Support `rescue_from` in connections (Rails 6.1). ([@palkan][])
