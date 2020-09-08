@@ -2,6 +2,8 @@
 
 ## master
 
+## 1.0.2 (2020-09-08)
+
 - Added missing channel state support to `#unsubscribed` callbacks. ([@palkan][])
 
 ## 1.0.1 (2020-07-07)
