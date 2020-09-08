@@ -31,7 +31,7 @@ module ActionCable
         end
       end
 
-      def initialize(socket, env, identifiers: "{}", subscriptions: [])
+      def initialize(socket, env, identifiers: "{}", subscriptions: nil)
         if env
           # If env is set, then somehow we're in the context of Action Cable
           # Return and print a warning in #process
@@ -51,8 +51,15 @@ module ActionCable
         @socket = socket
         @subscriptions = ActionCable::Connection::Subscriptions.new(self)
 
-        # Initialize channels if any
-        subscriptions.each { |id| @subscriptions.fetch(id) }
+        return unless subscriptions
+
+        # Initialize channels (for disconnect)
+        subscriptions.each do |id|
+          channel = @subscriptions.fetch(id)
+          next unless socket.istate[id]
+
+          channel.__istate__ = ActiveSupport::JSON.decode(socket.istate[id])
+        end
       end
 
       def process

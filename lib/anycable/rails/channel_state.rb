@@ -10,11 +10,11 @@ module AnyCable
             class_eval <<~RUBY, __FILE__, __LINE__ + 1
               def #{name}
                 return @#{name} if instance_variable_defined?(:@#{name})
-                @#{name} = AnyCable::Rails.deserialize(connection.socket.istate["#{name}"], json: true) if connection.anycable_socket
+                @#{name} = AnyCable::Rails.deserialize(__istate__["#{name}"], json: true) if connection.anycable_socket
               end
 
               def #{name}=(val)
-                connection.socket.istate["#{name}"] = AnyCable::Rails.serialize(val, json: true) if connection.anycable_socket
+                __istate__["#{name}"] = AnyCable::Rails.serialize(val, json: true) if connection.anycable_socket
                 instance_variable_set(:@#{name}, val)
               end
             RUBY
@@ -35,6 +35,13 @@ module AnyCable
 
       def self.included(base)
         base.extend ClassMethods
+      end
+
+      # Make it possible to provide istate explicitly for a channel instance
+      attr_writer :__istate__
+
+      def __istate__
+        @__istate__ ||= connection.socket.istate
       end
     end
   end

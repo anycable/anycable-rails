@@ -2,6 +2,8 @@
 
 ## master
 
+- Added missing channel state support to `#unsubscribed` callbacks. ([@palkan][])
+
 ## 1.0.1 (2020-07-07)
 
 - Fixed patching Action Cable testing classes. ([@palkan][])

@@ -13,8 +13,12 @@ module ApplicationCable
 
     def log_event(type)
       ApplicationCable::Connection.log_event(
-        identifier, type: type, user: current_user.name
+        identifier, type: type, user: current_user.name, **unsubscribed_params.compact
       )
+    end
+
+    def unsubscribed_params
+      {}
     end
   end
 end

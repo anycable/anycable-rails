@@ -84,5 +84,34 @@ describe "disconnection" do
         expect(channel2_logs.last[:data]).to eq(user: "disco", type: "unsubscribed")
       end
     end
+
+    context "with .state_attr_accessor" do
+      let(:channel_id) { {channel: "TestChannel", id: 1}.to_json }
+      let(:channel2_id) { {channel: "TestChannel", id: 2}.to_json }
+      let(:subscriptions) { [channel_id, channel2_id] }
+
+      before do
+        # During disconnect, istate contains all
+        # channel states JSON-encoded
+        request.istate = Google::Protobuf::Map.new(
+          :string,
+          :string,
+          {
+            channel_id => {name: "teddy".to_json}.to_json,
+            channel2_id => {name: "bear".to_json}.to_json
+          }
+        )
+      end
+
+      it "has access to state in #unsubscribed" do
+        subject
+
+        channel_logs = log.select { |entry| entry[:source] == channel_id }
+        expect(channel_logs.last[:data]).to eq(name: "teddy", user: "disco", type: "unsubscribed")
+
+        channel2_logs = log.select { |entry| entry[:source] == channel2_id }
+        expect(channel2_logs.last[:data]).to eq(name: "bear", user: "disco", type: "unsubscribed")
+      end
+    end
   end
 end

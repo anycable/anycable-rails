@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class TestChannel < ApplicationCable::Channel
-  state_attr_accessor :counter, :another_user, :topics
+  state_attr_accessor :counter, :another_user, :topics, :name
 
   def subscribed
     if current_user.secret != "123"
@@ -49,5 +49,11 @@ class TestChannel < ApplicationCable::Channel
 
   def send_message(data)
     transmit user: another_user.name, topic: topics[data["topic"]], message: data["text"]
+  end
+
+  private
+
+  def unsubscribed_params
+    {name: name}
   end
 end
