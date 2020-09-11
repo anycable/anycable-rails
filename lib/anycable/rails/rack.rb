@@ -44,10 +44,10 @@ module AnyCable
 
       def self.app
         @rack_app || app_build_lock.synchronize do
-          @rack_app ||= begin
-            stack = default_middleware_stack
-            @middleware = middleware.merge_into(stack)
-            middleware.build { [-1, {}, []] }
+          @rack_app ||= default_middleware_stack.yield_self do |stack|
+                          middleware.merge_into(stack)
+                        end.yield_self do |stack|
+            stack.build { [-1, {}, []] }
           end
         end
       end
