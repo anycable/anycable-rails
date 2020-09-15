@@ -38,7 +38,7 @@ module AnyCable
         config = ::Rails.application.config
 
         ActionDispatch::MiddlewareStack.new do |middleware|
-          middleware.use(config.session_store, config.session_options)
+          middleware.use(config.session_store, config.session_options) if config.session_store
         end
       end
 
