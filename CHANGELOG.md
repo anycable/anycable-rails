@@ -2,6 +2,10 @@
 
 ## master
 
+## 1.0.3 (2020-09-16)
+
+- Fixed bug with building a request object when session store is absent. ([@palkan][])
+
 ## 1.0.2 (2020-09-08)
 
 - Added missing channel state support to `#unsubscribed` callbacks. ([@palkan][])
