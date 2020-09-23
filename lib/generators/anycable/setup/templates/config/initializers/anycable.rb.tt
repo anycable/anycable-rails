@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-# Add Warden middkeware to AnyCable stack to allow accessing
+# Add Warden middleware to AnyCable stack to allow accessing
 # Devise current user via `env["warden"].user`.
 #
 # See <%= DOCS_ROOT %>/ruby/authentication
