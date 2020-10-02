@@ -2,6 +2,8 @@
 
 ## master
 
+## 1.0.4 (2020-10-02)
+
 - Relax Rails dependencies. ([@palkan][])
 
 Only add `actioncable` and `globalid` as runtime dependencies, not the whole `rails`.
