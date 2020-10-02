@@ -2,6 +2,10 @@
 
 ## master
 
+- Relax Rails dependencies. ([@palkan][])
+
+Only add `actioncable` and `globalid` as runtime dependencies, not the whole `rails`.
+
 ## 1.0.3 (2020-09-16)
 
 - Fixed bug with building a request object when session store is absent. ([@palkan][])

@@ -1,6 +1,6 @@
 source "https://rubygems.org"
 
-gem "rails", "~> 5.0"
+gem "actioncable", "~> 5.0"
 gem "rspec-rails", "~> 3.5"
 gem "sqlite3", "~> 1.3"
 
