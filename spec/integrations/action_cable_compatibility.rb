@@ -28,7 +28,7 @@ require "anycable/rails/compatibility"
 
 describe "Compatibility" do
   describe "Channel" do
-    class CompatibilityChannel < ActionCable::Channel::Base
+    class CompatibilityChannel < ActionCable::Channel::Base # rubocop:disable Lint/ConstantDefinitionInBlock
       def follow
       end
     end

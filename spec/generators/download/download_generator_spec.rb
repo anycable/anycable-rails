@@ -31,7 +31,7 @@ describe AnyCableRailsGenerators::DownloadGenerator, type: :generator do
         .to receive(:download_exe).with(%r{/releases/latest/download/anycable-go-linux-amd64},
           to: "/usr/cat/bin",
           file_name: "anycable-go")
-      silence_stream(STDOUT) { gen.invoke_all }
+      silence_stream($stdout) { gen.invoke_all }
     end
   end
 
@@ -42,7 +42,7 @@ describe AnyCableRailsGenerators::DownloadGenerator, type: :generator do
         .to receive(:download_exe).with(%r{/releases/download/v1.1.2/anycable-go-linux-amd64},
           to: "/usr/local/bin",
           file_name: "anycable-go")
-      silence_stream(STDOUT) { gen.invoke_all }
+      silence_stream($stdout) { gen.invoke_all }
     end
   end
 end

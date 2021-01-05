@@ -60,7 +60,7 @@ describe AnyCableRailsGenerators::SetupGenerator, type: :generator do
     it "shows a Docker Compose snippet" do
       gen = generator(%w[--devenv docker --skip-heroku])
       expect(gen).to receive(:install_for_docker)
-      silence_stream(STDOUT) { gen.invoke_all }
+      silence_stream($stdout) { gen.invoke_all }
     end
   end
 
@@ -145,7 +145,7 @@ describe AnyCableRailsGenerators::SetupGenerator, type: :generator do
         gen = generator(%w[--devenv local --source binary --os linux --cpu amd64 --skip-heroku --skip-procfile-dev false])
         expect(gen)
           .to receive(:generate).with("anycable:download", "--os linux --cpu amd64 --bin-path=/usr/local/bin")
-        silence_stream(STDOUT) { gen.invoke_all }
+        silence_stream($stdout) { gen.invoke_all }
       end
     end
 
@@ -153,7 +153,7 @@ describe AnyCableRailsGenerators::SetupGenerator, type: :generator do
       it "runs commands" do
         gen = generator(%w[--devenv local --source brew --skip-heroku --skip-procfile-dev false])
         expect(gen).to receive(:install_from_brew)
-        silence_stream(STDOUT) { gen.invoke_all }
+        silence_stream($stdout) { gen.invoke_all }
       end
     end
   end
@@ -206,7 +206,7 @@ describe AnyCableRailsGenerators::SetupGenerator, type: :generator do
           "bundle exec rubocop -r 'anycable/rails/compatibility/rubocop' " \
           "--only AnyCable/InstanceVars,AnyCable/PeriodicalTimers,AnyCable/InstanceVars"
         )
-      silence_stream(STDOUT) { gen.invoke_all }
+      silence_stream($stdout) { gen.invoke_all }
     end
   end
 end

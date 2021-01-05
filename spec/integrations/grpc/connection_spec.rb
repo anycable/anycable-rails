@@ -54,7 +54,7 @@ describe "client connection" do
     end
 
     it "logs access message (started)", log: :info do
-      expect { subject }.to output(/Started \"\/cable\?token=123\" \[AnyCable\]/).to_stdout_from_any_process
+      expect { subject }.to output(/Started "\/cable\?token=123" \[AnyCable\]/).to_stdout_from_any_process
     end
 
     context "when access logs disabled" do
@@ -66,7 +66,7 @@ describe "client connection" do
       end
 
       it "doesn't log access message", log: :info do
-        expect { subject }.not_to output(/Started \"\/cable\?token=123\" \[AnyCable\]/).to_stdout_from_any_process
+        expect { subject }.not_to output(/Started "\/cable\?token=123" \[AnyCable\]/).to_stdout_from_any_process
       end
     end
 
@@ -74,11 +74,11 @@ describe "client connection" do
       let(:cookies) { "user=john" }
 
       it "logs access message (started)", log: :info do
-        expect { subject }.to output(/Started \"\/cable\?token=123\" \[AnyCable\]/).to_stdout_from_any_process
+        expect { subject }.to output(/Started "\/cable\?token=123" \[AnyCable\]/).to_stdout_from_any_process
       end
 
       it "logs access message (rejected)", log: :info do
-        expect { subject }.to output(/Finished \"\/cable\?token=123\" \[AnyCable\].*\(Rejected\)/).to_stdout_from_any_process
+        expect { subject }.to output(/Finished "\/cable\?token=123" \[AnyCable\].*\(Rejected\)/).to_stdout_from_any_process
       end
     end
   end

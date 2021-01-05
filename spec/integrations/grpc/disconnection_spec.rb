@@ -31,12 +31,12 @@ describe "disconnection" do
     end
 
     it "logs access message (closed)", log: :info do
-      expect { subject }.to output(/Finished \"\/cable\?token=123\" \[AnyCable\].*\(Closed\)/).to_stdout_from_any_process
+      expect { subject }.to output(/Finished "\/cable\?token=123" \[AnyCable\].*\(Closed\)/).to_stdout_from_any_process
     end
 
     it "logs with tags when set", log: :info do
       request.cstate["__ltags__"] = ["u:john"].to_json
-      expect { subject }.to output(/\[u:john\] Finished \"\/cable\?token=123\" \[AnyCable\].*\(Closed\)/).to_stdout_from_any_process
+      expect { subject }.to output(/\[u:john\] Finished "\/cable\?token=123" \[AnyCable\].*\(Closed\)/).to_stdout_from_any_process
     end
 
     context "when access logs disabled" do
@@ -48,7 +48,7 @@ describe "disconnection" do
       end
 
       it "doesn't log access message", log: :info do
-        expect { subject }.not_to output(/Finished \"\/cable\?token=123\" \[AnyCable\].*\(Closed\)/).to_stdout_from_any_process
+        expect { subject }.not_to output(/Finished "\/cable\?token=123" \[AnyCable\].*\(Closed\)/).to_stdout_from_any_process
       end
     end
   end

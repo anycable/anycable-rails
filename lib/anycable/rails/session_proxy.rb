@@ -21,8 +21,8 @@ module AnyCable
         CODE
       end
 
-      alias include? has_key?
-      alias key? has_key?
+      alias_method :include?, :has_key?
+      alias_method :key?, :has_key?
 
       %i[update merge! to_hash].each do |mid|
         class_eval <<~CODE, __FILE__, __LINE__ + 1
@@ -33,7 +33,7 @@ module AnyCable
         CODE
       end
 
-      alias to_h to_hash
+      alias_method :to_h, :to_hash
 
       def keys
         rack_session.keys + socket_session.keys

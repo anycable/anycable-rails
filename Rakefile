@@ -2,11 +2,20 @@
 
 require "bundler/gem_tasks"
 require "rspec/core/rake_task"
-require "rubocop/rake_task"
-
-RuboCop::RakeTask.new
 
 RSpec::Core::RakeTask.new(:spec)
+
+begin
+  require "rubocop/rake_task"
+  RuboCop::RakeTask.new
+
+  RuboCop::RakeTask.new("rubocop:md") do |task|
+    task.options << %w[-c .rubocop-md.yml]
+  end
+rescue LoadError
+  task(:rubocop) {}
+  task("rubocop:md") {}
+end
 
 desc "Run compatibility specs"
 RSpec::Core::RakeTask.new("spec:compatibility") do |task|
@@ -14,4 +23,4 @@ RSpec::Core::RakeTask.new("spec:compatibility") do |task|
   task.verbose = false
 end
 
-task default: %w[rubocop spec:compatibility spec]
+task default: %w[rubocop rubocop:md spec:compatibility spec]

@@ -5,7 +5,7 @@ require "action_cable/channel"
 module ActionCable
   module Channel
     class Base # :nodoc:
-      alias handle_subscribe subscribe_to_channel
+      alias_method :handle_subscribe, :subscribe_to_channel
 
       public :handle_subscribe, :subscription_rejected?
 

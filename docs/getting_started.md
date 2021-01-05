@@ -134,7 +134,7 @@ AnyCable uses `Rails.logger` as `AnyCable.logger` by default, thus setting log l
 
 ```ruby
 # in Rails configuration
-config.logger = Logger.new(STDOUT)
+config.logger = Logger.new($stdout)
 config.log_level = :debug
 
 # or
