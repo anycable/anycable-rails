@@ -2,6 +2,12 @@
 
 ## master
 
+## 1.0.5 (2021-02-24)
+
+- Fixed bug with compatibility false negatives in development. ([@palkan][])
+
+See [#151](https://github.com/anycable/anycable-rails/issues/151).
+
 ## 1.0.4 (2020-10-02)
 
 - Relax Rails dependencies. ([@palkan][])
