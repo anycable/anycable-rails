@@ -23,6 +23,8 @@ module AnyCable
       %w[run_callbacks perform_action].each do |mid|
         module_eval <<~CODE, __FILE__, __LINE__ + 1
           def #{mid}(*)
+            # allocate @_streams
+            streams
             __anycable_check_ivars__ { super }
           end
         CODE

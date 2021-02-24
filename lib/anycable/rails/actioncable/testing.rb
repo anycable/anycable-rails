@@ -12,8 +12,6 @@ end
 
 ActionCable::Channel::ChannelStub.prepend(Module.new do
   def subscribe_to_channel
-    # allocate @streams
-    streams
     handle_subscribe
   end
 end)

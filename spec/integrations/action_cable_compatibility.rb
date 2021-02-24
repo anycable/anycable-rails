@@ -9,6 +9,7 @@ module ActionCable
     class Base
       # Make stream_from no-op
       def stream_from(*)
+        streams
         # do nothing
       end
 
@@ -19,6 +20,10 @@ module ActionCable
 
         reject_subscription if subscription_rejected?
         ensure_confirmation_sent
+      end
+
+      def streams
+        @_streams ||= []
       end
     end
   end
@@ -91,6 +96,14 @@ describe "Compatibility" do
           AnyCable::CompatibilityError,
           "Channel instance variables are not supported by AnyCable, but were set: @test"
         )
+      end
+
+      it "doesn't not throw when streams accessed" do
+        allow_any_instance_of(CompatibilityChannel).to receive(:subscribed) do |channel|
+          channel.stream_from "test"
+        end
+
+        expect { subject.subscribe_to_channel }.not_to raise_exception
       end
     end
 
