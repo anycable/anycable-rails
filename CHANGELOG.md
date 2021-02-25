@@ -2,6 +2,12 @@
 
 ## master
 
+## 1.0.6 (2021-02-25)
+
+- Keep an explicit list of instance vars to ignore in compatibility checks. ([@palkan][])
+
+You can ignore custom vars by adding them to the list: `AnyCable::Compatibility::IGNORE_INSTANCE_VARS << :@my_var`.
+
 ## 1.0.5 (2021-02-24)
 
 - Fixed bug with compatibility false negatives in development. ([@palkan][])

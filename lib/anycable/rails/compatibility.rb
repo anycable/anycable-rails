@@ -4,6 +4,11 @@ module AnyCable
   class CompatibilityError < StandardError; end
 
   module Compatibility # :nodoc:
+    IGNORE_INSTANCE_VARS = %i[
+      @active_periodic_timers
+      @_streams
+    ]
+
     ActionCable::Channel::Base.prepend(Module.new do
       def stream_from(broadcasting, callback = nil, coder: nil)
         if coder.present? && coder != ActiveSupport::JSON
@@ -23,8 +28,6 @@ module AnyCable
       %w[run_callbacks perform_action].each do |mid|
         module_eval <<~CODE, __FILE__, __LINE__ + 1
           def #{mid}(*)
-            # allocate @_streams
-            streams
             __anycable_check_ivars__ { super }
           end
         CODE
@@ -33,7 +36,7 @@ module AnyCable
       def __anycable_check_ivars__
         was_ivars = instance_variables
         res = yield
-        diff = instance_variables - was_ivars
+        diff = instance_variables - was_ivars - IGNORE_INSTANCE_VARS
 
         if self.class.respond_to?(:channel_state_attributes)
           diff.delete(:@__istate__)
