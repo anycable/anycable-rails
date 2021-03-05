@@ -11,7 +11,7 @@ eval_gemfile "gemfiles/rubocop.gemfile"
 if File.exist?(local_gemfile)
   eval(File.read(local_gemfile)) # rubocop:disable Lint/Eval
 else
-  gem "anycable", github: "anycable/anycable"
+  gem "anycable", "~> 1.0"
 
   gem 'sqlite3', '~> 1.3'
   gem 'actioncable', '~> 6.0'

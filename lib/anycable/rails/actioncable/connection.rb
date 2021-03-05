@@ -27,7 +27,7 @@ module ActionCable
 
       class << self
         def call(socket, **options)
-          new(socket, nil, options)
+          new(socket, nil, **options)
         end
       end
 

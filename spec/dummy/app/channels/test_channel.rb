@@ -21,7 +21,7 @@ class TestChannel < ApplicationCable::Channel
   end
 
   def add(data)
-    transmit result: (data["a"].to_i + data["b"].to_i)
+    transmit({result: (data["a"].to_i + data["b"].to_i)})
   end
 
   def fail
@@ -33,13 +33,13 @@ class TestChannel < ApplicationCable::Channel
     session[:count] ||= 0
     session[:count] += 1
     session[:tock] = data["tick"] || :tock
-    transmit result: session[:count]
+    transmit({result: session[:count]})
   end
 
   def itick
     self.counter ||= 0
     self.counter += 1
-    transmit result: counter
+    transmit({result: counter})
   end
 
   def chat_with(data)
@@ -48,7 +48,7 @@ class TestChannel < ApplicationCable::Channel
   end
 
   def send_message(data)
-    transmit user: another_user.name, topic: topics[data["topic"]], message: data["text"]
+    transmit({user: another_user.name, topic: topics[data["topic"]], message: data["text"]})
   end
 
   private

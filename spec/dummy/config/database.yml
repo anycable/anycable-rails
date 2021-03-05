@@ -1,3 +1,2 @@
 test:
-  adapter: "sqlite3"
-  database: <%= File.join(PROJECT_ROOT, "tmp", "test_db.sqlite") %>
+  url: "sqlite3:<%= File.join(PROJECT_ROOT, "tmp", "test_db.sqlite") %>"
