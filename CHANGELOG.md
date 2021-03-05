@@ -2,6 +2,10 @@
 
 ## master
 
+## 1.0.7 (2021-03-05)
+
+- Ruby 3 compatibility. ([@palkan][])
+
 ## 1.0.6 (2021-02-25)
 
 - Keep an explicit list of instance vars to ignore in compatibility checks. ([@palkan][])
