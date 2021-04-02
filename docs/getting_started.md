@@ -70,11 +70,11 @@ $ RAILS_ENV=production bundle exec anycable
 And, finally, run AnyCable WebSocket server, e.g. [anycable-go](../anycable-go/getting_started.md):
 
 ```sh
-$ anycable-go --host=localhost --port=3334
+$ anycable-go --host=localhost --port=8080
 
 INFO 2019-08-07T16:37:46.387Z context=main Starting AnyCable v0.6.2-13-gd421927 (with mruby 1.2.0 (2015-11-17)) (pid: 1362)
 INFO 2019-08-07T16:37:46.387Z context=main Handle WebSocket connections at /cable
-INFO 2019-08-07T16:37:46.388Z context=http Starting HTTP server at localhost:3334
+INFO 2019-08-07T16:37:46.388Z context=http Starting HTTP server at localhost:8080
 ```
 
 You can store AnyCable-specific configuration in YAML file (similar to Action Cable one):
@@ -125,7 +125,7 @@ AnyCable respects [Action Cable configuration](https://guides.rubyonrails.org/ac
 
 ```sh
 # with anycable-go
-$ anycable-go --headers=cookie,origin --port=3334
+$ anycable-go --headers=cookie,origin --port=8080
 ```
 
 ## Logging

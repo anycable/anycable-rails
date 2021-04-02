@@ -64,7 +64,7 @@ and specify AnyCable WebSocket server URL:
 # For development it's likely the localhost
 
 # config/environments/development.rb
-config.action_cable.url = "ws://localhost:3334/cable"
+config.action_cable.url = "ws://localhost:8080/cable"
 
 # For production it's likely to have a sub-domain and secure connection
 
@@ -85,7 +85,7 @@ $ RAILS_ENV=production bundle exec anycable
 And, finally, run AnyCable WebSocket server, e.g. [anycable-go](https://docs.anycable.io/#/v1/anycable-go/getting_started):
 
 ```sh
-anycable-go --host=localhost --port=3334
+anycable-go --host=localhost --port=8080
 ```
 
 See [documentation](https://docs.anycable.io/#/rails/getting_started) for more information on AnyCable + Rails usage.
