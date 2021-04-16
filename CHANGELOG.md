@@ -2,6 +2,11 @@
 
 ## master
 
+## 1.1.0-dev
+
+- **Ruby >= 2.6** is required.
+- **Rails >= 6.0** is required.
+
 ## 1.0.7 (2021-03-05)
 
 - Ruby 3 compatibility. ([@palkan][])
