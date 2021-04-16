@@ -11,8 +11,6 @@ With AnyCable you can use channels, client-side JS, broadcasting - (almost) all 
 
 You can even use Action Cable in development and not be afraid of [compatibility issues](#compatibility).
 
-**Important** This is a readme for the upcoming v1.0 release. For v0.6.x see the readme from the [0-6-stable](https://github.com/anycable/anycable-rails/tree/0-6-stable) branch.
-
 💾 [Example Application](https://github.com/anycable/anycable_rails_demo)
 
 📑 [Documentation](https://docs.anycable.io/#/rails/getting_started).
@@ -22,8 +20,8 @@ You can even use Action Cable in development and not be afraid of [compatibility
 
 ## Requirements
 
-- Ruby >= 2.5
-- Rails >= 5.2
+- Ruby >= 2.6
+- Rails >= 6.0
 - Redis (see [other options](https://github.com/anycable/anycable/issues/2) for broadcasting)
 
 ## Usage

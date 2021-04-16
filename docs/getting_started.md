@@ -6,8 +6,8 @@ AnyCable initially was designed for Rails applications only.
 
 ## Requirements
 
-- Ruby >= 2.5
-- Rails >= 5.0
+- Ruby >= 2.6
+- Rails >= 6.0
 - Redis (when using Redis [broadcast adapter](../ruby/broadcast_adapters.md))
 
 ## Installation
@@ -15,7 +15,7 @@ AnyCable initially was designed for Rails applications only.
 Add `anycable-rails` gem to your Gemfile:
 
 ```ruby
-gem "anycable-rails", "~> 1.0"
+gem "anycable-rails", "~> 1.1"
 
 # when using Redis broadcast adapter
 gem "redis", ">= 4.0"

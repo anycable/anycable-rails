@@ -15,4 +15,5 @@ else
 
   gem 'sqlite3', '~> 1.3'
   gem 'actioncable', '~> 6.0'
+  gem 'activerecord'
 end
