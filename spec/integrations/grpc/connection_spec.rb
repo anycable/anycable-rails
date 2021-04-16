@@ -102,7 +102,7 @@ describe "client connection" do
     end
 
     context "with protection" do
-      before(:each) { ActionCable.server.config.disable_request_forgery_protection = false }
+      before { ActionCable.server.config.disable_request_forgery_protection = false }
 
       context "with single allowed origin" do
         it "responds with success when accessed from an allowed origin" do

@@ -20,7 +20,7 @@ Dir["#{__dir__}/support/**/*.rb"].sort.each { |f| require f }
 RSpec.configure do |config|
   include ActiveSupport::Testing::Stream
 
-  config.after(:each) do
+  config.after do
     ApplicationCable::Connection.events_log.clear
     User.delete_all
   end
