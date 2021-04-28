@@ -10,4 +10,6 @@ shared_context "rpc_command" do
   let(:channel_params) { {} }
   let(:channel_identifier) { {channel: channel_class}.merge(channel_params) }
   let(:channel_id) { channel_identifier.to_json }
+
+  let(:handler) { AnyCable::RPC::Handler.new }
 end

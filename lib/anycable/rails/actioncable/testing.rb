@@ -18,7 +18,7 @@ end)
 
 ActionCable::Channel::ConnectionStub.prepend(Module.new do
   def socket
-    @socket ||= AnyCable::Socket.new(env: {})
+    @socket ||= AnyCable::Socket.new(env: AnyCable::Env.new(url: "http://test.host", headers: {}))
   end
 
   alias_method :anycable_socket, :socket

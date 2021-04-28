@@ -3,7 +3,6 @@
 require "spec_helper"
 
 describe "subscriptions" do
-  include_context "anycable:rpc:server"
   include_context "rpc_command"
 
   let(:channel_class) { "TestChannel" }
@@ -12,7 +11,7 @@ describe "subscriptions" do
     let(:command) { "subscribe" }
     let(:user) { User.create!(name: "john", secret: "123") }
 
-    subject { service.command(request) }
+    subject { handler.handle(:command, request) }
 
     context "reject subscription" do
       let(:user) { User.create!(name: "john", secret: "000") }
@@ -49,7 +48,7 @@ describe "subscriptions" do
 
     let(:command) { "unsubscribe" }
 
-    subject { service.command(request) }
+    subject { handler.handle(:command, request) }
 
     it "responds with stop_all_streams" do
       expect(subject).to be_success
