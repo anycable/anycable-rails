@@ -3,7 +3,6 @@
 require "spec_helper"
 
 describe "disconnection" do
-  include_context "anycable:rpc:server"
   include_context "rpc_command"
 
   let!(:user) { User.create!(name: "disco", secret: "123") }
@@ -21,7 +20,7 @@ describe "disconnection" do
 
   let(:log) { ApplicationCable::Connection.events_log }
 
-  subject { service.disconnect(request) }
+  subject { handler.handle(:disconnect, request) }
 
   describe "Connection#disconnect" do
     it "invokes #disconnect method with correct data" do

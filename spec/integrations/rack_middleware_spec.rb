@@ -4,8 +4,7 @@ require "spec_helper"
 require "action_controller/test_case"
 
 describe "rack middleware support" do
-  include_context "anycable:rpc:server"
-  include_context "anycable:rpc:stub"
+  include_context "rpc_command"
 
   include ActionDispatch::Integration::Runner
   include ActionDispatch::IntegrationTest::Behavior
@@ -36,7 +35,7 @@ describe "rack middleware support" do
     let(:params) { {data: {username: "sean", token: "joker"}} }
 
     it "is accessible in connection" do
-      response = service.connect(request)
+      response = handler.handle(:connect, request)
       expect(response).to be_success
       expect(JSON.parse(response.identifiers)).to include("current_user" => user.to_gid_param)
     end
@@ -51,7 +50,7 @@ describe "rack middleware support" do
       let(:data) { {action: "tick"} }
 
       it "persists session after each command" do
-        first_call = service.command(request)
+        first_call = handler.handle(:command, request)
 
         expect(first_call).to be_success
         expect(first_call.transmissions.size).to eq 1
@@ -62,7 +61,7 @@ describe "rack middleware support" do
 
         request.session = first_session
 
-        second_call = service.command(request)
+        second_call = handler.handle(:command, request)
 
         expect(second_call).to be_success
         expect(second_call.transmissions.size).to eq 1
@@ -72,7 +71,7 @@ describe "rack middleware support" do
       end
 
       it "overrides yet unwrapped session values" do
-        first_call = service.command(request)
+        first_call = handler.handle(:command, request)
 
         expect(first_call).to be_success
         expect(JSON.parse(first_call.session).fetch("tock")).to eq "tock"
@@ -81,7 +80,7 @@ describe "rack middleware support" do
         data[:tick] = "tack"
         request.data = data.to_json
 
-        second_call = service.command(request)
+        second_call = handler.handle(:command, request)
         expect(first_call).to be_success
         expect(JSON.parse(second_call.session).fetch("tock")).to eq "tack"
       end
@@ -92,7 +91,7 @@ describe "rack middleware support" do
     let(:params) { {user_id: user.id} }
 
     it "is accessible in connection" do
-      response = service.connect(request)
+      response = handler.handle(:connect, request)
       expect(response).to be_success
       expect(JSON.parse(response.identifiers)).to include("current_user" => user.to_gid_param)
     end

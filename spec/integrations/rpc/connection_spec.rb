@@ -3,8 +3,7 @@
 require "spec_helper"
 
 describe "client connection" do
-  include_context "anycable:rpc:server"
-  include_context "anycable:rpc:stub"
+  include_context "rpc_command"
 
   let!(:user) { User.create!(name: "john", secret: "123") }
 
@@ -12,7 +11,7 @@ describe "client connection" do
     AnyCable::ConnectionRequest.new(env: env)
   end
 
-  subject { service.connect(request) }
+  subject { handler.handle(:connect, request) }
 
   before { ActionCable.server.config.disable_request_forgery_protection = true }
 

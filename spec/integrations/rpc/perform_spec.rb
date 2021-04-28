@@ -3,7 +3,6 @@
 require "spec_helper"
 
 describe "client messages" do
-  include_context "anycable:rpc:server"
   include_context "rpc_command"
 
   let(:channel_class) { "TestChannel" }
@@ -12,7 +11,7 @@ describe "client messages" do
     let(:command) { "message" }
     let(:data) { {action: "add", a: 1, b: 2} }
 
-    subject { service.command(request) }
+    subject { handler.handle(:command, request) }
 
     it "responds with result" do
       expect(subject).to be_success
@@ -66,7 +65,7 @@ describe "client messages" do
       let(:data) { {action: "itick"} }
 
       it "track attrs in the channel state" do
-        first_call = service.command(request)
+        first_call = handler.handle(:command, request)
 
         expect(first_call).to be_success
         expect(first_call.transmissions.size).to eq 1
@@ -77,7 +76,7 @@ describe "client messages" do
 
         request.istate = first_state
 
-        second_call = service.command(request)
+        second_call = handler.handle(:command, request)
 
         expect(second_call).to be_success
         expect(second_call.transmissions.size).to eq 1
@@ -91,13 +90,13 @@ describe "client messages" do
 
         it "uses global id when possible and JSON otherwise" do
           request.data = {action: "chat_with", user_id: another_user.id, topics: {oss: 1, ruby: 2}}.to_json
-          first_call = service.command(request)
+          first_call = handler.handle(:command, request)
           expect(first_call).to be_success
 
           request.istate = first_call.istate
           request.data = {action: "send_message", text: "boom!", topic: :ruby}.to_json
 
-          second_call = service.command(request)
+          second_call = handler.handle(:command, request)
           expect(second_call.transmissions.size).to eq 1
           expect(second_call.transmissions.first).to include({"user" => "alice", "topic" => 2, "message" => "boom!"}.to_json)
           expect(second_call.istate.to_h).to be_empty
