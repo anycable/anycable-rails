@@ -9,8 +9,8 @@ module AnyCable
       #
       # See https://github.com/grpc/grpc-go/blob/master/Documentation/grpc-metadata.md
       class LogTagging < AnyCable::Middleware
-        def call(_request, call, _method)
-          sid = call.metadata["sid"]
+        def call(_method, _request, metadata)
+          sid = metadata["sid"]
           return yield unless sid
 
           AnyCable.logger.tagged("AnyCable sid=#{sid}") { yield }
