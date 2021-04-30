@@ -4,6 +4,10 @@
 
 ## 1.1.0-dev
 
+- Add option to embed AnyCable RPC into a Rails server process. ([@palkan][])
+
+Set `embedded: true` in the configuration to launch RPC along with `rails s` (only for Rails 6.1+).
+
 - **Ruby >= 2.6** is required.
 - **Rails >= 6.0** is required.
 

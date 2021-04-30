@@ -157,6 +157,50 @@ rpc: bundle exec anycable
 ws:  anycable-go
 ```
 
+### Embedded mode
+
+It is also possible to run RPC server within another Ruby process (Rails server or tests runner). We recommend using this option in development and test environments.
+
+When using Rails 6.1, you can automatically start an RPC server every time you run `rails s` by specifying the following configuration parameter:
+
+```yml
+# config/anycable.yml
+development:
+  embedded: true
+```
+
+**NOTE:** Make sure you have `Rails.application.load_server` in your `config.ru`.
+
+### Testing with AnyCable
+
+If you'd like to run AnyCable RPC server in tests (for example, in system tests), we recommend to start it manually only when necessary (i.e., when dependent tests are executed) and use the embedded mode. That's how we do it with RSpec:
+
+```ruby
+# spec/support/anycable_setup.rb
+RSpec.configure do |config|
+  # Only start RPC server if system tests are included into the run
+  next if config.filter.opposite.rules[:type] == "system" || config.exclude_pattern.match?(%r{spec/system})
+
+  require "anycable/cli"
+  AnyCable::CLI.embed!
+
+  # Make sure AnyCable pubsub adapter is used in system tests (and test adapter otherwise, so we can run unit tests)
+  config.before(:each, type: :system) do
+    next if ActionCable.server.pubsub.is_a?(ActionCable::SubscriptionAdapter::AnyCable)
+
+    @__was_pubsub_adapter__ = ActionCable.server.pubsub
+
+    adapter = ActionCable::SubscriptionAdapter::AnyCable.new(ActionCable.server)
+    ActionCable.server.instance_variable_set(:@pubsub, adapter)
+  end
+
+  config.after(:each, type: :system) do
+    next unless instance_variable_defined?(:@__was_pubsub_adapter__)
+    ActionCable.server.instance_variable_set(:@pubsub, @__was_pubsub_adapter__)
+  end
+end
+```
+
 ## Links
 
 - [Demo application](https://github.com/anycable/anycable_rails_demo)
