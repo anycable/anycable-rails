@@ -17,7 +17,8 @@ Gem::Specification.new do |spec|
     "changelog_uri" => "https://github.com/anycable/anycable-rails/blob/master/CHANGELOG.md",
     "documentation_uri" => "https://docs.anycable.io/#/using_with_rails",
     "homepage_uri" => "https://anycable.io/",
-    "source_code_uri" => "http://github.com/anycable/anycable-rails"
+    "source_code_uri" => "http://github.com/anycable/anycable-rails",
+    "funding_uri" => "https://github.com/sponsors/anycable"
   }
 
   spec.files = Dir.glob("lib/**/*") + %w[README.md MIT-LICENSE CHANGELOG.md]
