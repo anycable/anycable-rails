@@ -59,6 +59,16 @@ module AnyCable
           end
         end
       end
+
+      # Since Rails 6.1
+      if respond_to?(:server)
+        server do
+          next unless AnyCable.config.embedded?
+
+          require "anycable/cli"
+          AnyCable::CLI.embed!
+        end
+      end
     end
   end
 end
