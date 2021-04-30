@@ -13,7 +13,7 @@ require "anycable/rails/compatibility"
 
 module Dummy
   class Application < Rails::Application
-    config.logger = Logger.new($stdout)
+    config.logger = ActiveSupport::TaggedLogging.new(Logger.new($stdout))
     config.log_level = :fatal
     config.eager_load = true
 
