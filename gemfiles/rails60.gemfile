@@ -5,4 +5,6 @@ gem "activerecord"
 gem "rspec-rails", "~> 4.0.0"
 gem "sqlite3", "~> 1.4"
 
+gem "anycable-core", github: "anycable/anycable"
+
 gemspec path: ".."

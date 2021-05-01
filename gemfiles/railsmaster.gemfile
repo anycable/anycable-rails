@@ -4,4 +4,6 @@ gem "rails", git: "https://github.com/rails/rails.git", branch: "main"
 gem "rspec-rails"
 gem "sqlite3", "~> 1.4"
 
+gem "anycable-core", github: "anycable/anycable"
+
 gemspec path: ".."
