@@ -2,7 +2,7 @@
 
 ## master
 
-## 1.1.0-dev
+## 1.1.0.rc1
 
 - Add option to embed AnyCable RPC into a Rails server process. ([@palkan][])
 
