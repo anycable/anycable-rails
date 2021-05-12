@@ -2,7 +2,7 @@
 
 ## master
 
-## 1.1.0.rc1
+## 1.1.0.rc1 (2021-05-12)
 
 - Adding `anycable` or `grpc` gem as an explicit dependency is required.
 
