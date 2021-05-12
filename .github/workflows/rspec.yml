@@ -15,6 +15,7 @@ jobs:
       BUNDLE_RETRY: 3
       BUNDLE_FORCE_RUBY_PLATFORM: 1
       CI: true
+      BUNDLE_GEMFILE: ${{ matrix.gemfile }}
     strategy:
       fail-fast: false
       matrix:
@@ -29,25 +30,15 @@ jobs:
             gemfile: "gemfiles/rails60.gemfile"
     steps:
     - uses: actions/checkout@v2
-    - uses: actions/cache@v1
-      with:
-        path: /home/runner/bundle
-        key: bundle-${{ matrix.ruby }}-${{ matrix.gemfile }}-${{ hashFiles('**/*.gemspec') }}-${{ hashFiles('**/Gemfile') }}
-        restore-keys: |
-          bundle-${{ matrix.ruby }}-${{ matrix.gemfile }}-
-    - uses: ruby/setup-ruby@v1
-      with:
-        ruby-version: ${{ matrix.ruby }}
     - name: Install system deps
       run: |
         sudo apt-get update
         sudo apt-get install libsqlite3-dev
-    - name: Bundle install
-      run: |
-        bundle config path /home/runner/bundle
-        bundle config --global gemfile ${{ matrix.gemfile }}
-        bundle install
-        bundle update
+    - uses: ruby/setup-ruby@v1
+      with:
+        ruby-version: ${{ matrix.ruby }}
+        bundler-cache: true
+        bundler: 2.2.15
     - name: Run RSpec
       run: |
         bundle exec rake spec
