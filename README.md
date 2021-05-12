@@ -26,9 +26,10 @@ You can even use Action Cable in development and not be afraid of [compatibility
 
 ## Usage
 
-Add `anycable-rails` gem to your Gemfile:
+Add `anycable-rails` and `anycable` gems to your Gemfile:
 
 ```ruby
+gem "anycable"
 gem "anycable-rails"
 
 # when using Redis broadcast adapter

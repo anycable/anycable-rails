@@ -4,6 +4,11 @@
 
 ## 1.1.0.rc1
 
+- Adding `anycable` or `grpc` gem as an explicit dependency is required.
+
+Now, `anycable-rails` depends on `anycable-core`, which doesn't include gRPC server implementation.
+You should either add `anycable` or `grpc` (>= 1.37) gem as an explicit dependency.
+
 - Add option to embed AnyCable RPC into a Rails server process. ([@palkan][])
 
 Set `embedded: true` in the configuration to launch RPC along with `rails s` (only for Rails 6.1+).

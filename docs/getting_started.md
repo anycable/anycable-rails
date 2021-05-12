@@ -12,9 +12,10 @@ AnyCable initially was designed for Rails applications only.
 
 ## Installation
 
-Add `anycable-rails` gem to your Gemfile:
+Add `anycable-rails` and `anycable` gems to your Gemfile:
 
 ```ruby
+gem "anycable"
 gem "anycable-rails", "~> 1.1"
 
 # when using Redis broadcast adapter
