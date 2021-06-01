@@ -2,6 +2,10 @@
 
 ## master
 
+## 1.1.0 🚸 (2021-06-01)
+
+- No changes since 1.1.0.rc1.1.
+
 ## 1.1.0.rc1.1 (2021-05-12)
 
 - Fixed config loading regression introduced in 1.1.0.rc1.
