@@ -71,7 +71,7 @@ module ActionCable
 
       def invalid_request_message
         "You're trying to connect to Action Cable server while using AnyCable. " \
-        "See https://docs.anycable.io/#/troubleshooting?id=server-raises-an-argumenterror-exception-when-client-tries-to-connect"
+        "See https://docs.anycable.io/troubleshooting?id=server-raises-an-argumenterror-exception-when-client-tries-to-connect"
       end
 
       def handle_open

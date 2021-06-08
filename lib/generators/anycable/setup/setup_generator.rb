@@ -8,7 +8,7 @@ module AnyCableRailsGenerators
     namespace "anycable:setup"
     source_root File.expand_path("templates", __dir__)
 
-    DOCS_ROOT = "https://docs.anycable.io/#"
+    DOCS_ROOT = "https://docs.anycable.io"
     DEVELOPMENT_METHODS = %w[skip local docker].freeze
     SERVER_SOURCES = %w[skip brew binary].freeze
 
@@ -118,7 +118,7 @@ module AnyCableRailsGenerators
     def stimulus_reflex
       return unless stimulus_reflex?
 
-      say_status :help, "⚠️  Please, check out the documentation on using AnyCable with Stimulus Reflex: https://docs.anycable.io/#/rails/stimulus_reflex"
+      say_status :help, "⚠️  Please, check out the documentation on using AnyCable with Stimulus Reflex: #{DOCS_ROOT}/rails/stimulus_reflex"
     end
 
     def rubocop_compatibility
@@ -126,7 +126,7 @@ module AnyCableRailsGenerators
 
       say_status :info, "🤖 Running static compatibility checks with RuboCop"
       res = run "bundle exec rubocop -r 'anycable/rails/compatibility/rubocop' --only AnyCable/InstanceVars,AnyCable/PeriodicalTimers,AnyCable/InstanceVars"
-      say_status :help, "⚠️  Please, take a look at the icompatibilities above and fix them. See https://docs.anycable.io/#/rails/compatibility" unless res
+      say_status :help, "⚠️  Please, take a look at the icompatibilities above and fix them. See #{DOCS_ROOT}/rails/compatibility" unless res
     end
 
     def finish
