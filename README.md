@@ -1,7 +1,7 @@
 [![Gem Version](https://badge.fury.io/rb/anycable-rails.svg)](https://rubygems.org/gems/anycable-rails)
 [![Build](https://github.com/anycable/anycable-rails/workflows/Build/badge.svg)](https://github.com/anycable/anycable-rails/actions)
 [![Gitter](https://img.shields.io/badge/gitter-join%20chat%20%E2%86%92-brightgreen.svg)](https://gitter.im/anycable/Lobby)
-[![Documentation](https://img.shields.io/badge/docs-link-brightgreen.svg)](https://docs.anycable.io/#/rails/getting_started)
+[![Documentation](https://img.shields.io/badge/docs-link-brightgreen.svg)](https://docs.anycable.io/rails/getting_started)
 
 # AnyCable Rails
 
@@ -13,7 +13,7 @@ You can even use Action Cable in development and not be afraid of [compatibility
 
 💾 [Example Application](https://github.com/anycable/anycable_rails_demo)
 
-📑 [Documentation](https://docs.anycable.io/#/rails/getting_started).
+📑 [Documentation](https://docs.anycable.io/rails/getting_started).
 
 <a href="https://evilmartians.com/">
 <img src="https://evilmartians.com/badges/sponsored-by-evil-martians.svg" alt="Sponsored by Evil Martians" width="236" height="54"></a>
@@ -81,17 +81,17 @@ $ bundle exec anycable
 $ RAILS_ENV=production bundle exec anycable
 ```
 
-And, finally, run AnyCable WebSocket server, e.g. [anycable-go](https://docs.anycable.io/#/v1/anycable-go/getting_started):
+And, finally, run AnyCable WebSocket server, e.g. [anycable-go](https://docs.anycable.io/anycable-go/getting_started):
 
 ```sh
 anycable-go --host=localhost --port=8080
 ```
 
-See [documentation](https://docs.anycable.io/#/rails/getting_started) for more information on AnyCable + Rails usage.
+See [documentation](https://docs.anycable.io/rails/getting_started) for more information on AnyCable + Rails usage.
 
 ## Action Cable Compatibility
 
-See [documentation](https://docs.anycable.io/#/rails/compatibility).
+See [documentation](https://docs.anycable.io/rails/compatibility).
 
 ## Contributing
 
