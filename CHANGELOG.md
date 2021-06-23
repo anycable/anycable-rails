@@ -2,6 +2,10 @@
 
 ## master
 
+- Bring back dependency on `anycable` (instead of `anycable-core`). ([@palkan][])
+
+Make it easier to get started by adding just a single gem.
+
 ## 1.1.1 (2021-06-08)
 
 - Updated documentation links in the generator. ([@palkan][])
