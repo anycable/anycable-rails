@@ -2,6 +2,8 @@
 
 ## master
 
+## 1.1.2 (2021-06-23)
+
 - Bring back dependency on `anycable` (instead of `anycable-core`). ([@palkan][])
 
 Make it easier to get started by adding just a single gem.
