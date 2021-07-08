@@ -15,6 +15,8 @@ You can even use Action Cable in development and not be afraid of [compatibility
 
 📑 [Documentation](https://docs.anycable.io/rails/getting_started).
 
+> [AnyCable Pro](https://docs.anycable.io/pro) has been launched 🚀
+
 <a href="https://evilmartians.com/">
 <img src="https://evilmartians.com/badges/sponsored-by-evil-martians.svg" alt="Sponsored by Evil Martians" width="236" height="54"></a>
 
