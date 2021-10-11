@@ -2,6 +2,12 @@
 
 ## master
 
+## 1.1.3 (2021-10-11)
+
+- Relax Action Cable dependency. ([@palkan][])
+
+Action Cable 5.1 is allowed (though not recommended).
+
 ## 1.1.2 (2021-06-23)
 
 - Bring back dependency on `anycable` (instead of `anycable-core`). ([@palkan][])

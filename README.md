@@ -23,7 +23,7 @@ You can even use Action Cable in development and not be afraid of [compatibility
 ## Requirements
 
 - Ruby >= 2.6
-- Rails >= 6.0
+- Rails >= 6.0 (Rails 5.1 could work but we're no longer enforce compatibility on CI)
 - Redis (see [other options](https://github.com/anycable/anycable/issues/2) for broadcasting)
 
 ## Usage
