@@ -21,13 +21,20 @@ jobs:
       matrix:
         ruby: ["2.7"]
         gemfile: ["gemfiles/rails6.gemfile"]
+        allow_failure: [false]
         include:
           - ruby: "3.0"
             gemfile: "gemfiles/rails6.gemfile"
+            allow_failure: false
           - ruby: "2.7"
             gemfile: "gemfiles/railsmaster.gemfile"
+            allow_failure: false
           - ruby: "2.6"
             gemfile: "gemfiles/rails60.gemfile"
+            allow_failure: false
+          - ruby: "2.6"
+            gemfile: "gemfiles/rails51.gemfile"
+            allow_failure: true
     steps:
     - uses: actions/checkout@v2
     - name: Install system deps
@@ -40,8 +47,10 @@ jobs:
         bundler-cache: true
         bundler: 2.2.15
     - name: Run RSpec
+      continue-on-error: ${{ matrix.allow_failure }}
       run: |
         bundle exec rake spec
     - name: Run compatibility specs
+      continue-on-error: ${{ matrix.allow_failure }}
       run: |
         bundle exec rake spec:compatibility
