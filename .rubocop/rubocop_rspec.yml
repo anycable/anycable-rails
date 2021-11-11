@@ -1,6 +1,9 @@
 require:
   - rubocop-rspec
 
+RSpec:
+  Enabled: false
+
 RSpec/Focus:
   Enabled: true
 
@@ -38,4 +41,16 @@ RSpec/MissingExampleGroupArgument:
   Enabled: true
 
 RSpec/ReceiveCounts:
+  Enabled: true
+
+RSpec/ExcessiveDocstringSpacing: # new in 2.5
+  Enabled: true
+
+RSpec/IdenticalEqualityAssertion: # new in 2.4
+  Enabled: true
+
+RSpec/SubjectDeclaration: # new in 2.5
+  Enabled: true
+
+RSpec/Rails/AvoidSetupHook: # new in 2.4
   Enabled: true

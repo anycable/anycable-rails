@@ -9,7 +9,6 @@ require "anycable/rails/session_proxy"
 
 module ActionCable
   module Connection
-    # rubocop: disable Metrics/ClassLength
     class Base # :nodoc:
       # We store logger tags in the connection state to be able
       # to re-use them in the subsequent calls
@@ -98,7 +97,6 @@ module ActionCable
         true
       end
 
-      # rubocop:disable Metrics/MethodLength
       def handle_channel_command(identifier, command, data)
         channel = subscriptions.fetch(identifier)
         case command

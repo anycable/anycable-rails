@@ -5,7 +5,7 @@
 # Trigger autoload (if constant is defined)
 begin
   ActionCable::Channel::TestCase # rubocop:disable Lint/Void
-  ActionCable::Connection::TestCase # rubocop:disable Lint/Void
+  ActionCable::Connection::TestCase
 rescue NameError
   return
 end
