@@ -2,6 +2,8 @@
 
 ## master
 
+## 1.1.4 (2021-11-11)
+
 - Added `Connection#state_attr_accessor`. ([@palkan][])
 
 ## 1.1.3 (2021-10-11)
