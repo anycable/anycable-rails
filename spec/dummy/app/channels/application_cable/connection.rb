@@ -16,8 +16,9 @@ module ApplicationCable
       rescue_from ActiveRecord::RecordNotFound, with: :track_error
     end
 
-    identified_by :current_user
-    identified_by :url
+    identified_by :current_user, :url
+
+    state_attr_accessor :token
 
     def connect
       self.current_user = verify_user
@@ -37,7 +38,7 @@ module ApplicationCable
       username = session[:username] || cookies[:username]
       return reject_unauthorized_connection unless username
 
-      token = session[:token] || request.params[:token]
+      self.token = session[:token] || request.params[:token]
 
       User.find_by!(name: username, secret: token)
     end

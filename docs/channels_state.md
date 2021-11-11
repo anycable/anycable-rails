@@ -61,3 +61,27 @@ end
 ```
 
 Read more about how the state is passed from a WebSocket server and restored in an RPC server in the [architecture overview](../architecture.md#restoring-state-objects).
+
+### Connection State
+
+In addition to persisting channel states, we provide an ability to store data in the connection itself using a similar `.state_attr_accessor` interface:
+
+```ruby
+module ApplicationCable
+  class Connection < ActionCable::Connection::Base
+    identified_by :current_user
+
+    state_attr_accessor :url
+
+    def connect
+      self.current_user = verify_user
+      # URL is accesible in subsequent RPC calls just like current_user
+      self.url = request.url if current_user
+      logger.add_tags "ActionCable", current_user.name
+    end
+  end
+end
+```
+
+Why having a separate storage when we already have `identifiers`?
+Identifiers are meant what they say: they should be used to identify the connection (e.g., when used for remote disconnects). If you want to store some additional information in the connection, use state accessors instead.

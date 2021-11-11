@@ -47,8 +47,9 @@ describe "client connection" do
         "url" => "http://example.io/cable?token=123"
       )
       expect(subject.transmissions.first).to eq JSON.dump("type" => "welcome")
-      expect(JSON.parse(subject.cstate["__ltags__"])).to eq(
-        ["ActionCable", "john"]
+      expect(subject.cstate.to_h).to eq(
+        "__ltags__" => ["ActionCable", "john"].to_json,
+        "token" => "123".to_json
       )
     end
 
