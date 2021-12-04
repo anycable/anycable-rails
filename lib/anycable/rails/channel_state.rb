@@ -90,8 +90,19 @@ module AnyCable
   end
 end
 
-ActiveSupport.on_load(:action_cable) do
+if ActiveSupport::VERSION::MAJOR < 6
   # `state_attr_accessor` must be available in Action Cable
-  ::ActionCable::Connection::Base.include(AnyCable::Rails::ConnectionState)
-  ::ActionCable::Channel::Base.include(AnyCable::Rails::ChannelState)
+  ActiveSupport.on_load(:action_cable) do
+    ::ActionCable::Connection::Base.include(AnyCable::Rails::ConnectionState)
+    ::ActionCable::Channel::Base.include(AnyCable::Rails::ChannelState)
+  end
+else
+  # `state_attr_accessor` must be available in Action Cable
+  ActiveSupport.on_load(:action_cable_connection) do
+    ::ActionCable::Connection::Base.include(AnyCable::Rails::ConnectionState)
+  end
+
+  ActiveSupport.on_load(:action_cable_channel) do
+    ::ActionCable::Channel::Base.include(AnyCable::Rails::ChannelState)
+  end
 end
