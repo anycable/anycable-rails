@@ -2,6 +2,8 @@
 
 ## master
 
+## 1.2.0 (2021-12-21) 🎄
+
 - Drop Rails 5 support.
 
 - Drop Ruby 2.6 support.
