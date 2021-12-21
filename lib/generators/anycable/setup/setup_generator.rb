@@ -24,6 +24,12 @@ module AnyCableRailsGenerators
     class_option :skip_procfile_dev,
       type: :boolean,
       desc: "Do not create Procfile.dev"
+    class_option :skip_jwt,
+      type: :boolean,
+      desc: "Do not install anycable-rails-jwt"
+    class_option :skip_install,
+      type: :boolean,
+      desc: "Do not run bundle install when adding new gems"
 
     include WithOSHelpers
 
@@ -59,7 +65,7 @@ module AnyCableRailsGenerators
         <<~SNIPPET
           # Specify AnyCable WebSocket server URL to use by JS client
           config.after_initialize do
-            config.action_cable.url = ActionCable.server.config.url = ENV.fetch("CABLE_URL") if AnyCable::Rails.enabled?
+            config.action_cable.url = ActionCable.server.config.url = ENV.fetch("CABLE_URL", "/cable") if AnyCable::Rails.enabled?
           end
         SNIPPET
       end
@@ -129,6 +135,16 @@ module AnyCableRailsGenerators
       say_status :help, "⚠️  Please, take a look at the icompatibilities above and fix them. See #{DOCS_ROOT}/rails/compatibility" unless res
     end
 
+    def jwt
+      return if options[:skip_jwt]
+
+      return unless options[:skip_jwt] == false || yes?("Do you want to use JWT for authentication? [Yn]")
+
+      opts = " --skip-install" if options[:skip_install]
+
+      run "bundle add anycable-rails-jwt#{opts}"
+    end
+
     def finish
       say_status :info, "✅ AnyCable has been configured successfully!"
     end
@@ -172,7 +188,7 @@ module AnyCableRailsGenerators
       say <<~YML
         ─────────────────────────────────────────
         ws:
-          image: anycable/anycable-go:1.0
+          image: anycable/anycable-go:1.2
           ports:
             - '8080:8080'
           environment:

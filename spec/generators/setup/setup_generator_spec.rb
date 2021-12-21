@@ -18,8 +18,10 @@ describe AnyCableRailsGenerators::SetupGenerator, type: :generator do
     FileUtils.rm(removed_files.map { |f| File.join(destination_root, f) }) if removed_files.any?
   end
 
+  let(:default_opts) { %w[--skip-heroku --skip-install --skip-jwt --devenv skip] }
+
   context "when skip install environment" do
-    subject { run_generator %w[--devenv skip --skip-heroku] }
+    subject { run_generator default_opts }
 
     it "copies config files" do
       subject
@@ -52,20 +54,20 @@ describe AnyCableRailsGenerators::SetupGenerator, type: :generator do
         .to contain('config.action_cable.url = ActionCable.server.config.url = ENV.fetch("CABLE_URL", "ws://localhost:8080/cable") if AnyCable::Rails.enabled?')
 
       expect(file("config/environments/production.rb"))
-        .to contain('config.action_cable.url = ActionCable.server.config.url = ENV.fetch("CABLE_URL") if AnyCable::Rails.enabled?')
+        .to contain('config.action_cable.url = ActionCable.server.config.url = ENV.fetch("CABLE_URL", "/cable") if AnyCable::Rails.enabled?')
     end
   end
 
   context "when docker environment" do
     it "shows a Docker Compose snippet" do
-      gen = generator(%w[--devenv docker --skip-heroku])
+      gen = generator(default_opts + %w[--devenv=docker])
       expect(gen).to receive(:install_for_docker)
       silence_stream($stdout) { gen.invoke_all }
     end
   end
 
   context "when Heroku deployment" do
-    subject { run_generator %w[--devenv skip --skip-heroku=false] }
+    subject { run_generator default_opts + %w[--skip-heroku=false] }
 
     before do
       File.write(
@@ -95,7 +97,7 @@ describe AnyCableRailsGenerators::SetupGenerator, type: :generator do
   context "when local environment" do
     context "when do not install the server" do
       subject do
-        run_generator %w[--devenv local --source skip --skip-heroku --skip-procfile-dev false]
+        run_generator default_opts + %w[--devenv local --source skip --skip-procfile-dev false]
         file("Procfile.dev")
       end
 
@@ -142,7 +144,7 @@ describe AnyCableRailsGenerators::SetupGenerator, type: :generator do
 
     context "when downloading binary" do
       it "runs curl with valid url" do
-        gen = generator(%w[--devenv local --source binary --os linux --cpu amd64 --skip-heroku --skip-procfile-dev false])
+        gen = generator(default_opts + %w[--devenv local --source binary --os linux --cpu amd64 --skip-procfile-dev false])
         expect(gen)
           .to receive(:generate).with("anycable:download", "--os linux --cpu amd64 --bin-path=/usr/local/bin")
         silence_stream($stdout) { gen.invoke_all }
@@ -151,7 +153,7 @@ describe AnyCableRailsGenerators::SetupGenerator, type: :generator do
 
     context "when installing from Homebrew" do
       it "runs commands" do
-        gen = generator(%w[--devenv local --source brew --skip-heroku --skip-procfile-dev false])
+        gen = generator(default_opts + %w[--devenv local --source brew --skip-procfile-dev false])
         expect(gen).to receive(:install_from_brew)
         silence_stream($stdout) { gen.invoke_all }
       end
@@ -160,7 +162,7 @@ describe AnyCableRailsGenerators::SetupGenerator, type: :generator do
 
   context "config/initializers/anycable.rb" do
     subject do
-      run_generator %w[--devenv skip --skip-heroku]
+      run_generator default_opts
       file("config/initializers/anycable.rb")
     end
 
@@ -200,12 +202,30 @@ describe AnyCableRailsGenerators::SetupGenerator, type: :generator do
     end
 
     it "runs compatibility checks" do
-      gen = generator %w[--devenv skip --skip-heroku]
+      gen = generator default_opts
       expect(gen)
         .to receive(:run).with(
           "bundle exec rubocop -r 'anycable/rails/compatibility/rubocop' " \
           "--only AnyCable/InstanceVars,AnyCable/PeriodicalTimers,AnyCable/InstanceVars"
         )
+      silence_stream($stdout) { gen.invoke_all }
+    end
+  end
+
+  context "with jwt" do
+    it "adds anycable-rails-jwt gem" do
+      gen = generator default_opts + %w[--skip-jwt false]
+      expect(gen)
+        .to receive(:run).with("bundle add anycable-rails-jwt --skip-install")
+
+      silence_stream($stdout) { gen.invoke_all }
+    end
+
+    it "adds anycable-rails-jwt gem and install if not skipping install" do
+      gen = generator default_opts + %w[--skip-jwt false --skip-install false]
+      expect(gen)
+        .to receive(:run).with("bundle add anycable-rails-jwt")
+
       silence_stream($stdout) { gen.invoke_all }
     end
   end
