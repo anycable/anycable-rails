@@ -2,6 +2,10 @@
 
 ## master
 
+- Drop Rails 5 support.
+
+- Drop Ruby 2.6 support.
+
 ## 1.1.4 (2021-11-11)
 
 - Added `Connection#state_attr_accessor`. ([@palkan][])
