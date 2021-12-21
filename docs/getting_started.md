@@ -201,6 +201,32 @@ RSpec.configure do |config|
 end
 ```
 
+## Gradually migration from Action Cable
+
+In case switching from Action Cable to AnyCable requires updating the WebSocket url (e.g., when you have no control over a load balancer or ingress, so you can't just switch `/cable` traffic to a different service), you might want to pay additional attention to the migration.
+
+One option is to use a _dual broadcast_ strategy while using Action Cable within web instances. For that, you need a custom pubsub adapter to send messages to both Action Cable and AnyCable. Here is an example:
+
+```ruby
+require "anycable"
+require "action_cable/subscription_adapter/redis"
+
+module ActionCable
+  module SubscriptionAdapter
+    class AnyRedisCable < Redis
+      def broadcast(channel, payload)
+        super
+        ::AnyCable.broadcast(channel, payload)
+      end
+    end
+  end
+end
+```
+
+Then, in `cable.yml` set `adapter: :any_redis_cable`.
+
+**NOTE:** If you use `graphql-anycable`, things become more complicated. You will need to schemas with different subscriptions providers and a similar dual adapter to support both _cables_.
+
 ## Links
 
 - [Demo application](https://github.com/anycable/anycable_rails_demo)
