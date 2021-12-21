@@ -45,7 +45,7 @@ jobs:
       with:
         ruby-version: ${{ matrix.ruby }}
         bundler-cache: true
-        bundler: 2.2.15
+        bundler: 2.2.22
     - name: Run RSpec
       continue-on-error: ${{ matrix.allow_failure }}
       run: |
