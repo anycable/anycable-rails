@@ -70,7 +70,7 @@ module AnyCable
       # Since Rails 6.1
       if respond_to?(:server)
         server do
-          next unless AnyCable.config.embedded?
+          next unless AnyCable.config.embedded? && AnyCable::Rails.enabled?
 
           require "anycable/cli"
           AnyCable::CLI.embed!
