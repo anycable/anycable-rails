@@ -60,6 +60,13 @@ module AnyCable
         end
       end
 
+      # Temp hack to fix Sentry vs AnyCable incompatibility
+      # See https://github.com/anycable/anycable-rails/issues/165
+      initializer "anycable.sentry_hack", after: :"sentry.extend_action_cable" do
+        next unless defined?(::Sentry::Rails::ActionCableExtensions::Connection)
+        Sentry::Rails::ActionCableExtensions::Connection.send :public, :handle_open, :handle_close
+      end
+
       # Since Rails 6.1
       if respond_to?(:server)
         server do
