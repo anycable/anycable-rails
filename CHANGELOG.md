@@ -2,6 +2,14 @@
 
 ## master
 
+## 1.2.1 (2021-01-31)
+
+- Add a temporary fix to be compatible with `sentry-rails`. ([@palkan][])
+
+See [#165](https://github.com/anycable/anycable-rails/issues/165).
+
+- Run embedded RPC server only if `any_cable` adapter is used for Action Cable. ([@palkan][])
+
 ## 1.2.0 (2021-12-21) 🎄
 
 - Drop Rails 5 support.
