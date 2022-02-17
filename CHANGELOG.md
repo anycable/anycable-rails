@@ -2,6 +2,8 @@
 
 ## master
 
+- Refactored Action Cable patching to preserve original functionality and avoid monkey-patching collisions. ([@palkan][])
+
 ## 1.2.1 (2021-01-31)
 
 - Add a temporary fix to be compatible with `sentry-rails`. ([@palkan][])

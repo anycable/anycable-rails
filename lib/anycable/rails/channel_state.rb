@@ -10,11 +10,11 @@ module AnyCable
             class_eval <<~RUBY, __FILE__, __LINE__ + 1
               def #{name}
                 return @#{name} if instance_variable_defined?(:@#{name})
-                @#{name} = AnyCable::Rails.deserialize(__istate__["#{name}"], json: true) if connection.anycable_socket
+                @#{name} = AnyCable::Rails.deserialize(__istate__["#{name}"], json: true) if anycabled?
               end
 
               def #{name}=(val)
-                __istate__["#{name}"] = AnyCable::Rails.serialize(val, json: true) if connection.anycable_socket
+                __istate__["#{name}"] = AnyCable::Rails.serialize(val, json: true) if anycabled?
                 instance_variable_set(:@#{name}, val)
               end
             RUBY
@@ -41,7 +41,7 @@ module AnyCable
       attr_writer :__istate__
 
       def __istate__
-        @__istate__ ||= connection.socket.istate
+        @__istate__ ||= connection.anycable_socket.istate
       end
     end
 
@@ -53,11 +53,11 @@ module AnyCable
             class_eval <<~RUBY, __FILE__, __LINE__ + 1
               def #{name}
                 return @#{name} if instance_variable_defined?(:@#{name})
-                @#{name} = AnyCable::Rails.deserialize(__cstate__["#{name}"], json: true) if anycable_socket
+                @#{name} = AnyCable::Rails.deserialize(__cstate__["#{name}"], json: true) if anycabled?
               end
 
               def #{name}=(val)
-                __cstate__["#{name}"] = AnyCable::Rails.serialize(val, json: true) if anycable_socket
+                __cstate__["#{name}"] = AnyCable::Rails.serialize(val, json: true) if anycabled?
                 instance_variable_set(:@#{name}, val)
               end
             RUBY
@@ -84,7 +84,7 @@ module AnyCable
       attr_writer :__cstate__
 
       def __cstate__
-        @__cstate__ ||= socket.cstate
+        @__cstate__ ||= anycable_socket.cstate
       end
     end
   end

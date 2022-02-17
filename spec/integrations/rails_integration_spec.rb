@@ -22,6 +22,6 @@ describe "rails integration" do
   end
 
   it "assigns connection factory" do
-    expect(AnyCable.connection_factory).to eq(ApplicationCable::Connection)
+    expect(AnyCable.connection_factory).to eq(AnyCable::Rails::ConnectionFactory)
   end
 end

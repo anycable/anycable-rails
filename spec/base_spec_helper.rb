@@ -3,8 +3,8 @@
 ENV["RAILS_ENV"] = "test"
 
 begin
-  require "pry-byebug"
-rescue LoadError
+  require "debug"
+rescue LoadError, NoMethodError
 end
 
 PROJECT_ROOT = File.expand_path("../", __dir__)
