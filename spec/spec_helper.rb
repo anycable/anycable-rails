@@ -11,6 +11,13 @@ Rails.application.eager_load!
 # This code is called from the server callback in Railtie
 AnyCable.logger = ActiveSupport::TaggedLogging.new(::ActionCable.server.config.logger)
 
+if ENV["DEBUG_RPC_EXCEPTIONS"]
+  AnyCable.capture_exception do |ex, method, _|
+    $stdout.puts "Debugging RPC exception for ##{method}: #{ex.message}"
+    debugger # rubocop:disable Lint/Debugger
+  end
+end
+
 require "active_support/testing/stream"
 require "ammeter/init"
 require "anycable/rspec"

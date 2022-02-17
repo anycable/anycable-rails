@@ -2,12 +2,15 @@
 
 module ApplicationCable
   class Channel < ActionCable::Channel::Base
-    delegate :request, to: :connection
     delegate :session, to: :request
 
     after_subscribe -> { log_event("subscribed") }
 
     after_unsubscribe -> { log_event("unsubscribed") }
+
+    def request
+      connection.send(:request)
+    end
 
     private
 

@@ -16,6 +16,8 @@ module ApplicationCable
       rescue_from ActiveRecord::RecordNotFound, with: :track_error
     end
 
+    delegate :session, to: :request
+
     identified_by :current_user, :url
 
     state_attr_accessor :token

@@ -1,6 +1,11 @@
 # frozen_string_literal: true
 
+require "anycable/rails/action_cable_ext/connection"
+require "anycable/rails/action_cable_ext/channel"
+require "anycable/rails/action_cable_ext/remote_connections"
+
 require "anycable/rails/channel_state"
+require "anycable/rails/connection_factory"
 
 module AnyCable
   module Rails
@@ -43,28 +48,14 @@ module AnyCable
 
       initializer "anycable.connection_factory", after: "action_cable.set_configs" do |app|
         ActiveSupport.on_load(:action_cable) do
-          # Add AnyCable patch method stub (we use it in ChannelState to distinguish between Action Cable and AnyCable)
-          # NOTE: Method could be already defined if patch was loaded manually
-          ActionCable::Connection::Base.attr_reader(:anycable_socket) unless ActionCable::Connection::Base.method_defined?(:anycable_socket)
-
           app.config.to_prepare do
-            AnyCable.connection_factory = ActionCable.server.config.connection_class.call
+            AnyCable.connection_factory = AnyCable::Rails::ConnectionFactory
           end
 
-          if AnyCable::Rails.enabled?
-            require "anycable/rails/actioncable/connection"
-            if AnyCable.config.persistent_session_enabled
-              require "anycable/rails/actioncable/connection/persistent_session"
-            end
+          if AnyCable::Rails.enabled? && AnyCable.config.persistent_session_enabled
+            require "anycable/rails/connections/persistent_session"
           end
         end
-      end
-
-      # Temp hack to fix Sentry vs AnyCable incompatibility
-      # See https://github.com/anycable/anycable-rails/issues/165
-      initializer "anycable.sentry_hack", after: :"sentry.extend_action_cable" do
-        next unless defined?(::Sentry::Rails::ActionCableExtensions::Connection)
-        Sentry::Rails::ActionCableExtensions::Connection.send :public, :handle_open, :handle_close
       end
 
       # Since Rails 6.1

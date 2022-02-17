@@ -2,7 +2,7 @@ source 'https://rubygems.org'
 
 gemspec
 
-gem "pry-byebug", platform: :mri
+gem "debug", platform: :mri
 
 local_gemfile = "#{File.dirname(__FILE__)}/Gemfile.local"
 
@@ -11,7 +11,8 @@ eval_gemfile "gemfiles/rubocop.gemfile"
 if File.exist?(local_gemfile)
   eval(File.read(local_gemfile)) # rubocop:disable Lint/Eval
 else
-  gem 'sqlite3', '~> 1.3'
-  gem 'actioncable', '~> 6.0'
-  gem 'activerecord'
+  gem 'actioncable', '~> 7.0'
 end
+
+gem 'sqlite3', '~> 1.3'
+gem 'activerecord'
