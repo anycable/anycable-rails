@@ -139,6 +139,10 @@ module AnyCable
         ActionDispatch::Request.new(environment || env)
       end
 
+      def action_cable_connection
+        conn
+      end
+
       private
 
       attr_reader :conn

@@ -22,6 +22,6 @@ describe "rails integration" do
   end
 
   it "assigns connection factory" do
-    expect(AnyCable.connection_factory).to eq(AnyCable::Rails::ConnectionFactory)
+    expect(AnyCable.connection_factory).to be_an_instance_of(AnyCable::Rails::ConnectionFactory)
   end
 end

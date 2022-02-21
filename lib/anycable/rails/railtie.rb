@@ -49,7 +49,7 @@ module AnyCable
       initializer "anycable.connection_factory", after: "action_cable.set_configs" do |app|
         ActiveSupport.on_load(:action_cable) do
           app.config.to_prepare do
-            AnyCable.connection_factory = AnyCable::Rails::ConnectionFactory
+            AnyCable.connection_factory = AnyCable::Rails::ConnectionFactory.new
           end
 
           if AnyCable::Rails.enabled? && AnyCable.config.persistent_session_enabled
