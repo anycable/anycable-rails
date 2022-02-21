@@ -20,7 +20,7 @@ ActionCable::Channel::Base.prepend(Module.new do
     super unless anycabled?
   end
 
-  def stream_from(broadcasting, _callback = nil, _options = {})
+  def stream_from(broadcasting, _callback = nil, **)
     return super unless anycabled?
 
     connection.anycable_socket.subscribe identifier, broadcasting
