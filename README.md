@@ -1,6 +1,5 @@
 [![Gem Version](https://badge.fury.io/rb/anycable-rails.svg)](https://rubygems.org/gems/anycable-rails)
 [![Build](https://github.com/anycable/anycable-rails/workflows/Build/badge.svg)](https://github.com/anycable/anycable-rails/actions)
-[![Gitter](https://img.shields.io/badge/gitter-join%20chat%20%E2%86%92-brightgreen.svg)](https://gitter.im/anycable/Lobby)
 [![Documentation](https://img.shields.io/badge/docs-link-brightgreen.svg)](https://docs.anycable.io/rails/getting_started)
 
 # AnyCable Rails
