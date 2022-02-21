@@ -6,8 +6,8 @@ ActionCable::RemoteConnections::RemoteConnection.include(AnyCable::Rails::Connec
 
 ActionCable::RemoteConnections::RemoteConnection.prepend(Module.new do
   def disconnect(reconnect: true)
-    return super() unless ::AnyCable::Rails.enabled?
-
+    # Legacy Action Cable functionality if case we're not fully migrated yet
+    super() unless AnyCable::Rails.enabled?
     ::AnyCable.broadcast_adapter.broadcast_command("disconnect", identifier: identifiers_json, reconnect: reconnect)
   end
 end)

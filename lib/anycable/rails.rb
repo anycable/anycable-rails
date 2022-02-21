@@ -48,6 +48,17 @@ module AnyCable
           val
         end
       end
+
+      module Extension
+        def broadcast(channel, payload)
+          super
+          ::AnyCable.broadcast(channel, payload)
+        end
+      end
+
+      def extend_adapter!(adapter)
+        adapter.extend(Extension)
+      end
     end
   end
 end

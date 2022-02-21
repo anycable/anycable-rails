@@ -2,6 +2,8 @@
 
 ## master
 
+- Introduce `AnyCable::Rails.extend_adapter!` to make any pubsub adapter AnyCable-compatible. ([@palkan][])
+
 - Refactored Action Cable patching to preserve original functionality and avoid monkey-patching collisions. ([@palkan][])
 
 ## 1.2.1 (2021-01-31)

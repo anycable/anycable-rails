@@ -2,6 +2,8 @@
 
 require "spec_helper"
 
+require "action_cable/subscription_adapter/inline"
+
 describe AnyCable::Rails do
   describe "#deserialize" do
     specify "primitive value", :aggregate_failures do
@@ -54,6 +56,25 @@ describe AnyCable::Rails do
       specify "hash value" do
         expect(described_class.serialize({"a" => "b"}, json: true)).to eq({"a" => "b"}.to_json)
       end
+    end
+  end
+
+  describe ".extend_adapter!" do
+    subject(:adapter) { ActionCable::SubscriptionAdapter::Inline.new(ActionCable.server) }
+
+    before do
+      described_class.extend_adapter!(adapter)
+      allow(AnyCable).to receive(:broadcast)
+    end
+
+    specify do
+      messages = []
+      subject.subscribe "test", ->(msg) { messages << msg }
+
+      subject.broadcast "test", "hello"
+
+      expect(AnyCable).to have_received(:broadcast).with("test", "hello")
+      expect(messages).to eq(["hello"])
     end
   end
 end

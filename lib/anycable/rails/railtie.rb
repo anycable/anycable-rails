@@ -52,7 +52,7 @@ module AnyCable
             AnyCable.connection_factory = AnyCable::Rails::ConnectionFactory.new
           end
 
-          if AnyCable::Rails.enabled? && AnyCable.config.persistent_session_enabled
+          if AnyCable.config.persistent_session_enabled?
             require "anycable/rails/connections/persistent_session"
           end
         end
