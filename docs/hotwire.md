@@ -14,8 +14,8 @@ If you're only using Turbo Streams and don't rely on _pure_ Action Cable, you ca
 
 **What's the point?** Here are the main benefits of going the RPC-less way:
 
-- Improve applications performance by speeding up WebSocket handshakes and commands.
-- Reduce the infrastructure burden by not running a separate service (RPC). Especially helpful on [Heroku](../deployment/heroku.md).
+- Improve application performance by speeding up WebSocket handshakes and commands.
+- Reduce infrastructure burden by removing the need to run a separate service (RPC). Especially helpful on [Heroku](../deployment/heroku.md).
 - Open the possibility of using Turbo Streams without Rails and even Ruby!
 
 The default flow with AnyCable RPC looks like this:
