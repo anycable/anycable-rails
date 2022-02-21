@@ -16,6 +16,11 @@ jobs:
       BUNDLE_FORCE_RUBY_PLATFORM: 1
       CI: true
       BUNDLE_GEMFILE: ${{ matrix.gemfile }}
+    services:
+      redis:
+        image: redis:5.0-alpine
+        ports: ["6379:6379"]
+        options: --health-cmd="redis-cli ping" --health-interval 1s --health-timeout 3s --health-retries 30
     strategy:
       fail-fast: false
       matrix:
@@ -54,3 +59,9 @@ jobs:
       continue-on-error: ${{ matrix.allow_failure }}
       run: |
         bundle exec rake spec:compatibility
+    - name: Run conformance tests with Anyt
+      env:
+        BUNDLE_GEMFILE: "gemfiles/anyt.gemfile"
+      run: |
+        bundle install
+        bundle exec anyt --self-check
