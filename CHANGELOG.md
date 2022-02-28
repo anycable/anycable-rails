@@ -2,13 +2,19 @@
 
 ## master
 
-## 1.3.0 (2021-02-21)
+## 1.3.1 (202-02-28)
+
+- Fix Action Cable Channel patch to not change methods signatures. ([@palkan][])
+
+Otherwise it could lead to conflicts with other patches.
+
+## 1.3.0 (2022-02-21)
 
 - Introduce `AnyCable::Rails.extend_adapter!` to make any pubsub adapter AnyCable-compatible. ([@palkan][])
 
 - Refactored Action Cable patching to preserve original functionality and avoid monkey-patching collisions. ([@palkan][])
 
-## 1.2.1 (2021-01-31)
+## 1.2.1 (2022-01-31)
 
 - Add a temporary fix to be compatible with `sentry-rails`. ([@palkan][])
 
