@@ -3,13 +3,15 @@
 require "action_cable/channel"
 
 ActionCable::Channel::Base.prepend(Module.new do
-  def subscribe_to_channel(force: false)
-    return if anycabled? && !force
-    super()
+  def subscribe_to_channel
+    super unless anycabled? && !@__anycable_subscribing__
   end
 
   def handle_subscribe
-    subscribe_to_channel(force: true)
+    @__anycable_subscribing__ = true
+    subscribe_to_channel
+  ensure
+    @__anycable_subscribing__ = false
   end
 
   def start_periodic_timers
