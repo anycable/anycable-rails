@@ -34,6 +34,9 @@ jobs:
           - ruby: "2.7"
             gemfile: "gemfiles/rails6.gemfile"
             allow_failure: false
+          - ruby: "2.6"
+            gemfile: "gemfiles/rails6.gemfile"
+            allow_failure: false
           - ruby: "3.0"
             gemfile: "gemfiles/railsmaster.gemfile"
             allow_failure: false

@@ -24,7 +24,7 @@ Gem::Specification.new do |spec|
   spec.files = Dir.glob("lib/**/*") + %w[README.md MIT-LICENSE CHANGELOG.md]
   spec.require_paths = ["lib"]
 
-  spec.required_ruby_version = ">= 2.7"
+  spec.required_ruby_version = ">= 2.6"
 
   spec.add_dependency "anycable", "~> 1.2.0"
   spec.add_dependency "actioncable", ">= 6.0"
