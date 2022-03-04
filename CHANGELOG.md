@@ -2,7 +2,11 @@
 
 ## master
 
-## 1.3.1 (202-02-28)
+## 1.3.2 (2022-03-04)
+
+- Allow Ruby 2.6.
+
+## 1.3.1 (2022-02-28)
 
 - Fix Action Cable Channel patch to not change methods signatures. ([@palkan][])
 
