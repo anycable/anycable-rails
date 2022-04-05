@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require "action_cable/channel"
+require "action_cable"
 
 ActionCable::Channel::Base.prepend(Module.new do
   def subscribe_to_channel

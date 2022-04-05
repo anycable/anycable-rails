@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require "action_cable/connection"
+require "action_cable"
 require "anycable/rails/connections/serializable_identification"
 
 ActionCable::Connection::Base.include(AnyCable::Rails::Connections::SerializableIdentification)

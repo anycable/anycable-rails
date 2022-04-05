@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
-require "action_cable/connection"
-require "action_cable/channel"
+require "action_cable"
 
 module AnyCable
   module Rails
