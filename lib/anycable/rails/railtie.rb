@@ -20,7 +20,8 @@ module AnyCable
         AnyCable.logger = ::ActionCable.server.config.logger
 
         AnyCable.configure_server do
-          AnyCable.logger = ActiveSupport::TaggedLogging.new(::ActionCable.server.config.logger)
+          server_logger = AnyCable.logger = ::ActionCable.server.config.logger
+          AnyCable.logger = ActiveSupport::TaggedLogging.new(server_logger) if server_logger.is_a?(::Logger)
           # Broadcast server logs to STDOUT in development
           if ::Rails.env.development? &&
               !ActiveSupport::Logger.logger_outputs_to?(::Rails.logger, $stdout)
