@@ -26,8 +26,8 @@ module AnyCable
           if ::Rails.env.development? &&
               !ActiveSupport::Logger.logger_outputs_to?(::Rails.logger, $stdout)
             console = ActiveSupport::Logger.new($stdout)
-            console.formatter = ::Rails.logger.formatter
-            console.level = ::Rails.logger.level
+            console.formatter = ::Rails.logger.formatter if ::Rails.logger.respond_to?(:formatter)
+            console.level = ::Rails.logger.level if ::Rails.logger.respond_to?(:level)
             AnyCable.logger.extend(ActiveSupport::Logger.broadcast(console))
           end
         end
