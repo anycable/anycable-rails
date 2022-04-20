@@ -12,8 +12,11 @@ module AnyCable
           :anycable_socket
 
         # Using public :send_welcome_message causes stack level too deep 🤷🏻‍♂️
-        def public_send_welcome_message
-          send_welcome_message
+        def send_welcome_message
+          transmit({
+            type: ActionCable::INTERNAL[:message_types][:welcome],
+            sid: env["anycable.sid"]
+          }.compact)
         end
 
         def public_request
@@ -91,7 +94,7 @@ module AnyCable
 
         socket.cstate.write(LOG_TAGS_IDENTIFIER, logger.tags.to_json) unless logger.tags.empty?
 
-        conn.public_send_welcome_message
+        conn.send_welcome_message
       rescue ::ActionCable::Connection::Authorization::UnauthorizedError
         reject_request(
           ActionCable::INTERNAL[:disconnect_reasons]&.[](:unauthorized) || "unauthorized"

@@ -2,6 +2,10 @@
 
 ## master
 
+- Added `sid` (unique connection identifier) field to the `welcome` message if present. ([@palkan][])
+
+- Fixed handling Ruby Logger incompatible loggers. ([@palkan][])
+
 ## 1.3.2 (2022-03-04)
 
 - Allow Ruby 2.6.

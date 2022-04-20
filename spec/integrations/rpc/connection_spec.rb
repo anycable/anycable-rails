@@ -70,6 +70,15 @@ describe "client connection" do
       end
     end
 
+    context "when sid is provided" do
+      it "responds with 'welcome' message with sid", :aggregate_failures do
+        request.env.sid = "x2022"
+
+        expect(subject).to be_success
+        expect(JSON.parse(subject.transmissions.first)).to eq("type" => "welcome", "sid" => "x2022")
+      end
+    end
+
     context "auth failure" do
       let(:cookies) { "user=john" }
 
