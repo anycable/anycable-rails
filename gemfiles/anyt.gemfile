@@ -1,5 +1,5 @@
 source "https://rubygems.org" do
   gem "anycable-rails", path: ".."
-  gem "anyt", "~> 1.1.2"
+  gem "anyt", "~> 1.1"
   gem "puma"
 end
