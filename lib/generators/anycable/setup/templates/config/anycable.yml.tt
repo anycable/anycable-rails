@@ -28,7 +28,7 @@ default: &default
   broadcast_adapter: http
   <%- end -%>
   # Use the same channel name for WebSocket server, e.g.:
-  #   $ anycable-go --redis-channel="__anycable__"
+  #   $ anycable-go --redis_channel="__anycable__"
   redis_channel: "__anycable__"
   <%- if redis? -%>
   # You can use REDIS_URL env var to configure Redis URL.
