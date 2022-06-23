@@ -22,6 +22,8 @@ module ApplicationCable
 
     state_attr_accessor :token
 
+    around_command :log_command_execution
+
     def connect
       self.current_user = verify_user
       self.url = request.url if current_user
@@ -33,6 +35,12 @@ module ApplicationCable
     end
 
     private
+
+    def log_command_execution
+      start = Time.now
+      yield
+      self.class.log_event("command", time: Time.now - start)
+    end
 
     def verify_user
       return env["warden"]&.user if env["warden"]&.user

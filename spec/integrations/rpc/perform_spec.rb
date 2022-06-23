@@ -51,6 +51,16 @@ describe "client messages" do
       end
     end
 
+    context "with arround_command" do
+      let(:log) { ApplicationCable::Connection.events_log }
+
+      it "executes command callbacks" do
+        expect { subject }.to change { log.size }.by(1)
+
+        expect(log.last[:source]).to eq "command"
+      end
+    end
+
     describe "#stop_stream_from" do
       let(:data) { {action: "unfollow_all"} }
 
