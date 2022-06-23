@@ -48,10 +48,43 @@ unless ActionCable::Connection::Base.respond_to?(:before_command)
   end)
 
   ActionCable::Connection::Base.prepend(Module.new do
-    def dispatch_websocket_message(*)
+    def dispatch_websocket_message(websocket_message)
       return super unless websocket.alive?
 
-      run_callbacks(:command) { super }
+      handle_channel_command(decode(websocket_message))
+    end
+
+    def handle_channel_command(payload)
+      run_callbacks :command do
+        subscriptions.execute_command payload
+      end
+    end
+  end)
+end
+
+# Trigger autoload
+test_case_defined = false
+
+begin
+  ActionCable::Connection::TestCase # rubocop:disable Lint/Void
+  test_case_defined = true
+rescue NameError
+end
+
+# Backport: https://github.com/rails/rails/pull/45445
+if test_case_defined && !ActionCable::Connection::TestConnection.method_defined?(:transmissions)
+  ActionCable::Connection::TestConnection.prepend(Module.new do
+    attr_reader :transmissions
+
+    def initialize(*)
+      super
+
+      @transmissions = []
+      @subscriptions = ActionCable::Connection::Subscriptions.new(self)
+    end
+
+    def transmit(cable_message)
+      transmissions << cable_message.with_indifferent_access
     end
   end)
 end

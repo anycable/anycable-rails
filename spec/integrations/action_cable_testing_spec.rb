@@ -65,5 +65,19 @@ describe "action cable testing compatibility", type: :channel do
 
       expect(ApplicationCable::Connection.events_log.last.fetch(:data)).to eq(name: "max", url: "http://test.host/cable?token=123")
     end
+
+    specify "callbacks" do
+      connect "/cable?token=123", session: {username: user.name}
+
+      connection.handle_channel_command(
+        {
+          "identifier" => {channel: "ChatChannel"}.to_json,
+          "command" => "subscribe"
+        }
+      )
+
+      expect(connection.transmissions.last["type"]).to eq("confirm_subscription")
+      expect(ApplicationCable::Connection.events_log.last[:source]).to eq "command"
+    end
   end
 end
