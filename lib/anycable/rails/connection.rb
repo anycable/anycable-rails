@@ -110,22 +110,24 @@ module AnyCable
       end
 
       def handle_channel_command(identifier, command, data)
-        # We cannot use subscriptions#execute_command here,
-        # since we MUST return true of false, depending on the status
-        # of execution
-        channel = conn.subscriptions.fetch(identifier)
-        case command
-        when "subscribe"
-          channel.handle_subscribe
-          !channel.rejected?
-        when "unsubscribe"
-          conn.subscriptions.remove_subscription(channel)
-          true
-        when "message"
-          channel.perform_action ActiveSupport::JSON.decode(data)
-          true
-        else
-          false
+        conn.run_callbacks :command do
+          # We cannot use subscriptions#execute_command here,
+          # since we MUST return true of false, depending on the status
+          # of execution
+          channel = conn.subscriptions.fetch(identifier)
+          case command
+          when "subscribe"
+            channel.handle_subscribe
+            !channel.rejected?
+          when "unsubscribe"
+            conn.subscriptions.remove_subscription(channel)
+            true
+          when "message"
+            channel.perform_action ActiveSupport::JSON.decode(data)
+            true
+          else
+            false
+          end
         end
       # Support rescue_from
       # https://github.com/rails/rails/commit/d2571e560c62116f60429c933d0c41a0e249b58b

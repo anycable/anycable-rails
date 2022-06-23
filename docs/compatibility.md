@@ -17,10 +17,13 @@ Streaming | ✅
 Broadcasting | ✅
 Periodical timers | 🚫
 Disconnect remote clients | ✅
+Command callbacks | ✅ \*\*\*
 
 \* See [restoring state objects](../architecture.md#restoring-state-objects) for more information on how identifiers work.
 
 \*\* See [channel state](./channels_state.md) for more information on subscription instance variables support.
+
+\*\*\* AnyCable (via `anycable-rails`) also supports [command callbacks](https://github.com/rails/rails/pull/44696) (`before_command`, `after_command`, `around_command`) for older Rails versions (event when not using AnyCable).
 
 ## Runtime checks
 

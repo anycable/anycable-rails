@@ -28,3 +28,30 @@ ActionCable::Connection::Base.prepend(Module.new do
     @request ||= anycable_request_builder.build_rack_request(@env)
   end
 end)
+
+# Backport command callbacks: https://github.com/rails/rails/pull/44696
+unless ActionCable::Connection::Base.respond_to?(:before_command)
+  ActionCable::Connection::Base.include ActiveSupport::Callbacks
+  ActionCable::Connection::Base.define_callbacks :command
+  ActionCable::Connection::Base.extend(Module.new do
+    def before_command(*methods, &block)
+      set_callback(:command, :before, *methods, &block)
+    end
+
+    def after_command(*methods, &block)
+      set_callback(:command, :after, *methods, &block)
+    end
+
+    def around_command(*methods, &block)
+      set_callback(:command, :around, *methods, &block)
+    end
+  end)
+
+  ActionCable::Connection::Base.prepend(Module.new do
+    def dispatch_websocket_message(*)
+      return super unless websocket.alive?
+
+      run_callbacks(:command) { super }
+    end
+  end)
+end

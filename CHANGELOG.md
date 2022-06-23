@@ -2,6 +2,8 @@
 
 ## master
 
+- Add support and backport for Connection command callbacks. ([@palkan][])
+
 ## 1.3.3 (2022-04-20)
 
 - Added `sid` (unique connection identifier) field to the `welcome` message if present. ([@palkan][])
