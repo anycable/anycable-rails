@@ -2,6 +2,8 @@
 
 ## master
 
+## 1.3.4 (2022-06-28)
+
 - Add support and backport for Connection command callbacks. ([@palkan][])
 
 ## 1.3.3 (2022-04-20)
