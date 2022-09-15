@@ -178,26 +178,43 @@ If you'd like to run AnyCable RPC server in tests (for example, in system tests)
 ```ruby
 # spec/support/anycable_setup.rb
 RSpec.configure do |config|
-  # Only start RPC server if system tests are included into the run
-  next if config.filter.opposite.rules[:type] == "system" || config.exclude_pattern.match?(%r{spec/system})
+  cli = nil
 
-  require "anycable/cli"
-  AnyCable::CLI.embed!
+  config.before(:suite) do
+    examples = RSpec.world.filtered_examples.values.flatten
+    has_no_system_tests = examples.none? { |example| example.metadata[:type] == :system }
 
-  # Make sure AnyCable pubsub adapter is used in system tests (and test adapter otherwise, so we can run unit tests)
-  config.before(:each, type: :system) do
-    next if ActionCable.server.pubsub.is_a?(ActionCable::SubscriptionAdapter::AnyCable)
+    # Only start RPC server if system tests are included into the run
+    next if has_no_system_tests
 
-    @__was_pubsub_adapter__ = ActionCable.server.pubsub
+    require "anycable/cli"
 
-    adapter = ActionCable::SubscriptionAdapter::AnyCable.new(ActionCable.server)
-    ActionCable.server.instance_variable_set(:@pubsub, adapter)
+    $stdout.puts "\n⚡️  Starting AnyCable RPC server...\n"
+
+    cli = AnyCable::CLI.new(embedded: true)
+    cli.run
   end
 
-  config.after(:each, type: :system) do
-    next unless instance_variable_defined?(:@__was_pubsub_adapter__)
-    ActionCable.server.instance_variable_set(:@pubsub, @__was_pubsub_adapter__)
+  config.after(:suite) do
+    cli&.shutdown
   end
+end
+```
+
+To use `:test` Action Cable adapter along with AnyCable, you can extend it in the configuration:
+
+```rb
+# config/environments/test.rb
+Rails.application.configure do
+  config.after_initialize do
+    # Don't forget to configure URL
+    config.action_cable.url = ActionCable.server.config.url = ENV.fetch("CABLE_URL", "ws://localhost:8080/cable")
+
+    # Make test adapter AnyCable-compatible
+    AnyCable::Rails.extend_adapter!(ActionCable.server.pubsub)
+  end
+
+  # ...
 end
 ```
 
