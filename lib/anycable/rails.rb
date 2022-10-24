@@ -68,8 +68,8 @@ end
 if defined?(::Rails) && ::Rails.application && ::Rails.application.initialized?
   puts("\n**************************************************")
   puts(
-    "⛔️  WARNING: AnyCable loaded after application initialization. Might not work correctly.\n"\
-    "Please, make sure to remove `require: false` in your Gemfile or "\
+    "⛔️  WARNING: AnyCable loaded after application initialization. Might not work correctly.\n" \
+    "Please, make sure to remove `require: false` in your Gemfile or " \
     "require manually in `environment.rb` before `Rails.application.initialize!`"
   )
   puts("**************************************************\n\n")
