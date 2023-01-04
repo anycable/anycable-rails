@@ -19,4 +19,16 @@ describe "subscription adapter" do
 
     specify { expect(adapter).to eq(ActionCable::SubscriptionAdapter::AnyCable) }
   end
+
+  context "instance" do
+    subject(:adapter) { ActionCable::SubscriptionAdapter::AnyCable.new }
+
+    specify "#subscribe" do
+      expect { adapter.subscribe("test", nil) }.to raise_error(NotImplementedError)
+    end
+
+    specify "#unsubscribe" do
+      expect { adapter.unsubscribe("test", nil) }.to raise_error(NotImplementedError)
+    end
+  end
 end

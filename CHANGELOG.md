@@ -2,6 +2,8 @@
 
 ## master
 
+- Make misconfiguration error more informative. ([@palkan][])
+
 ## 1.3.4 (2022-06-28)
 
 - Add support and backport for Connection command callbacks. ([@palkan][])
