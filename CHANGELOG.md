@@ -2,6 +2,8 @@
 
 ## master
 
+## 1.3.5 (2023-01-04)
+
 - Make misconfiguration error more informative. ([@palkan][])
 
 ## 1.3.4 (2022-06-28)
