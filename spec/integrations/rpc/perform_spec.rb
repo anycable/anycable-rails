@@ -71,6 +71,16 @@ describe "client messages" do
       end
     end
 
+    context "nil stream" do
+      let(:channel_class) { "TestChannel" }
+      let(:data) { {action: "nil_stream"} }
+
+      it "responds with error" do
+        expect(subject).to be_success
+        expect(subject.streams).to eq([""])
+      end
+    end
+
     describe ".state_attr_accessor" do
       let(:data) { {action: "itick"} }
 

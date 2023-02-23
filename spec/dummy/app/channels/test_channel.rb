@@ -20,6 +20,10 @@ class TestChannel < ApplicationCable::Channel
     stop_stream_from "all"
   end
 
+  def nil_stream
+    stream_from nil
+  end
+
   def add(data)
     transmit({result: (data["a"].to_i + data["b"].to_i)})
   end

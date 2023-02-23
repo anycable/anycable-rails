@@ -12,7 +12,7 @@ if File.exist?(local_gemfile)
   eval(File.read(local_gemfile)) # rubocop:disable Lint/Eval
 else
   gem 'actioncable', '~> 7.0'
+  gem 'activerecord'
 end
 
 gem 'sqlite3', '~> 1.3'
-gem 'activerecord'
