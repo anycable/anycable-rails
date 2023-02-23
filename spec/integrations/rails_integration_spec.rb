@@ -24,4 +24,24 @@ describe "rails integration" do
   it "assigns connection factory" do
     expect(AnyCable.connection_factory).to be_an_instance_of(AnyCable::Rails::ConnectionFactory)
   end
+
+  context "integrates with error reporter" do
+    include_context "rpc_command"
+
+    let(:channel_class) { "TestChannel" }
+    let(:command) { "message" }
+    let(:data) { {action: "fail"} }
+
+    it "notifies Rails reporter on exception" do
+      response = handler.handle(:command, request)
+      expect(response).to be_error
+
+      last_reported_error, handled, context = TestErrorSubscriber.errors.last
+
+      expect(last_reported_error).to be_a(NoMethodError)
+      expect(handled).to be false
+      expect(context[:method]).to eq("command")
+      expect(context[:payload]).to be_a(Hash)
+    end
+  end
 end

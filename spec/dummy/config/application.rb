@@ -11,6 +11,20 @@ require "warden"
 require "anycable-rails"
 require "anycable/rails/compatibility"
 
+class TestErrorSubscriber
+  def self.report(error, handled:, severity:, context:)
+    errors << [error, handled, context]
+  end
+
+  def self.errors
+    Thread.current[:_test_errors_] ||= []
+  end
+
+  def self.reset
+    Thread.current[:_test_errors_] = []
+  end
+end
+
 module Dummy
   class Application < Rails::Application
     config.logger = ActiveSupport::TaggedLogging.new(Logger.new($stdout))
@@ -26,5 +40,11 @@ module Dummy
     config.middleware.use Warden::Manager
 
     AnyCable::Rails::Rack.middleware.use Warden::Manager
+
+    if ::Rails.version.to_f >= 7.0
+      config.after_initialize do |app|
+        app.executor.error_reporter.subscribe(TestErrorSubscriber)
+      end
+    end
   end
 end

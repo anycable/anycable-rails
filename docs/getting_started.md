@@ -143,6 +143,12 @@ Rails.logger.level = :debug if AnyCable.config.debug?
 
 Read more about [logging](../ruby/logging.md).
 
+## Exceptions
+
+AnyCable automatically integrates with Rails 7+ error reporting interface (`Rails.error.report(...)`), so you don't need to configure anything yourself.
+
+For earlier Rails versions, see [docs](../ruby/exceptions.md).
+
 ## Development and test
 
 AnyCable is [compatible](compatibility.md) with the original Action Cable implementation; thus you can continue using Action Cable for development and tests.

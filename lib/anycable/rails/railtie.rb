@@ -45,6 +45,12 @@ module AnyCable
         # see https://github.com/rails/rails/pull/33469/files
         executor = app.config.reload_classes_only_on_change ? app.reloader : app.executor
         AnyCable.middleware.use(AnyCable::Rails::Middlewares::Executor.new(executor))
+
+        if app.executor.respond_to?(:error_reporter)
+          AnyCable.capture_exception do |ex, method, message|
+            ::Rails.error.report(ex, handled: false, context: {method: method, payload: message})
+          end
+        end
       end
 
       initializer "anycable.connection_factory", after: "action_cable.set_configs" do |app|

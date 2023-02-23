@@ -17,6 +17,7 @@ AllCops:
     - 'spec/rubocop/fixtures/**/*'
   DisplayCopNames: true
   SuggestExtensions: false
+  NewCops: disable
   TargetRubyVersion: 2.7
 
 Standard/BlockSingleLineBraces:

@@ -29,6 +29,7 @@ RSpec.configure do |config|
 
   config.after do
     ApplicationCable::Connection.events_log.clear
+    TestErrorSubscriber.reset
     User.delete_all
   end
 end
