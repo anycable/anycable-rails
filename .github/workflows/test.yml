@@ -9,6 +9,7 @@ on:
 
 jobs:
   rspec:
+    if: ${{ !contains(github.event.head_commit.message, '[ci skip tests]') }}
     runs-on: ubuntu-latest
     env:
       BUNDLE_JOBS: 4
@@ -18,7 +19,7 @@ jobs:
       BUNDLE_GEMFILE: ${{ matrix.gemfile }}
     services:
       redis:
-        image: redis:5.0-alpine
+        image: redis:6.0-alpine
         ports: ["6379:6379"]
         options: --health-cmd="redis-cli ping" --health-interval 1s --health-timeout 3s --health-retries 30
     strategy:
@@ -28,7 +29,7 @@ jobs:
         gemfile: ["gemfiles/rails6.gemfile"]
         allow_failure: [false]
         include:
-          - ruby: "3.1"
+          - ruby: "3.2"
             gemfile: "gemfiles/rails7.gemfile"
             allow_failure: false
           - ruby: "2.7"
@@ -53,7 +54,6 @@ jobs:
       with:
         ruby-version: ${{ matrix.ruby }}
         bundler-cache: true
-        bundler: 2.2.22
     - name: Run RSpec
       continue-on-error: ${{ matrix.allow_failure }}
       run: |
