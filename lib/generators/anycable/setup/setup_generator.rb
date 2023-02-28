@@ -159,6 +159,10 @@ module AnyCableRailsGenerators
       !!gemfile_lock&.match?(/^\s+redis\b/)
     end
 
+    def nats?
+      !!gemfile_lock&.match?(/^\s+nats-pure\b/)
+    end
+
     def webpacker?
       !!gemfile_lock&.match?(/^\s+webpacker\b/)
     end
