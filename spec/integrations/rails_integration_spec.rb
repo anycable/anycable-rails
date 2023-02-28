@@ -25,7 +25,7 @@ describe "rails integration" do
     expect(AnyCable.connection_factory).to be_an_instance_of(AnyCable::Rails::ConnectionFactory)
   end
 
-  context "integrates with error reporter" do
+  context "integrates with error reporter", skip: (::Rails.version.to_f < 7.0) do
     include_context "rpc_command"
 
     let(:channel_class) { "TestChannel" }
