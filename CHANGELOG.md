@@ -2,6 +2,8 @@
 
 ## master
 
+## 1.3.6 (2023-02-28)
+
 - Handle `nil` streams gracefully. ([@palkan][])
 
 - Report exceptions via the `Rails.error.report` interface. ([@palkan][])
