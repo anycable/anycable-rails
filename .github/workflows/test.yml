@@ -27,23 +27,15 @@ jobs:
       matrix:
         ruby: ["3.0"]
         gemfile: ["gemfiles/rails6.gemfile"]
-        allow_failure: [false]
         include:
           - ruby: "3.2"
             gemfile: "gemfiles/rails7.gemfile"
-            allow_failure: false
           - ruby: "2.7"
             gemfile: "gemfiles/rails6.gemfile"
-            allow_failure: false
-          - ruby: "2.6"
-            gemfile: "gemfiles/rails6.gemfile"
-            allow_failure: false
           - ruby: "3.1"
             gemfile: "gemfiles/railsmaster.gemfile"
-            allow_failure: false
           - ruby: "2.7"
             gemfile: "gemfiles/rails60.gemfile"
-            allow_failure: false
     steps:
     - uses: actions/checkout@v2
     - name: Install system deps
