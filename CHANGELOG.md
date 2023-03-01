@@ -2,6 +2,12 @@
 
 ## master
 
+## 1.3.7 (2023-02-28)
+
+- Fix `anycable` gem dependency constraints.
+
+- Require Ruby 2.7+.
+
 ## 1.3.6 (2023-02-28)
 
 - Handle `nil` streams gracefully. ([@palkan][])
