@@ -12,8 +12,18 @@ module AnyCable
           @executor = executor
         end
 
-        def call(*)
-          executor.wrap { yield }
+        def call(method, message, metadata)
+          if ::Rails.respond_to?(:error)
+            executor.wrap do
+              sid = metadata["sid"]
+
+              ::Rails.error.record(context: {method: method, payload: message.to_h, sid: sid}) do
+                yield
+              end
+            end
+          else
+            executor.wrap { yield }
+          end
         end
       end
     end

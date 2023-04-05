@@ -48,7 +48,7 @@ module AnyCable
 
         if app.executor.respond_to?(:error_reporter)
           AnyCable.capture_exception do |ex, method, message|
-            ::Rails.error.report(ex, handled: false, context: {method: method, payload: message})
+            ::Rails.error.report(ex, handled: false, context: {method: method.to_sym, payload: message})
           end
         end
       end

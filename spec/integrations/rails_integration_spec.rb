@@ -40,7 +40,7 @@ describe "rails integration" do
 
       expect(last_reported_error).to be_a(NoMethodError)
       expect(handled).to be false
-      expect(context[:method]).to eq("command")
+      expect(context[:method]).to eq(:command)
       expect(context[:payload]).to be_a(Hash)
     end
   end
