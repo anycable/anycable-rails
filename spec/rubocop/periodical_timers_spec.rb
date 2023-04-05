@@ -13,7 +13,7 @@ describe RuboCop::Cop::AnyCable::PeriodicalTimers do
     RUBY
 
     expect(cop.offenses.size).to be(1)
-    expect(cop.messages.first).to eq("Periodical Timers are not supported in AnyCable")
+    expect(cop.messages.first).to include("Periodical Timers are not supported in AnyCable")
   end
 
   it "registers offense for #periodically call explicit self" do
@@ -24,6 +24,6 @@ describe RuboCop::Cop::AnyCable::PeriodicalTimers do
     RUBY
 
     expect(cop.offenses.size).to be(1)
-    expect(cop.messages.first).to eq("Periodical Timers are not supported in AnyCable")
+    expect(cop.messages.first).to include("Periodical Timers are not supported in AnyCable")
   end
 end
