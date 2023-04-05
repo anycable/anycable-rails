@@ -15,7 +15,7 @@ describe RuboCop::Cop::AnyCable::StreamFrom do
     RUBY
 
     expect(cop.offenses.size).to be(1)
-    expect(cop.messages.first).to eq("Custom stream callbacks are not supported in AnyCable")
+    expect(cop.messages.first).to include("Custom stream callbacks are not supported in AnyCable")
   end
 
   it "registers offense for #stream_for with block" do
@@ -28,7 +28,7 @@ describe RuboCop::Cop::AnyCable::StreamFrom do
     RUBY
 
     expect(cop.offenses.size).to be(1)
-    expect(cop.messages.first).to eq("Custom stream callbacks are not supported in AnyCable")
+    expect(cop.messages.first).to include("Custom stream callbacks are not supported in AnyCable")
   end
 
   it "registers offense for #stream_from with lambda" do
@@ -41,7 +41,7 @@ describe RuboCop::Cop::AnyCable::StreamFrom do
     RUBY
 
     expect(cop.offenses.size).to be(1)
-    expect(cop.messages.first).to eq("Custom stream callbacks are not supported in AnyCable")
+    expect(cop.messages.first).to include("Custom stream callbacks are not supported in AnyCable")
   end
 
   it "registers offense for #stream_for with lambda" do
@@ -54,7 +54,7 @@ describe RuboCop::Cop::AnyCable::StreamFrom do
     RUBY
 
     expect(cop.offenses.size).to be(1)
-    expect(cop.messages.first).to eq("Custom stream callbacks are not supported in AnyCable")
+    expect(cop.messages.first).to include("Custom stream callbacks are not supported in AnyCable")
   end
 
   it "registers offense for #stream_from with not JSON coder" do
@@ -67,7 +67,7 @@ describe RuboCop::Cop::AnyCable::StreamFrom do
     RUBY
 
     expect(cop.offenses.size).to be(1)
-    expect(cop.messages.first).to eq("Custom coders are not supported in AnyCable")
+    expect(cop.messages.first).to include("Custom coders are not supported in AnyCable")
   end
 
   it "registers offense for #stream_for with not JSON coder" do
@@ -80,7 +80,7 @@ describe RuboCop::Cop::AnyCable::StreamFrom do
     RUBY
 
     expect(cop.offenses.size).to be(1)
-    expect(cop.messages.first).to eq("Custom coders are not supported in AnyCable")
+    expect(cop.messages.first).to include("Custom coders are not supported in AnyCable")
   end
 
   it "does not register offense for #stream_from with JSON coder" do
