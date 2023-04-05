@@ -16,7 +16,9 @@ jobs:
       BUNDLE_RETRY: 3
       BUNDLE_FORCE_RUBY_PLATFORM: 1
       CI: true
-      BUNDLE_GEMFILE: ${{ matrix.gemfile }}
+      BUNDLE_GEMFILE: gemfiles/${{ matrix.gemfile }}.gemfile
+      COVERAGE: "true"
+      COVERALLS_REPO_TOKEN: ${{ secrets.github_token }}
     services:
       redis:
         image: redis:6.0-alpine
@@ -26,16 +28,16 @@ jobs:
       fail-fast: false
       matrix:
         ruby: ["3.0"]
-        gemfile: ["gemfiles/rails6.gemfile"]
+        gemfile: ["rails6"]
         include:
           - ruby: "3.2"
-            gemfile: "gemfiles/rails7.gemfile"
+            gemfile: "rails7"
           - ruby: "2.7"
-            gemfile: "gemfiles/rails6.gemfile"
+            gemfile: "rails6"
           - ruby: "3.1"
-            gemfile: "gemfiles/railsmaster.gemfile"
+            gemfile: "railsmaster"
           - ruby: "2.7"
-            gemfile: "gemfiles/rails60.gemfile"
+            gemfile: "rails60"
     steps:
     - uses: actions/checkout@v2
     - name: Install system deps
@@ -46,17 +48,34 @@ jobs:
       with:
         ruby-version: ${{ matrix.ruby }}
         bundler-cache: true
+    - name: Install Coveralls reporter
+      run: |
+        curl -L https://github.com/coverallsapp/coverage-reporter/releases/latest/download/coveralls-linux.tar.gz | tar zxv
     - name: Run RSpec
       continue-on-error: ${{ matrix.allow_failure }}
       run: |
         bundle exec rake spec
+        ./coveralls -p --job-flag=ruby-${{ matrix.ruby }}-${{ matrix.gemfile }}
     - name: Run compatibility specs
       continue-on-error: ${{ matrix.allow_failure }}
       run: |
         bundle exec rake spec:compatibility
+        ./coveralls -p --job-flag=compatibility-${{ matrix.ruby }}-${{ matrix.gemfile }}
     - name: Run conformance tests with Anyt
       env:
         BUNDLE_GEMFILE: "gemfiles/anyt.gemfile"
       run: |
         bundle install
         bundle exec anyt --self-check
+  coverage:
+    needs: rspec
+    runs-on: ubuntu-latest
+    env:
+      COVERALLS_REPO_TOKEN: ${{ secrets.github_token }}
+    steps:
+    - name: Install Coveralls reporter
+      run: |
+        curl -L https://github.com/coverallsapp/coverage-reporter/releases/latest/download/coveralls-linux.tar.gz | tar zxv
+    - name: Finilize Coveralls build
+      run: |
+        ./coveralls -d
