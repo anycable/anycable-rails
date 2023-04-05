@@ -12,7 +12,7 @@ require "anycable-rails"
 require "anycable/rails/compatibility"
 
 class TestErrorSubscriber
-  def self.report(error, handled:, severity:, context:)
+  def self.report(error, handled:, severity:, context:, **_other)
     errors << [error, handled, context]
   end
 

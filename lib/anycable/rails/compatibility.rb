@@ -7,6 +7,7 @@ module AnyCable
     IGNORE_INSTANCE_VARS = %i[
       @active_periodic_timers
       @_streams
+      @parameter_filter
     ]
 
     ActionCable::Channel::Base.prepend(Module.new do
