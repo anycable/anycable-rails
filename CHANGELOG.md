@@ -2,6 +2,10 @@
 
 ## master
 
+- Add HTTP RPC integration. ([@palkan][])
+
+Specify `http_rpc_mounth_path` in your `anycable.yml` to enable HTTP RPC.
+
 ## 1.3.7 (2023-02-28)
 
 - Fix `anycable` gem dependency constraints.

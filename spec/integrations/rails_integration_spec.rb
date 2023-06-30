@@ -21,6 +21,22 @@ describe "rails integration" do
     end
   end
 
+  context "has embedded HTTP RPC server" do
+    include ActionDispatch::Integration::Runner
+    include ActionDispatch::IntegrationTest::Behavior
+
+    # Delegates to `Rails.application`.
+    def app
+      ::Rails.application
+    end
+
+    specify do
+      post "/_anycable/connect"
+      expect(response.code).to eq "422"
+      expect(response.body).to eq "Empty request body"
+    end
+  end
+
   it "assigns connection factory" do
     expect(AnyCable.connection_factory).to be_an_instance_of(AnyCable::Rails::ConnectionFactory)
   end
