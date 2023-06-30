@@ -65,6 +65,19 @@ module AnyCable
         end
       end
 
+      initializer "anycable.routes" do
+        next unless AnyCable::Rails.enabled?
+
+        config.after_initialize do |app|
+          config = AnyCable.config
+          unless config.http_rpc_mount_path.nil?
+            app.routes.prepend do
+              mount AnyCable::HTTRPC::Server.new => config.http_rpc_mount_path, :internal => true
+            end
+          end
+        end
+      end
+
       # Since Rails 6.1
       if respond_to?(:server)
         server do
