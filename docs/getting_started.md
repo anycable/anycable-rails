@@ -6,7 +6,7 @@ AnyCable initially was designed for Rails applications only.
 
 ## Requirements
 
-- Ruby >= 2.6
+- Ruby >= 2.7
 - Rails >= 6.0
 - Redis (when using Redis [broadcast adapter](../ruby/broadcast_adapters.md))
 
@@ -15,10 +15,10 @@ AnyCable initially was designed for Rails applications only.
 Add `anycable-rails` gem to your Gemfile:
 
 ```ruby
-gem "anycable-rails", "~> 1.1"
+gem "anycable-rails", "~> 1.4"
 
 # when using Redis broadcast adapter
-gem "redis", ">= 4.0"
+gem "redis", ">= 5.0"
 ```
 
 (and don't forget to run `bundle install`).
@@ -96,7 +96,7 @@ You can install AnyCable-Go server using one of the [multiple ways](../anycable-
 For your convenience, we have a generator task which could be used to download a binary from GitHub released for your platform:
 
 ```sh
-$ bundle exec rails anycable:download
+$ bundle exec rails g anycable:download
 
 run  curl -L https://github.com/anycable/anycable-go/releases/download/...
 ```
