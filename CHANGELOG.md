@@ -2,6 +2,8 @@
 
 ## master
 
+## 1.4.0.rc.2 (2023-07-03)
+
 - Add HTTP RPC integration. ([@palkan][])
 
 Specify `http_rpc_mounth_path` in your `anycable.yml` to enable HTTP RPC.
