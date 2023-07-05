@@ -2,6 +2,10 @@
 
 ## master
 
+## 1.4.0.rc.3 (2023-07-04)
+
+- Relax `anycable` gem dependency constraints.
+
 ## 1.4.0.rc.2 (2023-07-03)
 
 - Add HTTP RPC integration. ([@palkan][])
