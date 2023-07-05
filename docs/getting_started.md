@@ -8,7 +8,8 @@ AnyCable initially was designed for Rails applications only.
 
 - Ruby >= 2.7
 - Rails >= 6.0
-- Redis (when using Redis [broadcast adapter](../ruby/broadcast_adapters.md))
+
+See also requirements for [broadcast adapters](../ruby/broadcast_adapters.md) (You can start with HTTP to avoid additional dependencies).
 
 ## Installation
 
@@ -16,9 +17,6 @@ Add `anycable-rails` gem to your Gemfile:
 
 ```ruby
 gem "anycable-rails", "~> 1.4"
-
-# when using Redis broadcast adapter
-gem "redis", ">= 5.0"
 ```
 
 (and don't forget to run `bundle install`).
@@ -72,7 +70,7 @@ And, finally, run AnyCable WebSocket server, e.g. [anycable-go](../anycable-go/g
 ```sh
 $ anycable-go --host=localhost --port=8080
 
-INFO 2019-08-07T16:37:46.387Z context=main Starting AnyCable v0.6.2-13-gd421927 (with mruby 1.2.0 (2015-11-17)) (pid: 1362)
+INFO 2019-08-07T16:37:46.387Z context=main Starting AnyCable v1.4.0-13-gd421927 (with mruby 1.2.0 (2015-11-17)) (pid: 1362)
 INFO 2019-08-07T16:37:46.387Z context=main Handle WebSocket connections at /cable
 INFO 2019-08-07T16:37:46.388Z context=http Starting HTTP server at localhost:8080
 ```
@@ -104,6 +102,32 @@ run  curl -L https://github.com/anycable/anycable-go/releases/download/...
 You can specify the target bin path (`--bin-path`) or AnyCable-Go version (`--version`).
 
 **NOTE:** This task uses cURL under the hood, so it must be available.
+
+Another option is to create a Bash-wrapper to install and run a particular version of `anycable-go` automatically. Here is an example `bin/anycable-go` script:
+
+```sh
+#!/bin/bash
+
+cd $(dirname $0)/..
+
+version="1.4.0"
+
+if [ ! -f ./bin/dist/anycable-go ]; then
+  echo "AnyCable-go is not installed, downloading..."
+  ./bin/rails g anycable:download --version=$version --bin-path=./bin/dist
+fi
+
+curVersion=$(./bin/dist/anycable-go -v)
+
+if [[ "$curVersion" != "$version"* ]]; then
+  echo "AnyCable-go version is not $version, downloading a new one..."
+  ./bin/rails g anycable:download --version=$version --bin-path=./bin/dist
+fi
+
+./bin/dist/anycable-go $@
+```
+
+See it in action in the [demo application](https://github.com/anycable/anycable_rails_demo/pull/1).
 
 ### Access logs
 
@@ -176,6 +200,8 @@ development:
 ```
 
 **NOTE:** Make sure you have `Rails.application.load_server` in your `config.ru`.
+
+Alternatively, you can also embed HTTP RPC into your Rails web server. See [HTTP RPC docs](../ruby/http_rpc.md).
 
 ### Testing with AnyCable
 
