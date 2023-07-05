@@ -23,7 +23,7 @@ module AnyCableRailsGenerators
         "amd64"
       when "x86_32", "x86", "i386", "i486", "i686"
         "i386"
-      when "aarch64", "aarch64_be", /armv8/
+      when "aarch64", "aarch64_be", "arm64", /armv8/
         "arm64"
       when "arm", /armv7/, /armv6/
         "arm"

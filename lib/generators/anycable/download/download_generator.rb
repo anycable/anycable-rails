@@ -61,6 +61,8 @@ module AnyCableRailsGenerators
     def download_exe(url, to:, file_name:)
       file_path = File.join(to, file_name)
 
+      FileUtils.mkdir_p(to) unless File.directory?(to)
+
       run "#{sudo(to)}curl -L #{url} -o #{file_path}", abort_on_failure: true
       run "#{sudo(to)}chmod +x #{file_path}", abort_on_failure: true
       run "#{file_path} -v", abort_on_failure: true

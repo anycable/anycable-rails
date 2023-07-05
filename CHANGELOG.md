@@ -2,6 +2,12 @@
 
 ## master
 
+## 1.4.0.rc.4 (2023-07-05)
+
+- Fix `anycable:download` command. ([@palkan][])
+
+Detect MacOS arm64, create target bin path if it doesn't exist.
+
 ## 1.4.0.rc.3 (2023-07-04)
 
 - Relax `anycable` gem dependency constraints.
