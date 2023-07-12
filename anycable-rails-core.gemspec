@@ -3,13 +3,13 @@
 require_relative "lib/anycable/rails/version"
 
 Gem::Specification.new do |spec|
-  spec.name = "anycable-rails"
+  spec.name = "anycable-rails-core"
   spec.version = AnyCable::Rails::VERSION
   spec.authors = ["palkan"]
   spec.email = ["dementiev.vm@gmail.com"]
 
-  spec.summary = "AnyCable integration for Rails"
-  spec.description = "AnyCable integration for Rails"
+  spec.summary = "AnyCable integration for Rails (w/o RPC dependencies)"
+  spec.description = "AnyCable integration for Rails (w/o RPC dependencies)"
   spec.homepage = "http://github.com/anycable/anycable-rails"
   spec.license = "MIT"
   spec.metadata = {
@@ -21,20 +21,12 @@ Gem::Specification.new do |spec|
     "funding_uri" => "https://github.com/sponsors/anycable"
   }
 
-  spec.files = %w[README.md MIT-LICENSE CHANGELOG.md]
+  spec.files = Dir.glob("lib/**/*") + %w[README.md MIT-LICENSE CHANGELOG.md]
   spec.require_paths = ["lib"]
 
   spec.required_ruby_version = ">= 2.7"
 
-  spec.add_dependency "anycable-rails-core", AnyCable::Rails::VERSION
-  spec.add_dependency "anycable"
-
-  spec.add_development_dependency "ammeter", "~> 1.1"
-  spec.add_development_dependency "bundler", ">= 1.10"
-  spec.add_development_dependency "rake", "~> 13.0"
-  spec.add_development_dependency "rspec-rails", ">= 4.0.0"
-  spec.add_development_dependency "rubocop", ">= 0.80"
-  spec.add_development_dependency "warden"
-  spec.add_development_dependency "simplecov"
-  spec.add_development_dependency "simplecov-lcov"
+  spec.add_dependency "anycable-core", "~> 1.4"
+  spec.add_dependency "actioncable", ">= 6.0"
+  spec.add_dependency "globalid"
 end

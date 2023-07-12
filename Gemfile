@@ -1,6 +1,6 @@
 source 'https://rubygems.org'
 
-gemspec
+gemspec name: "anycable-rails"
 
 gem "debug", platform: :mri
 

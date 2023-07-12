@@ -203,6 +203,8 @@ development:
 
 Alternatively, you can also embed HTTP RPC into your Rails web server. See [HTTP RPC docs](../ruby/http_rpc.md).
 
+If you use only HTTP RPC in all environments, you can avoid installing gRPC dependencies by using the `anycable-rails-core` gem instead of `anycable-rails`.
+
 ### Testing with AnyCable
 
 If you'd like to run AnyCable RPC server in tests (for example, in system tests), we recommend to start it manually only when necessary (i.e., when dependent tests are executed) and use the embedded mode. That's how we do it with RSpec:
