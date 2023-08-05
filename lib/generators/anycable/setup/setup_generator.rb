@@ -10,14 +10,15 @@ module AnyCableRailsGenerators
 
     DOCS_ROOT = "https://docs.anycable.io"
     DEVELOPMENT_METHODS = %w[skip local docker].freeze
-    SERVER_SOURCES = %w[skip brew binary].freeze
+    RPC_IMPL = %w[grpc http].freeze
 
     class_option :devenv,
       type: :string,
       desc: "Select your development environment (options: #{DEVELOPMENT_METHODS.join(", ")})"
-    class_option :source,
+    class_option :rpc,
       type: :string,
-      desc: "Choose a way of installing AnyCable-Go server (options: #{SERVER_SOURCES.join(", ")})"
+      desc: "Select RPC implementation (options: #{RPC_IMPL.join(", ")})",
+      default: "grpc"
     class_option :skip_heroku,
       type: :boolean,
       desc: "Do not copy Heroku configs"
@@ -30,12 +31,6 @@ module AnyCableRailsGenerators
     class_option :skip_install,
       type: :boolean,
       desc: "Do not run bundle install when adding new gems"
-
-    include WithOSHelpers
-
-    class_option :bin_path,
-      type: :string,
-      desc: "Where to download AnyCable-Go server binary (default: #{DEFAULT_BIN_PATH})"
     class_option :version,
       type: :string,
       desc: "Specify the AnyCable-Go version (defaults to latest release)"
@@ -99,6 +94,7 @@ module AnyCableRailsGenerators
 
       in_root do
         next unless File.file?("Procfile")
+        next if http_rpc?
 
         contents = File.read("Procfile")
         contents.sub!(/^web: (.*)$/, %q(web: [[ "$ANYCABLE_DEPLOYMENT" == "true" ]] && bundle exec anycable --server-command="anycable-go" || \1))
@@ -171,6 +167,10 @@ module AnyCableRailsGenerators
       !!gemfile_lock&.match?(/^\s+rubocop\b/)
     end
 
+    def http_rpc?
+      options[:rpc] == "http"
+    end
+
     def gemfile_lock
       @gemfile_lock ||= begin
         res = nil
@@ -192,7 +192,7 @@ module AnyCableRailsGenerators
       say <<~YML
         ─────────────────────────────────────────
         ws:
-          image: anycable/anycable-go:1.2
+          image: anycable/anycable-go:1.4
           ports:
             - '8080:8080'
           environment:
@@ -223,33 +223,25 @@ module AnyCableRailsGenerators
     end
 
     def install_for_local
-      install_server
+      inside("bin") do
+        template "anycable-go", chmod: 0o755
+      end
+
+      if file_exists?(".gitignore")
+        append_file ".gitignore", "bin/dist\n"
+      end
+
       template_proc_files
-    end
-
-    def install_server
-      answer = SERVER_SOURCES.index(options[:source]) || 99
-
-      until SERVER_SOURCES[answer.to_i]
-        answer = ask "How do you want to install AnyCable-Go WebSocket server? (1) Homebrew, (2) Download binary, (0) Skip"
-      end
-
-      case answer.to_i
-      when 0
-        say_status :help, "⚠️  Please, read this guide on how to install AnyCable-Go server 👉 #{DOCS_ROOT}/anycable-go/getting_started", :yellow
-        return
-      else
-        return unless send("install_from_#{SERVER_SOURCES[answer.to_i]}")
-      end
-
-      say_status :info, "✅ AnyCable-Go WebSocket server has been successfully installed"
     end
 
     def template_proc_files
       file_name = "Procfile.dev"
 
       if file_exists?(file_name)
-        append_file file_name, "anycable: bundle exec anycable\nws: anycable-go#{anycable_go_options}", force: true
+        unless http_rpc?
+          append_file file_name, "anycable: bundle exec anycable\n", force: true
+        end
+        append_file file_name, "ws: bin/anycable-go #{anycable_go_options}", force: true
       else
         say_status :help, "💡 We recommend using Hivemind to manage multiple processes in development 👉 https://github.com/DarthSim/hivemind", :yellow
 
@@ -263,38 +255,30 @@ module AnyCableRailsGenerators
       end
     end
 
-    def install_from_brew
-      run "brew install anycable-go", abort_on_failure: true
-      run "anycable-go -v", abort_on_failure: true
-    end
-
-    def install_from_binary
-      bin_path ||= DEFAULT_BIN_PATH if options[:devenv] # User don't want interactive mode
-      bin_path ||= ask "Please, enter the path to download the AnyCable-Go binary to", default: DEFAULT_BIN_PATH, path: true
-
-      generate "anycable:download", download_options(bin_path: bin_path)
-
-      true
-    end
-
-    def download_options(**params)
-      opts = options.merge(params)
-      [].tap do |args|
-        args << "--os #{opts[:os]}" if opts[:os]
-        args << "--cpu #{opts[:cpu]}" if opts[:cpu]
-        args << "--bin-path=#{opts[:bin_path]}" if opts[:bin_path]
-        args << "--version #{opts[:version]}" if opts[:version]
-      end.join(" ")
-    end
-
     def anycable_go_options
-      redis? ? " --port=8080" : " --port=8080 --broadcast_adapter=http"
+      opts = ["--port=8080"]
+      opts << "--broadcast_adapter=http" unless redis?
+      opts << "--rpc_impl=http --rpc_host=http://localhost:3000/_anycable" if http_rpc?
+      opts.join(" ")
     end
 
     def file_exists?(name)
       in_root do
         return File.file?(name)
       end
+    end
+
+    def anycable_go_version
+      @anycable_go_version ||= (normalize_version(options[:version]) || "latest")
+    end
+
+    def normalize_version(version)
+      return unless version
+
+      # We need a full version for bin/anycable-go script
+      segments = Gem::Version.new(version).segments
+      segments << 0 until segments.size >= 3
+      segments.join(".")
     end
   end
 end

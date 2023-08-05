@@ -2,6 +2,10 @@
 
 ## master
 
+- Upgrade `anycable:setup` generator to support v1.4 features. ([@palkan][])
+
+Add `bin/anycable-go` to use `anycable-go` locally. Add `--rpc=http` to configure for using AnyCable with HTTP RPC.
+
 ## 1.4.0 (2023-07-07)
 
 - Add HTTP RPC integration. ([@palkan][])

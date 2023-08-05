@@ -27,6 +27,10 @@ Then, run the interactive configuration wizard via Rails generators:
 bundle exec rails g anycable:setup
 ```
 
+The command above asks you a few questions to configure AnyCable for your application.
+
+**NOTE:** If you want to use [HTTP RPC](../ruby/http_rpc.md), you MUST specify the `--rpc=http` option.
+
 ## Configuration
 
 Next, update your Action Cable configuration:
@@ -103,7 +107,7 @@ You can specify the target bin path (`--bin-path`) or AnyCable-Go version (`--ve
 
 **NOTE:** This task uses cURL under the hood, so it must be available.
 
-Another option is to create a Bash-wrapper to install and run a particular version of `anycable-go` automatically. Here is an example `bin/anycable-go` script:
+Another option is to create a Bash-wrapper to install and run a particular version of `anycable-go` automatically. AnyCable does this for you when you run `rails g anycable:setup` and choose to install `anycable-go` locally. The generated script looks like this:
 
 ```sh
 #!/bin/bash
