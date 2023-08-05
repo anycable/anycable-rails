@@ -48,6 +48,15 @@ describe AnyCableRailsGenerators::SetupGenerator, type: :generator do
       end
     end
 
+    context "when using HTTP RPC" do
+      subject { run_generator default_opts + %w[--rpc http] }
+
+      it "anycable.yml use redis broadcast adapter" do
+        subject
+        expect(file("config/anycable.yml")).to contain(%(http_rpc_mount_path: "/_anycable"))
+      end
+    end
+
     it "patch environment configs" do
       subject
       expect(file("config/environments/development.rb"))
@@ -92,70 +101,105 @@ describe AnyCableRailsGenerators::SetupGenerator, type: :generator do
         "release: bundle exec rails db:migrate"
       )
     end
+
+    context "when using HTTP RPC on Heroku" do
+      subject { run_generator default_opts + %w[--skip-heroku=false --rpc=http] }
+
+      it "doesn't update Procfile" do
+        subject
+        expect(file("Procfile")).to contain(
+          "web: bundle exec puma -C config/puma.rb"
+        )
+      end
+    end
   end
 
   context "when local environment" do
-    context "when do not install the server" do
-      subject do
-        run_generator default_opts + %w[--devenv local --source skip --skip-procfile-dev false]
-        file("Procfile.dev")
+    before do
+      File.write(
+        File.join(destination_root, ".gitignore"),
+        <<~CODE
+          tmp/
+          *.log
+        CODE
+      )
+    end
+
+    let(:opts) { %w[--devenv local --skip-procfile-dev false] }
+
+    subject do
+      run_generator default_opts + opts
+      file("Procfile.dev")
+    end
+
+    it "creates bin/anycable-go" do
+      subject
+      expect(file("bin/anycable-go")).to exist
+    end
+
+    it "adds bin/dist to .gitignore" do
+      subject
+      expect(file(".gitignore")).to contain("bin/dist")
+    end
+
+    context "when Procfile.dev exists" do
+      it "patches" do
+        expect(subject)
+          .to contain("anycable: bundle exec anycable")
+        expect(subject)
+          .to contain("ws: bin/anycable-go --port=8080 --broadcast_adapter=http")
+      end
+    end
+
+    context "when Procfile.dev is absent" do
+      let(:removed_files) { %w[Procfile.dev] }
+
+      it "creates" do
+        expect(subject)
+          .to contain("anycable: bundle exec anycable")
+        expect(subject)
+          .to contain("ws: bin/anycable-go --port=8080 --broadcast_adapter=http")
       end
 
-      context "when Procfile.dev exists" do
-        it "patches" do
-          expect(subject)
-            .to contain("anycable: bundle exec anycable")
-          expect(subject)
-            .to contain("ws: anycable-go --port=8080 --broadcast_adapter=http")
+      context "when redis is in the deps" do
+        before do
+          File.write(
+            File.join(destination_root, "Gemfile.lock"),
+            <<~CODE
+              GEM
+                specs:
+                  redis
+            CODE
+          )
         end
-      end
-
-      context "when Procfile.dev is absent" do
-        let(:removed_files) { %w[Procfile.dev] }
 
         it "creates" do
           expect(subject)
             .to contain("anycable: bundle exec anycable")
           expect(subject)
-            .to contain("ws: anycable-go --port=8080 --broadcast_adapter=http")
-        end
-
-        context "when redis is in the deps" do
-          before do
-            File.write(
-              File.join(destination_root, "Gemfile.lock"),
-              <<~CODE
-                GEM
-                  specs:
-                    redis
-              CODE
-            )
-          end
-
-          it "creates" do
-            expect(subject)
-              .to contain("anycable: bundle exec anycable")
-            expect(subject)
-              .to contain("ws: anycable-go --port=8080\n")
-          end
+            .to contain("ws: bin/anycable-go --port=8080\n")
         end
       end
-    end
 
-    context "when downloading binary" do
-      it "runs curl with valid url" do
-        gen = generator(default_opts + %w[--devenv local --source binary --os linux --cpu amd64 --skip-procfile-dev false])
-        expect(gen)
-          .to receive(:generate).with("anycable:download", "--os linux --cpu amd64 --bin-path=/usr/local/bin")
-        silence_stream($stdout) { gen.invoke_all }
+      context "when using HTTP rpc" do
+        before { opts << "--rpc=http" }
+
+        it "creates" do
+          expect(subject)
+            .not_to contain("anycable: bundle exec anycable")
+          expect(subject)
+            .to contain("ws: bin/anycable-go --port=8080 --broadcast_adapter=http --rpc_impl=http --rpc_host=http://localhost:3000/_anycable\n")
+        end
       end
-    end
 
-    context "when installing from Homebrew" do
-      it "runs commands" do
-        gen = generator(default_opts + %w[--devenv local --source brew --skip-procfile-dev false])
-        expect(gen).to receive(:install_from_brew)
-        silence_stream($stdout) { gen.invoke_all }
+      context "when version is specified" do
+        before { opts << "--version=1.4" }
+
+        it "creates bin/anycable-go with the specified version" do
+          subject
+          expect(file("bin/anycable-go")).to exist
+          expect(file("bin/anycable-go")).to contain("1.4.0")
+        end
       end
     end
   end

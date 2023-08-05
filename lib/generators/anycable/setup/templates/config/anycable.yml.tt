@@ -32,6 +32,9 @@ default: &default
   # Localhost is used by default.
   # redis_url: "redis://localhost:6379/1"
   <%- end -%>
+  <%- if http_rpc? -%>
+  http_rpc_mount_path: "/_anycable"
+  <%- end -%>
 
 development:
   <<: *default
@@ -41,8 +44,3 @@ test:
 
 production:
   <<: *default
-  <%- if !redis? && !nats? -%>
-  # Use Redis or NATS in production
-  broadcast_adapter: redis
-  # broadcast_adapter: nats
-  <%- end -%>
