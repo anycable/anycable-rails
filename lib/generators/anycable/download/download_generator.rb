@@ -44,12 +44,12 @@ module AnyCableRailsGenerators
     end
 
     def legacy_release_url(version)
-      "https://github.com/anycable/anycable-go/releases/download/#{version}/" \
+      "https://github.com/anycable/anycable-go/releases/download/v#{version}/" \
         "anycable-go-v#{version}-#{os_name}-#{cpu_name}"
     end
 
     def new_release_url(version)
-      "https://github.com/anycable/anycable-go/releases/download/#{version}/" \
+      "https://github.com/anycable/anycable-go/releases/download/v#{version}/" \
         "anycable-go-#{os_name}-#{cpu_name}"
     end
 
