@@ -21,15 +21,23 @@ module AnyCable
 
         AnyCable.configure_server do
           server_logger = AnyCable.logger = ::ActionCable.server.config.logger
-          AnyCable.logger = ActiveSupport::TaggedLogging.new(server_logger) if server_logger.is_a?(::Logger)
+
           # Broadcast server logs to STDOUT in development
           if ::Rails.env.development? &&
               !ActiveSupport::Logger.logger_outputs_to?(::Rails.logger, $stdout)
             console = ActiveSupport::Logger.new($stdout)
             console.formatter = ::Rails.logger.formatter if ::Rails.logger.respond_to?(:formatter)
             console.level = ::Rails.logger.level if ::Rails.logger.respond_to?(:level)
-            AnyCable.logger.extend(ActiveSupport::Logger.broadcast(console))
+
+            # Rails 7.1+
+            if defined?(ActiveSupport::BroadcastLogger)
+              AnyCable.logger = ActiveSupport::BroadcastLogger.new(AnyCable.logger, console)
+            else
+              AnyCable.logger.extend(ActiveSupport::Logger.broadcast(console))
+            end
           end
+
+          AnyCable.logger = ActiveSupport::TaggedLogging.new(AnyCable.logger) if server_logger.is_a?(::Logger)
         end
 
         # Add tagging middleware
