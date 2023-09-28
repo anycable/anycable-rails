@@ -2,6 +2,10 @@
 
 ## master
 
+## 1.4.1 (2023-09-27)
+
+- Fix compatibility with Rails 7.1. ([@palkan][])
+
 - Upgrade `anycable:setup` generator to support v1.4 features. ([@palkan][])
 
 Add `bin/anycable-go` to use `anycable-go` locally. Add `--rpc=http` to configure for using AnyCable with HTTP RPC.
