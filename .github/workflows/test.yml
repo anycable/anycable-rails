@@ -38,6 +38,8 @@ jobs:
             gemfile: "railsmaster"
           - ruby: "2.7"
             gemfile: "rails60"
+          - ruby: "3.2"
+            gemfile: "anycablemaster"
     steps:
     - uses: actions/checkout@v2
     - name: Install system deps
