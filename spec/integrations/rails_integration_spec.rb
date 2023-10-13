@@ -60,4 +60,13 @@ describe "rails integration" do
       expect(context[:payload]).to be_a(Hash)
     end
   end
+
+  context "database pool check" do
+    before { allow(Kernel).to receive(:warn) }
+
+    specify do
+      AnyCable.server_callbacks.last.call
+      expect(Kernel).to have_received(:warn).with(/is greater than DB pool size/)
+    end
+  end
 end

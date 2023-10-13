@@ -2,7 +2,9 @@
 
 ## master
 
-- Add support for broadcast options (e.g., `exclude_socket`). ([@palkan][])
+- Print warning if the database pool size is less than RPC pool size. ([@palkan][])
+
+- Add support for broadcast options (e.g., `exclude_socket`) and `broadcast ..., to_others: true`. ([@palkan][])
 
 - Add `batch_broadcasts` option to automatically batch broadcasts for code wrapped in Rails executor. ([@palkan][])
 

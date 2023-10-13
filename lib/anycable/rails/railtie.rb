@@ -108,6 +108,25 @@ module AnyCable
         end
       end
 
+      initializer "anycable.verify_pool_sizes" do
+        next if AnyCable.config.disable_rpc_pool_size_warning?
+        # Skip if non-gRPC server is used
+        next unless AnyCable.config.respond_to?(:rpc_pool_size)
+
+        # Log current db vs. gRPC pool sizes
+        AnyCable.configure_server do
+          db_pool_size = ActiveRecord::Base.connection_pool.size
+          rpc_pool_size = AnyCable.config.rpc_pool_size
+
+          if rpc_pool_size > db_pool_size
+            ::Kernel.warn(
+              "\n⛔️ WARNING: AnyCable RPC pool size (#{rpc_pool_size}) is greater than DB pool size (#{db_pool_size})\n" \
+              "Please, consider adjusting the database pool size to avoid connection wait times and increase throughput of your RPC server\n\n"
+            )
+          end
+        end
+      end
+
       # Since Rails 6.1
       if respond_to?(:server)
         server do
