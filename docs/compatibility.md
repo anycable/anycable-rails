@@ -2,22 +2,22 @@
 
 This compatibility table shows which Action Cable features supported by `anycable` gem (AnyCable servers may not support some of the features supported by gem).
 
-Feature                  | Status
--------------------------|--------
-Connection identifiers   | ✅\*
-Connection request data (cookies, params) | ✅
-Disconnect handling | ✅
-Subscribe to channels | ✅
-Parameterized subscriptions | ✅
-Unsubscribe from channels | ✅
-[Subscription Instance Variables](http://edgeapi.rubyonrails.org/classes/ActionCable/Channel/Streams.html) | ✅ \*\*
-Performing Channel Actions | ✅
-Streaming | ✅
-[Custom stream callbacks](http://edgeapi.rubyonrails.org/classes/ActionCable/Channel/Streams.html) | 🚫
-Broadcasting | ✅
-Periodical timers | 🚫
-Disconnect remote clients | ✅
-Command callbacks | ✅ \*\*\*
+| Feature                  | Status|
+|--------------------------|--------|
+| Connection identifiers   | ✅\* |
+| Connection request data (cookies, params) | ✅ |
+| Disconnect handling | ✅ |
+| Subscribe to channels | ✅ |
+| Parameterized subscriptions | ✅ |
+| Unsubscribe from channels | ✅ |
+| [Subscription Instance Variables](http://edgeapi.rubyonrails.org/classes/ActionCable/Channel/Streams.html) | ✅ \*\* |
+| Performing Channel Actions | ✅ |
+| Streaming | ✅ |
+| [Custom stream callbacks](http://edgeapi.rubyonrails.org/classes/ActionCable/Channel/Streams.html) | 🚫 |
+| Broadcasting | ✅ |
+| Periodical timers | 🚫 |
+| Disconnect remote clients | ✅ |
+| Command callbacks | ✅ \*\*\* |
 
 \* See [restoring state objects](../architecture.md#restoring-state-objects) for more information on how identifiers work.
 
