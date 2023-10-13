@@ -16,6 +16,7 @@ AnyCable::Config.attr_config(
   persistent_session_enabled: false,
   embedded: false,
   http_rpc_mount_path: nil,
-  batch_broadcasts: false
+  batch_broadcasts: false,
+  socket_id_header: "X-Socket-ID"
 )
 AnyCable::Config.ignore_options :access_logs_disabled, :persistent_session_enabled

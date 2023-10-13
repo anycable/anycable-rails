@@ -3,6 +3,7 @@
 require "anycable/rails/action_cable_ext/connection"
 require "anycable/rails/action_cable_ext/channel"
 require "anycable/rails/action_cable_ext/remote_connections"
+require "anycable/rails/action_cable_ext/broadcast_options"
 
 require "anycable/rails/channel_state"
 require "anycable/rails/connection_factory"
@@ -67,6 +68,13 @@ module AnyCable
           else
             warn "[AnyCable] Auto-batching is enabled for broadcasts but your anycable version doesn't support it. Please, upgrade"
           end
+        end
+      end
+
+      initializer "anycable.socket_id_tracking" do
+        ActiveSupport.on_load(:action_controller) do
+          require "anycable/rails/socket_id_tracking"
+          include AnyCable::Rails::SocketIdTracking
         end
       end
 
