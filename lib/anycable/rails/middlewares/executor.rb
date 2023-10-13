@@ -13,16 +13,16 @@ module AnyCable
         end
 
         def call(method, message, metadata)
+          sid = metadata["sid"]
+
           if ::Rails.respond_to?(:error)
             executor.wrap do
-              sid = metadata["sid"]
-
               ::Rails.error.record(context: {method: method, payload: message.to_h, sid: sid}) do
-                yield
+                Rails.with_socket_id(sid) { yield }
               end
             end
           else
-            executor.wrap { yield }
+            executor.wrap { Rails.with_socket_id(sid) { yield } }
           end
         end
       end

@@ -18,8 +18,11 @@ module ActionCable
       def initialize(*)
       end
 
-      def broadcast(channel, payload)
-        ::AnyCable.broadcast(channel, payload)
+      def broadcast(channel, payload, **options)
+        options.merge!(::AnyCable::Rails.current_broadcast_options || {})
+        to_others = options.delete(:to_others)
+        options[:exclude_socket] ||= ::AnyCable::Rails.current_socket_id if to_others
+        ::AnyCable.broadcast(channel, payload, **options.compact)
       end
 
       def subscribe(*)

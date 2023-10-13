@@ -6,6 +6,7 @@ require "anycable/rails/config"
 require "anycable/rails/rack"
 
 require "globalid"
+require "active_support/core_ext/module/attribute_accessors_per_thread"
 
 module AnyCable
   # Rails handler for AnyCable
@@ -13,6 +14,9 @@ module AnyCable
     require "anycable/rails/railtie"
 
     ADAPTER_ALIASES = %w[any_cable anycable].freeze
+
+    thread_mattr_accessor :current_socket_id
+    thread_mattr_accessor :current_broadcast_options
 
     class << self
       def enabled?
@@ -22,6 +26,25 @@ module AnyCable
 
       def compatible_adapter?(adapter)
         ADAPTER_ALIASES.include?(adapter)
+      end
+
+      def with_socket_id(socket_id)
+        old_socket_id, self.current_socket_id = current_socket_id, socket_id
+        yield
+      ensure
+        self.current_socket_id = old_socket_id
+      end
+
+      def with_broadcast_options(**options)
+        old_options = current_broadcast_options
+        self.current_broadcast_options = options.reverse_merge(old_options || {})
+        yield
+      ensure
+        self.current_broadcast_options = old_options
+      end
+
+      def broadcasting_to_others(&block)
+        with_broadcast_options(to_others: true, &block)
       end
 
       # Serialize connection/channel state variable to string
@@ -50,9 +73,9 @@ module AnyCable
       end
 
       module Extension
-        def broadcast(channel, payload)
+        def broadcast(...)
           super
-          ::AnyCable.broadcast(channel, payload)
+          ::AnyCable.broadcast(...)
         end
       end
 

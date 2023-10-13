@@ -1,6 +1,6 @@
 # Getting Started with AnyCable on Rails
 
-AnyCable initially was designed for Rails applications only.
+AnyCable can be used as a drop-in replacement for the Action Cable server in Rails applications. It supports most Action Cable features (see [Compatibility](./compatibility.md) for more) and can be used with any Action Cable client. Moreover, AnyCable brings additional power-ups for your real-time features, such as [streams history support](../guides/reliable_streams.md) and API extensions (see [below](#action-cable-extensions)).
 
 > See also the [demo](https://github.com/anycable/anycable_rails_demo/pull/2) of migrating from Action Cable to AnyCable.
 
@@ -95,7 +95,7 @@ Or you can use the environment variables (or anything else supported by [anyway_
 
 AnyCable supports publishing [broadcast messages in batches](../ruby/broadcast_adapters.md#batching) (to reduce the number of round-trips and ensure delivery order). You can enable automatic batching of broadcasts by setting `ANYCABLE_BROADCAST_BATCHING=true` (or `broadcast_batching: true` in the config file).
 
-Auto-batching uses [Rails executor](https://guides.rubyonrails.org/threading_and_code_execution.html#executor) under the hood, so broadcasts are aggregated within Rails _units of work_, such as HTTP requests, background jobs, etc.
+Auto-batching uses [Rails executor]() under the hood, so broadcasts are aggregated within Rails _units of work_, such as HTTP requests, background jobs, etc.
 
 ### Server installation
 
@@ -182,6 +182,29 @@ Read more about [logging](../ruby/logging.md).
 AnyCable automatically integrates with Rails 7+ error reporting interface (`Rails.error.report(...)`), so you don't need to configure anything yourself.
 
 For earlier Rails versions, see [docs](../ruby/exceptions.md).
+
+## Action Cable extensions
+
+### Broadcast to others
+
+AnyCable provides a functionality to deliver broadcasts to all clients except from the one initiated the action (e.g., when you need to broadcast a message to all users in a chat room except the one who sent the message).
+
+> **NOTE:** This feature is not available in Action Cable. It relies on [Action Cable protocol extensions](../misc/action_cable_protocol.md) currently only supported by AnyCable.
+
+To do so, you need to obtain a unique socket identifier. For example, using [AnyCable JS client](https://github.com/anycable/anycable-client), you can access it via the `cable.sessionId` property.
+
+Then, you must attach this identifier to HTTP request as a `X-Socket-ID` header value. AnyCable Rails uses this value to populate the `AnyCable::Rails.current_socket_id` value. If this value is set, you can implement broadcasting to other using one of the following methods:
+
+- Calling `ActionCable.server.broadcast stream, data, to_others: true`
+- Calling `MyChannel.broadcast_to stream, data, to_others: true`
+
+Finally, if you perform broadcasts indirectly, you can wrap the code with `AnyCable::Rails.broadcasting_to_others` to enable this feature. For example, when using Turbo Streams:
+
+```ruby
+AnyCable::Rails.broadcasting_to_others do
+  Turbo::StreamsChannel.broadcast_remove_to workspace, target: item
+end
+```
 
 ## Development and test
 

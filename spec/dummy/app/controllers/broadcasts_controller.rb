@@ -4,8 +4,9 @@ class BroadcastsController < ApplicationController
   around_action :maybe_disable_auto_batching
 
   def create
+    options = params[:to_others] ? {to_others: true} : {}
     params[:count].to_i.times do |num|
-      ActionCable.server.broadcast "test", {count: num + 1}
+      ActionCable.server.broadcast "test", {count: num + 1}, **options
     end
 
     head :created
