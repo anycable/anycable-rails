@@ -74,7 +74,12 @@ module AnyCable
       initializer "anycable.socket_id_tracking" do
         ActiveSupport.on_load(:action_controller) do
           require "anycable/rails/socket_id_tracking"
-          include AnyCable::Rails::SocketIdTracking
+          include AnyCable::Rails::SocketIdTrackingController
+        end
+
+        ActiveSupport.on_load(:active_job) do
+          require "anycable/rails/socket_id_tracking"
+          include AnyCable::Rails::SocketIdTrackingJob
         end
       end
 
