@@ -206,6 +206,19 @@ AnyCable::Rails.broadcasting_to_others do
 end
 ```
 
+You can also pass socket ID explicitly (if obtained from another source):
+
+```ruby
+AnyCable::Rails.broadcasting_to_others(socket_id: my_socket_id) do
+ # ...
+end
+
+# or
+ActionCable.server.broadcast stream, data, exclude_socket: my_socket_id
+````
+
+**IMPORTANT:** AnyCable Rails automatically pass the current socket ID to Active Job, so you can use `broadcast ..., to_others: true` in your background jobs without any additional configuration.
+
 ## Development and test
 
 AnyCable is [compatible](compatibility.md) with the original Action Cable implementation; thus you can continue using Action Cable for development and tests.

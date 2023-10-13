@@ -13,6 +13,7 @@ if File.exist?(local_gemfile)
 else
   gem 'actioncable', '~> 7.0'
   gem 'activerecord'
+  gem 'activejob'
 end
 
 gem 'sqlite3', '~> 1.3'

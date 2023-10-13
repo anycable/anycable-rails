@@ -63,4 +63,28 @@ describe "broadcast to others", skip: !supported do
       )
     end
   end
+
+  context "with background jobs" do
+    before do
+      ActiveJob::Base.disable_test_adapter
+    end
+
+    it "pass cable_socket_id to the job" do
+      AnyCable::Rails.broadcasting_to_others(socket_id: "pagliacci") do
+        BroadcastJob.perform_later("testo", {kind: "pizza"}, true)
+      end
+
+      # Wait for all jobs to be processed
+      ActiveJob::Base.queue_adapter.shutdown
+
+      expect(AnyCable.broadcast_adapter).to have_received(:raw_broadcast).once
+      expect(AnyCable.broadcast_adapter).to have_received(:raw_broadcast).with(
+        [{
+          stream: "testo",
+          data: {kind: "pizza"}.to_json,
+          meta: {exclude_socket: "pagliacci"}
+        }].to_json
+      )
+    end
+  end
 end

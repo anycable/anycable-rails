@@ -43,8 +43,12 @@ module AnyCable
         self.current_broadcast_options = old_options
       end
 
-      def broadcasting_to_others(&block)
-        with_broadcast_options(to_others: true, &block)
+      def broadcasting_to_others(socket_id: nil, &block)
+        if socket_id
+          with_socket_id(socket_id) { with_broadcast_options(to_others: true, &block) }
+        else
+          with_broadcast_options(to_others: true, &block)
+        end
       end
 
       # Serialize connection/channel state variable to string
