@@ -59,6 +59,15 @@ module AnyCable
             ::Rails.error.report(ex, handled: false, context: {method: method.to_sym, payload: message})
           end
         end
+
+        if AnyCable.config.batch_broadcasts?
+          if AnyCable.broadcast_adapter.respond_to?(:start_batching)
+            app.executor.to_run { AnyCable.broadcast_adapter.start_batching }
+            app.executor.to_complete { AnyCable.broadcast_adapter.finish_batching }
+          else
+            warn "[AnyCable] Auto-batching is enabled for broadcasts but your anycable version doesn't support it. Please, upgrade"
+          end
+        end
       end
 
       initializer "anycable.connection_factory", after: "action_cable.set_configs" do |app|
