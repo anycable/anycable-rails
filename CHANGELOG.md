@@ -8,6 +8,8 @@
 
 - Add `batch_broadcasts` option to automatically batch broadcasts for code wrapped in Rails executor. ([@palkan][])
 
+- Fix broadcast logging in Rails 7.1. ([@iuri-gg][])
+
 ## 1.4.1 (2023-09-27)
 
 - Fix compatibility with Rails 7.1. ([@palkan][])
