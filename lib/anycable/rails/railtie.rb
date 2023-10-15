@@ -115,14 +115,16 @@ module AnyCable
 
         # Log current db vs. gRPC pool sizes
         AnyCable.configure_server do
-          db_pool_size = ActiveRecord::Base.connection_pool.size
-          rpc_pool_size = AnyCable.config.rpc_pool_size
+          ActiveSupport.on_load(:active_record) do
+            db_pool_size = ::ActiveRecord::Base.connection_pool.size
+            rpc_pool_size = AnyCable.config.rpc_pool_size
 
-          if rpc_pool_size > db_pool_size
-            ::Kernel.warn(
-              "\n⛔️ WARNING: AnyCable RPC pool size (#{rpc_pool_size}) is greater than DB pool size (#{db_pool_size})\n" \
-              "Please, consider adjusting the database pool size to avoid connection wait times and increase throughput of your RPC server\n\n"
-            )
+            if rpc_pool_size > db_pool_size
+              ::Kernel.warn(
+                "\n⛔️ WARNING: AnyCable RPC pool size (#{rpc_pool_size}) is greater than DB pool size (#{db_pool_size})\n" \
+                "Please, consider adjusting the database pool size to avoid connection wait times and increase throughput of your RPC server\n\n"
+              )
+            end
           end
         end
       end
