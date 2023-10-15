@@ -31,8 +31,8 @@ module AnyCable
             console.level = ::Rails.logger.level if ::Rails.logger.respond_to?(:level)
 
             # Rails 7.1+
-            if defined?(ActiveSupport::BroadcastLogger)
-              AnyCable.logger = ActiveSupport::BroadcastLogger.new(AnyCable.logger, console)
+            if AnyCable.logger.respond_to?(:broadcast_to)
+              AnyCable.logger.broadcast_to(console)
             else
               AnyCable.logger.extend(ActiveSupport::Logger.broadcast(console))
             end
