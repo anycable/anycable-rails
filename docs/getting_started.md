@@ -91,12 +91,6 @@ production:
 
 Or you can use the environment variables (or anything else supported by [anyway_config](https://github.com/palkan/anyway_config)).
 
-### Batching broadcasts automatically
-
-AnyCable supports publishing [broadcast messages in batches](../ruby/broadcast_adapters.md#batching) (to reduce the number of round-trips and ensure delivery order). You can enable automatic batching of broadcasts by setting `ANYCABLE_BROADCAST_BATCHING=true` (or `broadcast_batching: true` in the config file).
-
-Auto-batching uses [Rails executor]() under the hood, so broadcasts are aggregated within Rails _units of work_, such as HTTP requests, background jobs, etc.
-
 ### Server installation
 
 You can install AnyCable-Go server using one of the [multiple ways](../anycable-go/getting_started.md#installation).
@@ -218,6 +212,12 @@ ActionCable.server.broadcast stream, data, exclude_socket: my_socket_id
 ````
 
 **IMPORTANT:** AnyCable Rails automatically pass the current socket ID to Active Job, so you can use `broadcast ..., to_others: true` in your background jobs without any additional configuration.
+
+### Batching broadcasts automatically
+
+AnyCable supports publishing [broadcast messages in batches](../ruby/broadcast_adapters.md#batching) (to reduce the number of round-trips and ensure delivery order). You can enable automatic batching of broadcasts by setting `ANYCABLE_BROADCAST_BATCHING=true` (or `broadcast_batching: true` in the config file).
+
+Auto-batching uses [Rails executor](https://guides.rubyonrails.org/threading_and_code_execution.html#executor) under the hood, so broadcasts are aggregated within Rails _units of work_, such as HTTP requests, background jobs, etc.
 
 ## Development and test
 
