@@ -2,6 +2,8 @@
 
 ## master
 
+## 1.4.2 (2023-10-15)
+
 - Print warning if the database pool size is less than RPC pool size. ([@palkan][])
 
 - Add support for broadcast options (e.g., `exclude_socket`) and `broadcast ..., to_others: true`. ([@palkan][])
