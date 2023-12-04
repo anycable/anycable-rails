@@ -46,7 +46,7 @@ describe "client connection" do
         "current_user" => user.to_gid_param,
         "url" => "http://example.io/cable?token=123"
       )
-      expect(subject.transmissions.first).to eq JSON.dump("type" => "welcome")
+      expect(subject.transmissions.first).to eq JSON.dump({"type" => "welcome"})
       expect(subject.cstate.to_h).to eq(
         "__ltags__" => ["ActionCable", "john"].to_json,
         "token" => "123".to_json
