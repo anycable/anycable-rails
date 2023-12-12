@@ -33,8 +33,10 @@ module AnyCable
             # Rails 7.1+
             if AnyCable.logger.respond_to?(:broadcast_to)
               AnyCable.logger.broadcast_to(console)
-            else
+            elsif ActiveSupport::Logger.respond_to?(:broadcast)
               AnyCable.logger.extend(ActiveSupport::Logger.broadcast(console))
+            elsif defined?(ActiveSupport::BroadcastLogger)
+              AnyCable.logger = ActiveSupport::BroadcastLogger.new(AnyCable.logger, console)
             end
           end
 
