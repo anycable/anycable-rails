@@ -2,6 +2,10 @@
 
 ## master
 
+## 1.4.4 (2024-03-08) 🌷
+
+- Minor fixes
+
 ## 1.4.3 (2023-12-13)
 
 - Fix console logging in Rails 7.1 when the app's logger has no broadcast support. ([@palkan][])
