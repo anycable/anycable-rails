@@ -4,6 +4,10 @@
 # Devise current user via `env["warden"].user`.
 #
 # See <%= DOCS_ROOT %>/ruby/authentication
-AnyCable::Rails::Rack.middleware.use Warden::Manager do |config|
-  Devise.warden_config = config
+#
+# NOTE: This is only needed in environments where you use AnyCable.
+if defined?(AnyCable::Rails)
+  AnyCable::Rails::Rack.middleware.use Warden::Manager do |config|
+    Devise.warden_config = config
+  end
 end
