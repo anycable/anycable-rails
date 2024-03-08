@@ -74,7 +74,7 @@ module AnyCableRailsGenerators
       answer = DEVELOPMENT_METHODS.index(options[:devenv]) || 99
 
       until DEVELOPMENT_METHODS[answer.to_i]
-        answer = ask "Which environment do you use for development? (1) Local, (2) Docker, (0) Skip"
+        answer = ask "Do you want to run anycable-go locally or as a Docker container? (1) Local, (2) Docker, (0) Skip"
       end
 
       case env = DEVELOPMENT_METHODS[answer.to_i]
@@ -224,7 +224,8 @@ module AnyCableRailsGenerators
 
     def install_for_local
       inside("bin") do
-        template "anycable-go", chmod: 0o755
+        template "anycable-go"
+        chmod "anycable-go", 0755, verbose: false
       end
 
       if file_exists?(".gitignore")
