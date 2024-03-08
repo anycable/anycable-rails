@@ -225,7 +225,7 @@ module AnyCableRailsGenerators
     def install_for_local
       inside("bin") do
         template "anycable-go"
-        chmod "anycable-go", 0755, verbose: false
+        chmod "anycable-go", 0755, verbose: false # rubocop:disable Style/NumericLiteralPrefix
       end
 
       if file_exists?(".gitignore")
@@ -270,7 +270,7 @@ module AnyCableRailsGenerators
     end
 
     def anycable_go_version
-      @anycable_go_version ||= (normalize_version(options[:version]) || "latest")
+      @anycable_go_version ||= normalize_version(options[:version]) || "latest"
     end
 
     def normalize_version(version)
