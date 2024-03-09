@@ -131,6 +131,12 @@ module AnyCable
         end
       end
 
+      initializer "anycable.helpers" do
+        ActiveSupport.on_load(:action_view) do
+          include AnyCable::Rails::Helper
+        end
+      end
+
       # Since Rails 6.1
       if respond_to?(:server)
         server do

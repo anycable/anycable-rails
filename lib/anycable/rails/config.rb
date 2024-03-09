@@ -11,10 +11,12 @@ require "anyway/rails"
 # - `embedded` (defaults to false) — whether to run RPC server inside a Rails server process
 # - `http_rpc_mount_path` (default to nil) — path to mount HTTP RPC server
 # - `batch_broadcasts` (defaults to false) — whether to batch broadcasts automatically for code wrapped with Rails executor
+# - `jwt_param` (defaults to 'jid') — the name of the JWT authentication query paramter or header
 AnyCable::Config.attr_config(
   access_logs_disabled: true,
   persistent_session_enabled: false,
   embedded: false,
+  jwt_param: "jid",
   http_rpc_mount_path: nil,
   batch_broadcasts: false,
   socket_id_header: "X-Socket-ID",
