@@ -11,6 +11,8 @@ require "active_support/core_ext/module/attribute_accessors_per_thread"
 module AnyCable
   # Rails handler for AnyCable
   module Rails
+    autoload :Helper, "anycable/rails/helper"
+
     require "anycable/rails/railtie"
 
     ADAPTER_ALIASES = %w[any_cable anycable].freeze
