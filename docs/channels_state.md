@@ -1,6 +1,6 @@
-# Channels State
+# Channel state
 
-Since channel classes are ephemeral in AnyCable (see [Architecture](../architecture.md)), the following example wouldn't not work out-of-the-box:
+Channel objects are ephemeral when using AnyCable (see [Architecture](../architecture.md)) compared to Action Cable. Thus, the following example wouldn't work in AnyCable as expected:
 
 ```ruby
 class RoomChannel < ApplicationCable::Channel
@@ -62,7 +62,7 @@ end
 
 Read more about how the state is passed from a WebSocket server and restored in an RPC server in the [architecture overview](../architecture.md#restoring-state-objects).
 
-### Connection State
+### Connection state
 
 In addition to persisting channel states, we provide an ability to store data in the connection itself using a similar `.state_attr_accessor` interface:
 

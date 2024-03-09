@@ -1,6 +1,6 @@
 # Action Cable Compatibility
 
-This compatibility table shows which Action Cable features supported by `anycable` gem (AnyCable servers may not support some of the features supported by gem).
+This compatibility table shows which Action Cable features are supported by AnyCable Rails.
 
 | Feature                  | Status|
 |--------------------------|--------|
@@ -27,7 +27,7 @@ This compatibility table shows which Action Cable features supported by `anycabl
 
 ## Runtime checks
 
-AnyCable provides a way to enforce compatibility through runtime checks.
+AnyCable Rails provides a way to enforce compatibility through runtime checks.
 
 Runtime checks are monkey-patches which raise exceptions (`AnyCable::CompatibilityError`) when AnyCable-incompatible code is called.
 
@@ -53,7 +53,7 @@ raises `AnyCable::CompatibilityError` when client tries to subscribe to the chan
 
 ## RuboCop cops
 
-AnyCable integrates with [RuboCop](https://github.com/rubocop-hq/rubocop) to detect incompatible code in your application.
+AnyCable Rails comes with [RuboCop](https://github.com/rubocop-hq/rubocop) rules to detect incompatible code in your application.
 
 Add to your `.rubocop.yml`:
 
@@ -73,13 +73,13 @@ $ bundle exec rubocop
 #=>    ^^^^^^^^^^^^^^^^
 ```
 
-Or you can require AnyCable cops dynamically:
+Or you can require AnyCable Rails cops dynamically:
 
 ```sh
 bundle exec rubocop -r 'anycable/rails/compatibility/rubocop' --only AnyCable
 ```
 
-**NOTE**: If you have `DisabledByDefault: true` in your RuboCop config, you need to specify all AnyCable cops explicitly:
+**NOTE**: If you have `DisabledByDefault: true` in your RuboCop config, you need to specify all AnyCable Rails cops explicitly:
 
 ```sh
 bundle exec rubocop -r 'anycable/rails/compatibility/rubocop' \

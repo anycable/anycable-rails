@@ -1,6 +1,6 @@
-# Getting Started with AnyCable on Rails
+# AnyCable on Rails
 
-AnyCable can be used as a drop-in replacement for the Action Cable server in Rails applications. It supports most Action Cable features (see [Compatibility](./compatibility.md) for more) and can be used with any Action Cable client. Moreover, AnyCable brings additional power-ups for your real-time features, such as [streams history support](../guides/reliable_streams.md) and API extensions (see [below](#action-cable-extensions)).
+AnyCable can be used as a drop-in replacement for Action Cable in Rails applications. It supports most Action Cable features (see [Compatibility](./compatibility.md) for more) and can be used with any Action Cable client. Moreover, AnyCable brings additional power-ups for your real-time features, such as [streams history support](../guides/reliable_streams.md) and API extensions (see [below](#action-cable-extensions)).
 
 > See also the [demo](https://github.com/anycable/anycable_rails_demo/pull/2) of migrating from Action Cable to AnyCable.
 
@@ -13,169 +13,143 @@ See also requirements for [broadcast adapters](../ruby/broadcast_adapters.md) (Y
 
 ## Installation
 
-Add `anycable-rails` gem to your Gemfile:
+Add AnyCable Rails gem to your Gemfile:
 
 ```ruby
-gem "anycable-rails", "~> 1.4"
+# If you plan to use gRPC
+gem "anycable-rails", "~> 1.5"
+
+# If you plan to use HTTP RPC or no RPC at all
+gem "anycable-rails-core", "~> 1.5"
 ```
 
-(and don't forget to run `bundle install`).
+Read more about different RPC modes [here](../anycable-go/rpc.md).
 
 Then, run the interactive configuration wizard via Rails generators:
 
 ```sh
-bundle exec rails g anycable:setup
+bin/rails g anycable:setup
 ```
 
-The command above asks you a few questions to configure AnyCable for your application.
-
-**NOTE:** If you want to use [HTTP RPC](../ruby/http_rpc.md), you MUST specify the `--rpc=http` option.
+The command above asks you a few questions to configure AnyCable for your application. Want more control? Check out the [manual setup section](#manual-setup) below.
 
 ## Configuration
 
-Next, update your Action Cable configuration:
+AnyCable Rails uses [Anyway Config][] for configuration. Thus, you can store configuration parameters whenever you want: YAML files, credentials, environment variables, whatever.
 
-```yml
-# config/cable.yml
-production:
-  # Set adapter to any_cable to activate AnyCable
-  adapter: any_cable
-```
+We recommend keeping non-sensitive and _stable_ parameters in `config/anycable.yml`, e.g., broadcast adapter, default JWT TTL, etc.
 
-Install [WebSocket server](#server-installation) and specify its URL in the configuration:
+For secrets (`secret`, `broadcast_key`, etc.), we recommend using Rails credentials.
 
-```ruby
-# For development it's likely the localhost
+The most important configuration settings are:
 
-# config/environments/development.rb
-config.action_cable.url = "ws://localhost:8080/cable"
+- **secret**: a common secret used to secure AnyCable features (signed streams, JWT, etc.). Make sure the value is the same for your Rails application and AnyCable server.
 
-# For production it's likely to have a sub-domain and secure connection
+- **broadcast_adapter**: defines how to deliver broadcast messages from the Rails application to AnyCable server (so it can transmit them to connected clients). See [broadcasting docs](../ruby/broadast_adapters.md) for available options and their configuration.
 
-# config/environments/production.rb
-config.action_cable.url = "wss://ws.example.com/cable"
-```
+See AnyCable Ruby [configuration](../ruby/configuration.md) for more information.
 
-Now you can start AnyCable RPC server for your application:
+### Forgery protection
+
+AnyCable respects [Action Cable configuration](https://guides.rubyonrails.org/action_cable_overview.html#allowed-request-origins) regarding forgery protection if and only if `ORIGIN` header is proxied by AnyCable server, i.e.:
 
 ```sh
-$ bundle exec anycable
-#> Starting AnyCable gRPC server (pid: 48111)
-#> Serving Rails application from ./config/environment.rb
-
-# don't forget to provide Rails env in production
-$ RAILS_ENV=production bundle exec anycable
+anycable-go --headers=cookie,origin --port=8080
 ```
 
-**NOTE**: you don't need to specify `-r` option (see [CLI docs](../ruby/cli.md)), your application would be loaded from `config/environment.rb`.
+However, we recommend performing the origin check at the AnyCable server side (via the `--allowed_origins` option). See [AnyCable configuration](../anycable-go/configuration.md).
 
-And, finally, run AnyCable WebSocket server, e.g. [anycable-go](../anycable-go/getting_started.md):
+### Embedded gRPC server
 
-```sh
-$ anycable-go --host=localhost --port=8080
+It is possible to run AnyCable gRPC server within another Ruby process (Rails server or tests runner). We recommend using this option in development and test environments only or in single-process production environments.
 
-INFO 2019-08-07T16:37:46.387Z context=main Starting AnyCable v1.4.0-13-gd421927 (with mruby 1.2.0 (2015-11-17)) (pid: 1362)
-INFO 2019-08-07T16:37:46.387Z context=main Handle WebSocket connections at /cable
-INFO 2019-08-07T16:37:46.388Z context=http Starting HTTP server at localhost:8080
-```
-
-You can store AnyCable-specific configuration in YAML file (similar to Action Cable one):
+To automatically start a gRPC server every time you run `rails s`, add `embedded: true` to your configuration. For example:
 
 ```yml
 # config/anycable.yml
 development:
-  redis_url: redis://localhost:6379/1
-production:
-  redis_url: redis://my.redis.io:6379/1
+  embedded: true
 ```
 
-Or you can use the environment variables (or anything else supported by [anyway_config](https://github.com/palkan/anyway_config)).
+**NOTE:** Make sure you have `Rails.application.load_server` in your `config.ru`. The feature is available since Rails 6.1.
 
-### Server installation
+## Manual setup
 
-You can install AnyCable-Go server using one of the [multiple ways](../anycable-go/getting_started.md#installation).
+### Development
 
-For your convenience, we have a generator task which could be used to download a binary from GitHub released for your platform:
-
-```sh
-$ bundle exec rails g anycable:download
-
-run  curl -L https://github.com/anycable/anycable-go/releases/download/...
-```
-
-You can specify the target bin path (`--bin-path`) or AnyCable-Go version (`--version`).
-
-**NOTE:** This task uses cURL under the hood, so it must be available.
-
-Another option is to create a Bash-wrapper to install and run a particular version of `anycable-go` automatically. AnyCable does this for you when you run `rails g anycable:setup` and choose to install `anycable-go` locally. The generated script looks like this:
-
-```sh
-#!/bin/bash
-
-cd $(dirname $0)/..
-
-version="1.4.0"
-
-if [ ! -f ./bin/dist/anycable-go ]; then
-  echo "AnyCable-go is not installed, downloading..."
-  ./bin/rails g anycable:download --version=$version --bin-path=./bin/dist
-fi
-
-curVersion=$(./bin/dist/anycable-go -v)
-
-if [[ "$curVersion" != "$version"* ]]; then
-  echo "AnyCable-go version is not $version, downloading a new one..."
-  ./bin/rails g anycable:download --version=$version --bin-path=./bin/dist
-fi
-
-./bin/dist/anycable-go $@
-```
-
-See it in action in the [demo application](https://github.com/anycable/anycable_rails_demo/pull/1).
-
-### Access logs
-
-Rails integration extends the base [configuration](../ruby/configuration.md) by adding a special parameter–`access_logs_disabled`.
-
-This parameter turn on/off access logging (`Started <request data>` / `Finished <request data>`) (disabled by default).
-
-You can configure it via env var (`ANYCABLE_ACCESS_LOGS_DISABLED=0` to enable) or config file:
+First, activate AnyCable in your Rails application by specifying it as an adapter for Action Cable:
 
 ```yml
-# config/anycable.yml
-production:
-  access_logs_disabled: false
+# config/cable.yml
+development:
+  adapter: any_cable
+  # ...
 ```
 
-### Forgery protection
-
-AnyCable respects [Action Cable configuration](https://guides.rubyonrails.org/action_cable_overview.html#allowed-request-origins) regarding forgery protection if and only if `ORIGIN` header is proxied by WebSocket server:
-
-```sh
-# with anycable-go
-$ anycable-go --headers=cookie,origin --port=8080
-```
-
-## Logging
-
-AnyCable uses `Rails.logger` as `AnyCable.logger` by default, thus setting log level for AnyCable (e.g. `ANYCABLE_LOG_LEVEL=debug`) won't work, you should configure Rails logger instead, e.g.:
+Install [AnyCable server](#server-installation) and specify its URL in the configuration:
 
 ```ruby
-# in Rails configuration
-config.logger = Logger.new($stdout)
-config.log_level = :debug
+# config/environments/development.rb
 
-# or
-Rails.logger.level = :debug if AnyCable.config.debug?
+# For development, it's likely the localhost
+config.action_cable.url = "ws://localhost:8080/cable"
 ```
 
-Read more about [logging](../ruby/logging.md).
+Finally, add the following commands to your `Procfile.dev` file\*:
 
-## Exceptions
+```sh
+web: bin/rails s
+# ...
+ws: anycable-go
+# When using gRPC
+rpc: bundle exec anycable
+```
 
-AnyCable automatically integrates with Rails 7+ error reporting interface (`Rails.error.report(...)`), so you don't need to configure anything yourself.
+Now, run your application via your process manager (or `bin/dev`, if any). You are AnyCable-ready!
 
-For earlier Rails versions, see [docs](../ruby/exceptions.md).
+\* If you don't have a process manager yet, we recommend using [Overmind][]. [Foreman][] works, too.
+
+**IMPORTANT**: Despite AnyCable providing multiple RPC modes, we recommend having similar development and production setups. Thus, if you use gRPC in production, use it in development, too.
+
+### Production
+
+> The quickest way to get AnyCable server for production usage is to use our managed (and free) solution: [plus.anycable.io](https://plus.anycable.io)
+
+Whenever you're ready to push youre AnyCable-backed Rails application to production (or staging), make sure your application is configured the right way:
+
+- Configure Action Cable adapter for production:
+
+  ```yml
+  # config/cable.yml
+  production:
+    adapter: any_cable
+    # ...
+  ```
+
+- Update Action Cable configuration to point clients to connect to AnyCable server
+
+  ```ruby
+  # config/environments/production.rb
+  config.action_cable.url = ENV.fetch("ANYCABLE_WEBSOCKET_URL")
+  ```
+
+  **IMPORTANT:** The URL configuration is used by the `#action_cable_meta_tag` helper. Make sure you have it in your HTML layout.
+
+- When using gRPC server, make sure you have a corresponding new process added to your deployment.
+
+Check out our [deployment guides](../deployment) to learn more about your deployment method and AnyCable.
+
+## Server installation
+
+For your convenience, we provide a binstub (`bin/anycable-go`) which automatically downloads an AnyCable server binary (and caches it) and launches it. Run the following command to add it to your project:
+
+```sh
+$ bundle exec rails g anycable:bin
+
+...
+```
+
+You can also install AnyCable server yourself using one of the [multiple ways](../anycable-go/getting_started.md#installation).
 
 ## Action Cable extensions
 
@@ -209,7 +183,7 @@ end
 
 # or
 ActionCable.server.broadcast stream, data, exclude_socket: my_socket_id
-````
+```
 
 **IMPORTANT:** AnyCable Rails automatically pass the current socket ID to Active Job, so you can use `broadcast ..., to_others: true` in your background jobs without any additional configuration.
 
@@ -219,41 +193,13 @@ AnyCable supports publishing [broadcast messages in batches](../ruby/broadcast_a
 
 Auto-batching uses [Rails executor](https://guides.rubyonrails.org/threading_and_code_execution.html#executor) under the hood, so broadcasts are aggregated within Rails _units of work_, such as HTTP requests, background jobs, etc.
 
-## Development and test
-
-AnyCable is [compatible](compatibility.md) with the original Action Cable implementation; thus you can continue using Action Cable for development and tests.
-
-Compatibility could be enforced by [runtime checks](compatibility.md#runtime-checks) or [static checks](compatibility.md#rubocop-cops) (via [RuboCop](https://github.com/rubocop-hq/rubocop)).
-
-Use process manager (e.g. [Hivemind](https://github.com/DarthSim/hivemind) or [Overmind](https://github.com/DarthSim/overmind)) to run AnyCable processes in development with the following `Procfile`:
-
-```procfile
-web: bundle exec rails s
-rpc: bundle exec anycable
-ws:  anycable-go
-```
-
-### Embedded mode
-
-It is also possible to run RPC server within another Ruby process (Rails server or tests runner). We recommend using this option in development and test environments.
-
-When using Rails 6.1, you can automatically start an RPC server every time you run `rails s` by specifying the following configuration parameter:
-
-```yml
-# config/anycable.yml
-development:
-  embedded: true
-```
-
-**NOTE:** Make sure you have `Rails.application.load_server` in your `config.ru`.
-
-Alternatively, you can also embed HTTP RPC into your Rails web server. See [HTTP RPC docs](../ruby/http_rpc.md).
-
-If you use only HTTP RPC in all environments, you can avoid installing gRPC dependencies by using the `anycable-rails-core` gem instead of `anycable-rails`.
-
 ### Testing with AnyCable
 
-If you'd like to run AnyCable RPC server in tests (for example, in system tests), we recommend to start it manually only when necessary (i.e., when dependent tests are executed) and use the embedded mode. That's how we do it with RSpec:
+If you'd like to run AnyCable gRPC server in tests (for example, in system tests), we recommend to start it manually only when necessary (i.e., when dependent tests are executed) and use the embedded mode.
+
+You can also run AnyCable server automatically when starting a gRPC server.
+
+That's how we do it with RSpec:
 
 ```ruby
 # spec/support/anycable_setup.rb
@@ -270,13 +216,7 @@ RSpec.configure do |config|
     require "anycable/cli"
 
     $stdout.puts "\n⚡️  Starting AnyCable RPC server...\n"
-
-    cli = AnyCable::CLI.new(embedded: true)
-    cli.run
-  end
-
-  config.after(:suite) do
-    cli&.shutdown
+    AnyCable::CLI.embed!(%w[--server-command=bin/anycable-go])
   end
 end
 ```
@@ -313,6 +253,6 @@ AnyCable::Rails.extend_adapter!(ActionCable.server.pubsub)
 
 **NOTE:** If you use `graphql-anycable`, things become more complicated. You will need to schemas with different subscriptions providers and a similar dual adapter to support both _cables_.
 
-## Links
-
-- [Demo application](https://github.com/anycable/anycable_rails_demo)
+[Overmind]: https://github.com/DarthSim/overmind
+[Foreman]: https://github.com/ddollar/foreman
+[Anyway Config]: https://github.com/palkan/anyway_config

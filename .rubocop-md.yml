@@ -21,3 +21,6 @@ Naming/FileName:
 Layout/InitialIndentation:
   Exclude:
     - 'CHANGELOG.md'
+
+Layout/IndentationConsistency:
+  Enabled: false
