@@ -57,7 +57,7 @@ module AnyCable
         Streams.signed(stream_name_from(streamables))
       end
 
-      private def stream_name_from(streamables)
+      def stream_name_from(streamables)
         if streamables.is_a?(Array)
           streamables.map { |streamable| stream_name_from(streamable) }.join(":")
         else
