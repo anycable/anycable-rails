@@ -42,8 +42,6 @@ module Dummy
 
     AnyCable::Rails::Rack.middleware.use Warden::Manager
 
-    config.action_cable.url = "ws://jwt.anycable.io/cable"
-
     if ::Rails.version.to_f >= 7.0
       config.after_initialize do |app|
         app.executor.error_reporter.subscribe(TestErrorSubscriber)
