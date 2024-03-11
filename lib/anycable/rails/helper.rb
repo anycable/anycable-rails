@@ -27,6 +27,10 @@ module AnyCable
 
         tag "meta", name: "any-cable-jwt", content: token
       end
+
+      def signed_stream_name(streamables)
+        Rails.signed_stream_name(streamables)
+      end
     end
   end
 end

@@ -24,7 +24,7 @@ module AnyCable
             obj = instance_variable_get("@#{id}")
             next unless obj
 
-            acc[id] = AnyCable::Rails.serialize(obj)
+            acc[id] = AnyCable::Serializer.serialize(obj)
           end.compact
         end
 
@@ -37,7 +37,7 @@ module AnyCable
           return unless @cached_ids
 
           @cached_ids[name] ||= @cached_ids.fetch(name) do
-            AnyCable::Rails.deserialize(@serialized_ids[name.to_s])
+            AnyCable::Serializer.deserialize(@serialized_ids[name.to_s])
           end
         end
       end

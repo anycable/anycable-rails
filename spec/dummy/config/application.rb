@@ -29,7 +29,7 @@ end
 module Dummy
   class Application < Rails::Application
     config.logger = ActiveSupport::TaggedLogging.new(Logger.new($stdout))
-    config.log_level = :fatal
+    config.log_level = ENV["ANYCABLE_DEBUG"].in?(%w[1 y t true]) ? :debug : :fatal
     config.eager_load = true
 
     if Rails::VERSION::MAJOR < 6

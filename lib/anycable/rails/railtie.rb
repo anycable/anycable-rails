@@ -30,7 +30,6 @@ module AnyCable
         end
       end
 
-
       initializer "anycable.logger", after: "action_cable.logger" do |_app|
         AnyCable.logger = ::ActionCable.server.config.logger
 
@@ -63,6 +62,11 @@ module AnyCable
 
           AnyCable.middleware.use(AnyCable::Rails::Middlewares::LogTagging)
         end
+      end
+
+      initializer "anycable.object_serializer" do |_app|
+        require "anycable/rails/object_serializer"
+        AnyCable::Serializer.object_serializer = AnyCable::Rails::ObjectSerializer
       end
 
       initializer "anycable.executor" do |app|

@@ -53,28 +53,15 @@ module AnyCable
         end
       end
 
-      # Serialize connection/channel state variable to string
-      # using GlobalID where possible or JSON (if json: true)
-      def serialize(obj, json: false)
-        obj.try(:to_gid_param) || (json ? obj.to_json : obj)
+      def signed_stream_name(streamables)
+        Streams.signed(stream_name_from(streamables))
       end
 
-      # Deserialize previously serialized value from string to
-      # Ruby object.
-      # If the resulting object is a Hash, make it indifferent
-      def deserialize(str, json: false)
-        str.yield_self do |val|
-          next val unless val.is_a?(String)
-
-          gval = GlobalID::Locator.locate(val)
-          return gval if gval
-
-          next val unless json
-
-          JSON.parse(val)
-        end.yield_self do |val|
-          next val.with_indifferent_access if val.is_a?(Hash)
-          val
+      private def stream_name_from(streamables)
+        if streamables.is_a?(Array)
+          streamables.map { |streamable| stream_name_from(streamable) }.join(":")
+        else
+          streamables.then { |streamable| streamable.try(:to_gid_param) || streamable.to_param }
         end
       end
 
