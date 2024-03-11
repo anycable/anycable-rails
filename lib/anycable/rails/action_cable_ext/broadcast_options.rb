@@ -10,6 +10,11 @@ ActionCable::Server::Base.prepend(Module.new do
       super(channel, payload)
     end
   end
+
+  def broadcaster_for(broadcasting, **options)
+    broadcasting = AnyCable::Rails.stream_name_from(broadcasting)
+    super(broadcasting, **options)
+  end
 end)
 
 ActionCable::Channel::Base.singleton_class.prepend(Module.new do
