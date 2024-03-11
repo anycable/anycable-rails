@@ -10,11 +10,15 @@ module AnyCable
             class_eval <<~RUBY, __FILE__, __LINE__ + 1
               def #{name}
                 return @#{name} if instance_variable_defined?(:@#{name})
-                @#{name} = AnyCable::Rails.deserialize(__istate__["#{name}"], json: true) if anycabled?
+                return unless anycabled?
+
+                val = __istate__["#{name}"]
+
+                @#{name} = val.present? ? AnyCable::Serializer.deserialize(JSON.parse(val)) : nil
               end
 
               def #{name}=(val)
-                __istate__["#{name}"] = AnyCable::Rails.serialize(val, json: true) if anycabled?
+                __istate__["#{name}"] = AnyCable::Serializer.serialize(val).to_json if anycabled?
                 instance_variable_set(:@#{name}, val)
               end
             RUBY
@@ -53,11 +57,14 @@ module AnyCable
             class_eval <<~RUBY, __FILE__, __LINE__ + 1
               def #{name}
                 return @#{name} if instance_variable_defined?(:@#{name})
-                @#{name} = AnyCable::Rails.deserialize(__cstate__["#{name}"], json: true) if anycabled?
+                return unless anycabled?
+
+                val = __cstate__["#{name}"]
+                @#{name} = val.present? ? AnyCable::Serializer.deserialize(JSON.parse(val)) : nil
               end
 
               def #{name}=(val)
-                __cstate__["#{name}"] = AnyCable::Rails.serialize(val, json: true) if anycabled?
+                __cstate__["#{name}"] = AnyCable::Serializer.serialize(val).to_json if anycabled?
                 instance_variable_set(:@#{name}, val)
               end
             RUBY

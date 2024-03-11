@@ -2,7 +2,12 @@
 
 require "base_spec_helper"
 
-require File.expand_path("spec/dummy/config/environment", PROJECT_ROOT)
+begin
+  require File.expand_path("spec/dummy/config/environment", PROJECT_ROOT)
+rescue => e
+  $stdout.puts "Failed to load Rails app: #{e.message}\n#{e.backtrace.take(5).join("\n")}"
+  exit(1)
+end
 
 require "rspec/rails"
 

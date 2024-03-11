@@ -28,4 +28,14 @@ describe AnyCable::Rails::Helper, type: :helper do
         .to eq("<meta name=\"any-cable-jwt\" content=\"test.jwt.token\" />")
     end
   end
+
+  describe "#signed_stream_name" do
+    it "builds a signed stream name via AnyCable::Streams.sign" do
+      expect(AnyCable::Rails).to receive(:signed_stream_name).with("foo-bar").and_return("rab-oof")
+      expect(AnyCable::Rails).to receive(:signed_stream_name).with([:a, 2]).and_return("b-3")
+
+      expect(signed_stream_name("foo-bar")).to eq("rab-oof")
+      expect(signed_stream_name([:a, 2])).to eq("b-3")
+    end
+  end
 end

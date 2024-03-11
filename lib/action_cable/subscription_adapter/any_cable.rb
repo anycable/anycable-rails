@@ -8,7 +8,7 @@ module ActionCable
     # to AnyCable
     class AnyCable < Base
       ACTION_CABLE_SERVER_ERROR_MESSAGE = <<~STR
-        Looks like you're trying to connect to Rails Action Cable server, not an AnyCable one.
+        Looks like you are trying to connect to Rails Action Cable server, not an AnyCable one.
 
         Please make sure your client is configured to connect to AnyCable server.
 
