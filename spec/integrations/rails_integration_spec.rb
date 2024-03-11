@@ -41,6 +41,12 @@ describe "rails integration" do
     expect(AnyCable.connection_factory).to be_an_instance_of(AnyCable::Rails::ConnectionFactory)
   end
 
+  it "assigns Action Cable url" do
+    # see dummy/config/anycable.yml
+    actual = ActionCable.server.config.url
+    expect(actual).to eq("ws://local.test/cable")
+  end
+
   context "integrates with error reporter", skip: (::Rails.version.to_f < 7.0) do
     include_context "rpc_command"
 

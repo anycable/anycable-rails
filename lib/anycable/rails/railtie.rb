@@ -17,6 +17,20 @@ module AnyCable
         app.config.action_cable.mount_path = nil
       end
 
+      initializer "anycable.websocket_url", after: "action_cable.set_configs" do |app|
+        next unless AnyCable::Rails.enabled?
+
+        websocket_url = AnyCable.config.websocket_url.presence
+        next unless websocket_url
+
+        app.config.action_cable.url = websocket_url
+
+        ActiveSupport.on_load(:action_cable) do
+          ::ActionCable.server.config.url = websocket_url
+        end
+      end
+
+
       initializer "anycable.logger", after: "action_cable.logger" do |_app|
         AnyCable.logger = ::ActionCable.server.config.logger
 

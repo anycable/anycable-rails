@@ -11,14 +11,14 @@ describe AnyCable::Rails::Helper, type: :helper do
   describe "#action_cable_with_jwt_meta_tag" do
     it "builds a metatag with a token in a query string" do
       expect(action_cable_with_jwt_meta_tag(**payload))
-        .to eq("<meta name=\"action-cable-url\" content=\"ws://jwt.anycable.io/cable?jid=test.jwt.token\" />")
+        .to eq("<meta name=\"action-cable-url\" content=\"ws://local.test/cable?jid=test.jwt.token\" />")
     end
 
     it "when url already contains a query param" do
-      expect(ActionCable.server.config).to receive(:url).and_return("ws://jwt.anycable.io/cable?secret=param")
+      expect(ActionCable.server.config).to receive(:url).and_return("ws://local.test/cable?secret=param")
 
       expect(action_cable_with_jwt_meta_tag(**payload))
-        .to eq("<meta name=\"action-cable-url\" content=\"ws://jwt.anycable.io/cable?secret=param&amp;jid=test.jwt.token\" />")
+        .to eq("<meta name=\"action-cable-url\" content=\"ws://local.test/cable?secret=param&amp;jid=test.jwt.token\" />")
     end
   end
 
