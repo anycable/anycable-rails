@@ -41,7 +41,7 @@ If you're not using HTML, you can generate AnyCable JWT by using the following A
 token = AnyCable::JWT.encode({user: current_user})
 
 # you can also override the global TTL setting via expires_at option
-token = AnyCable::Rails::JWT.encode({user: current_user}, expires_at: 10.minutes.from_now)
+token = AnyCable::JWT.encode({user: current_user}, expires_at: 10.minutes.from_now)
 ```
 
 ### Using AnyCable JWT with Action Cable
@@ -51,12 +51,12 @@ You can use AnyCable JWT authentication with Rails Action Cable (especially usef
 ```diff
  module ApplicationCable
    class Connection < ActionCable::Connection::Base
-+    prepend AnyCable::Rails::ConnectionJWT
++    prepend AnyCable::Rails::Ext::JWT
 +
      identified_by :user, :tenant
 
      def connect
-+      return identify_from_anycable_jwt if anycable_jwt_present?
++      return identify_from_anycable_jwt! if anycable_jwt_present?
 +
        self.current_user = find_verified_user
        self.tenant = find_current_tenant

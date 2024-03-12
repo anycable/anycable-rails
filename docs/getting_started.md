@@ -1,6 +1,6 @@
 # AnyCable on Rails
 
-AnyCable can be used as a drop-in replacement for Action Cable in Rails applications. It supports most Action Cable features (see [Compatibility](./compatibility.md) for more) and can be used with any Action Cable client. Moreover, AnyCable brings additional power-ups for your real-time features, such as [streams history support](../guides/reliable_streams.md) and API extensions (see [below](#action-cable-extensions)).
+AnyCable can be used as a drop-in replacement for Action Cable in Rails applications. It supports most Action Cable features (see [Compatibility](./compatibility.md) for more) and can be used with any Action Cable client. Moreover, AnyCable brings additional power-ups for your real-time features, such as [streams history support](../guides/reliable_streams.md) and [API extensions](./extensions.md).
 
 > See also the [demo](https://github.com/anycable/anycable_rails_demo/pull/2) of migrating from Action Cable to AnyCable.
 
@@ -86,16 +86,16 @@ development:
   # ...
 ```
 
-Install [AnyCable server](#server-installation) and specify its URL in the configuration:
+Then, create `config/anycable.yml` with basic AnyCable configuration:
 
-```ruby
-# config/environments/development.rb
-
-# For development, it's likely the localhost
-config.action_cable.url = "ws://localhost:8080/cable"
+```yml
+# config/anycable.yml
+development:
+  broadcast_adapter: http
+  websocket_url: ws://localhost:8080/cable
 ```
 
-Finally, add the following commands to your `Procfile.dev` file\*:
+Install [AnyCable server](#server-installation) and add the following commands to your `Procfile.dev` file\*:
 
 ```sh
 web: bin/rails s
@@ -115,7 +115,7 @@ Now, run your application via your process manager (or `bin/dev`, if any). You a
 
 > The quickest way to get AnyCable server for production usage is to use our managed (and free) solution: [plus.anycable.io](https://plus.anycable.io)
 
-Whenever you're ready to push youre AnyCable-backed Rails application to production (or staging), make sure your application is configured the right way:
+Whenever you're ready to push your AnyCable-backed Rails application to production (or staging), make sure your application is configured the right way:
 
 - Configure Action Cable adapter for production:
 
@@ -126,18 +126,17 @@ Whenever you're ready to push youre AnyCable-backed Rails application to product
     # ...
   ```
 
-- Update Action Cable configuration to point clients to connect to AnyCable server
+- Provide AnyCable WebSocket URL via the `ANYCABLE_WEBSOCKET_URL` environment variable.
 
-  ```ruby
-  # config/environments/production.rb
-  config.action_cable.url = ENV.fetch("ANYCABLE_WEBSOCKET_URL")
-  ```
+  Alternatively, you can use Rails credentials or YAML configuration.
 
   **IMPORTANT:** The URL configuration is used by the `#action_cable_meta_tag` helper. Make sure you have it in your HTML layout.
 
+- Make sure you configured secrets obtained from your AnyCable server (`secret`, `broadcast_key`, etc.)
+
 - When using gRPC server, make sure you have a corresponding new process added to your deployment.
 
-Check out our [deployment guides](../deployment) to learn more about your deployment method and AnyCable.
+Check out our [deployment guides](../deployment) to learn more about your deployment methods and AnyCable.
 
 ## Server installation
 
@@ -151,49 +150,7 @@ $ bundle exec rails g anycable:bin
 
 You can also install AnyCable server yourself using one of the [multiple ways](../anycable-go/getting_started.md#installation).
 
-## Action Cable extensions
-
-### Broadcast to others
-
-AnyCable provides a functionality to deliver broadcasts to all clients except from the one initiated the action (e.g., when you need to broadcast a message to all users in a chat room except the one who sent the message).
-
-> **NOTE:** This feature is not available in Action Cable. It relies on [Action Cable protocol extensions](../misc/action_cable_protocol.md) currently only supported by AnyCable.
-
-To do so, you need to obtain a unique socket identifier. For example, using [AnyCable JS client](https://github.com/anycable/anycable-client), you can access it via the `cable.sessionId` property.
-
-Then, you must attach this identifier to HTTP request as a `X-Socket-ID` header value. AnyCable Rails uses this value to populate the `AnyCable::Rails.current_socket_id` value. If this value is set, you can implement broadcasting to other using one of the following methods:
-
-- Calling `ActionCable.server.broadcast stream, data, to_others: true`
-- Calling `MyChannel.broadcast_to stream, data, to_others: true`
-
-Finally, if you perform broadcasts indirectly, you can wrap the code with `AnyCable::Rails.broadcasting_to_others` to enable this feature. For example, when using Turbo Streams:
-
-```ruby
-AnyCable::Rails.broadcasting_to_others do
-  Turbo::StreamsChannel.broadcast_remove_to workspace, target: item
-end
-```
-
-You can also pass socket ID explicitly (if obtained from another source):
-
-```ruby
-AnyCable::Rails.broadcasting_to_others(socket_id: my_socket_id) do
- # ...
-end
-
-# or
-ActionCable.server.broadcast stream, data, exclude_socket: my_socket_id
-```
-
-**IMPORTANT:** AnyCable Rails automatically pass the current socket ID to Active Job, so you can use `broadcast ..., to_others: true` in your background jobs without any additional configuration.
-
-### Batching broadcasts automatically
-
-AnyCable supports publishing [broadcast messages in batches](../ruby/broadcast_adapters.md#batching) (to reduce the number of round-trips and ensure delivery order). You can enable automatic batching of broadcasts by setting `ANYCABLE_BROADCAST_BATCHING=true` (or `broadcast_batching: true` in the config file).
-
-Auto-batching uses [Rails executor](https://guides.rubyonrails.org/threading_and_code_execution.html#executor) under the hood, so broadcasts are aggregated within Rails _units of work_, such as HTTP requests, background jobs, etc.
-
-### Testing with AnyCable
+## Testing with AnyCable
 
 If you'd like to run AnyCable gRPC server in tests (for example, in system tests), we recommend to start it manually only when necessary (i.e., when dependent tests are executed) and use the embedded mode.
 
@@ -240,16 +197,20 @@ end
 
 ## Gradually migrating from Action Cable
 
-In case switching from Action Cable to AnyCable requires updating the WebSocket url (e.g., when you have no control over a load balancer or ingress, so you can't just switch `/cable` traffic to a different service), you might want to pay additional attention to the migration.
+It's possible to run AnyCable along with Action Cable, so you can still serve legacy connections (or perform gradual roll-out, A/B testing, etc.). A common use-case is switching from Action Cable to AnyCable while updating the WebSocket URL (e.g., when you have no control over a load balancer or ingress, so you can't just switch `/cable` traffic to a different service).
 
-First, you need to continue using your current pubsub adapter for Action Cable (say, `redis`). Clients could continue using the Rails endpoint (`ws://<web>/cable`) as well as connect via the AnyCable one (`ws://<anycable-go>/cable`).
+To achieve a smooth migration, you need to accomplish the following steps:
 
-To publish updates to both _cables_, we need to use the _dual broadcast_ strategy. For that, you need to extend your pubsub adapter to send data to AnyCable:
+- Continue using your current pub/sub adapter for Action Cable (say, `redis`) but extend it with AnyCable broadcasting capabilities by adding the following code:
 
-```ruby
-# config/initializers/anycable.rb
-AnyCable::Rails.extend_adapter!(ActionCable.server.pubsub)
-```
+  ```ruby
+  # config/initializers/anycable.rb
+  AnyCable::Rails.extend_adapter!(ActionCable.server.pubsub) unless AnyCable::Rails.enabled?
+  ```
+
+- You can also add AnyCable JWT support to Action Cable. See [authentication docs](./authentication.md#jwt-authentication).
+
+That's it! Now you can serve Action Cable clients via both `ws://<rails>/cable` and `ws://<anycable>/cable`, and they should be able to communicate with each other.
 
 **NOTE:** If you use `graphql-anycable`, things become more complicated. You will need to schemas with different subscriptions providers and a similar dual adapter to support both _cables_.
 

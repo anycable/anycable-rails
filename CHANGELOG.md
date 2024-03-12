@@ -2,6 +2,22 @@
 
 ## master
 
+  Make it possible to call `ActionCable.server.broadcast(user, data)` or `ActionCable.server.broadcast([user, :context], data)`. This is a companion functionality for `#signed_stream_name`.
+
+- Added `websocket_url` configuration option to specify the URL of AnyCable server. ([@palkan][])
+
+  It's used to configure `config.action_cable.url` if AnyCable is activated. No need to set up it manually.
+
+- Added `rails g anycable:bin` to create a binstub to run AnyCable server. ([@palkan][])
+
+- Added signed streams helpers. ([@palkan][])
+
+  You can use `#signed_stream_name(streamable)` to generate a signed stream name.
+
+- Added JWT authentication helpers. ([@palkan][])
+
+  No more need in a separate `anycable-rails-jwt` gem.
+
 ## 1.4.5
 
 - Restrict `anycable` gem version.
