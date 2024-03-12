@@ -2,6 +2,10 @@
 
 ## master
 
+## 1.4.5
+
+- Restrict `anycable` gem version.
+
 ## 1.4.4 (2024-03-08) 🌷
 
 - Minor fixes
