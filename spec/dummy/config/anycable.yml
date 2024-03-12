@@ -6,3 +6,4 @@ test:
   persistent_session_enabled: true
   http_rpc_mount_path: "/_anycable"
   batch_broadcasts: true
+  jwt_secret: "jotz"

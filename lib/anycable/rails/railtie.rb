@@ -4,6 +4,7 @@ require "anycable/rails/action_cable_ext/connection"
 require "anycable/rails/action_cable_ext/channel"
 require "anycable/rails/action_cable_ext/remote_connections"
 require "anycable/rails/action_cable_ext/broadcast_options"
+require "anycable/rails/action_cable_ext/signed_streams"
 
 require "anycable/rails/channel_state"
 require "anycable/rails/connection_factory"
