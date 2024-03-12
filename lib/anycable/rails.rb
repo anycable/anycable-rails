@@ -8,10 +8,13 @@ require "anycable/rails/rack"
 require "globalid"
 require "active_support/core_ext/module/attribute_accessors_per_thread"
 
+require "anycable/rails/ext"
+
 module AnyCable
   # Rails handler for AnyCable
   module Rails
     autoload :Helper, "anycable/rails/helper"
+    autoload :PubSubChannel, "anycable/rails/pubsub_channel"
 
     require "anycable/rails/railtie"
 
