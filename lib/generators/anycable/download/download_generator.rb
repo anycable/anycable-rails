@@ -13,10 +13,10 @@ module AnyCableRailsGenerators
 
     class_option :bin_path,
       type: :string,
-      desc: "Where to download AnyCable-Go server binary (default: #{DEFAULT_BIN_PATH})"
+      desc: "Where to download AnyCable server binary (default: #{DEFAULT_BIN_PATH})"
     class_option :version,
       type: :string,
-      desc: "Specify the AnyCable-Go version (defaults to latest release)"
+      desc: "Specify the AnyCable version (defaults to latest release)"
 
     def download_bin
       out = options[:bin_path] || DEFAULT_BIN_PATH
@@ -74,7 +74,7 @@ module AnyCableRailsGenerators
         if yes? "Path is not writable 😕. Do you have sudo privileges?"
           sudo = "sudo "
         else
-          say_status :error, "❌ Failed to install AnyCable-Go WebSocket server", :red
+          say_status :error, "❌ Failed to install AnyCable real-time server", :red
           raise StandardError, "Path #{path} is not writable!"
         end
       end

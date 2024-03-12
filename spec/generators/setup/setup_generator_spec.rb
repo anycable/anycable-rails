@@ -18,15 +18,58 @@ describe AnyCableRailsGenerators::SetupGenerator, type: :generator do
     FileUtils.rm(removed_files.map { |f| File.join(destination_root, f) }) if removed_files.any?
   end
 
-  let(:default_opts) { %w[--skip-heroku --skip-install --skip-jwt --devenv skip] }
+  let(:default_opts) { %w[--rpc grpc --devenv skip] }
 
   context "when skip install environment" do
     subject { run_generator default_opts }
 
-    it "copies config files" do
+    it "generates config files" do
       subject
       expect(file("config/cable.yml")).to exist
+      expect(file("config/cable.yml")).to contain(%(adapter: <%= ENV.fetch("ACTION_CABLE_ADAPTER", "any_cable") %>))
       expect(file("config/anycable.yml")).to contain("broadcast_adapter: http")
+    end
+
+    context "when cable.yml is present" do
+      before do
+        File.write(
+          File.join(destination_root, "config/cable.yml"),
+          <<~YML
+            default: &default
+              adapter: redis
+              url: redis://localhost:6379
+
+            development:
+              <<: *default
+              channel_prefix: campfire_development
+
+            test:
+              adapter: test
+
+            performance:
+              <<: *default
+              channel_prefix: campfire_performance
+
+            production:
+              <<: *default
+              channel_prefix: campfire_production
+          YML
+        )
+      end
+
+      subject do
+        run_generator default_opts
+        file("config/cable.yml")
+      end
+
+      it "updates cable.yml contents" do
+        is_expected.to exist
+
+        is_expected.to contain(%(adapter: <%= ENV.fetch("ACTION_CABLE_ADAPTER", "any_cable") %>))
+        is_expected.to contain("channel_prefix: campfire_production")
+        is_expected.to contain("channel_prefix: campfire_development")
+        is_expected.to contain("adapter: test")
+      end
     end
 
     context "when redis is in the deps" do
@@ -53,17 +96,8 @@ describe AnyCableRailsGenerators::SetupGenerator, type: :generator do
 
       it "anycable.yml use redis broadcast adapter" do
         subject
-        expect(file("config/anycable.yml")).to contain(%(http_rpc_mount_path: "/_anycable"))
+        expect(file("config/anycable.yml")).to contain(%(  http_rpc_mount_path: "/_anycable"))
       end
-    end
-
-    it "patch environment configs" do
-      subject
-      expect(file("config/environments/development.rb"))
-        .to contain('config.action_cable.url = ActionCable.server.config.url = ENV.fetch("CABLE_URL", "ws://localhost:8080/cable") if AnyCable::Rails.enabled?')
-
-      expect(file("config/environments/production.rb"))
-        .to contain('config.action_cable.url = ActionCable.server.config.url = ENV.fetch("CABLE_URL", "/cable") if AnyCable::Rails.enabled?')
     end
   end
 
@@ -75,71 +109,16 @@ describe AnyCableRailsGenerators::SetupGenerator, type: :generator do
     end
   end
 
-  context "when Heroku deployment" do
-    subject { run_generator default_opts + %w[--skip-heroku=false] }
-
-    before do
-      File.write(
-        File.join(destination_root, "Procfile"),
-        <<~CODE
-          web: bundle exec puma -C config/puma.rb
-          worker: bundle exec lowkiq
-          release: bundle exec rails db:migrate
-        CODE
-      )
-    end
-
-    it "updates Procfile", :aggregate_failures do
-      subject
-      expect(file("Procfile")).to contain(
-        'web: [[ "$ANYCABLE_DEPLOYMENT" == "true" ]] && bundle exec anycable --server-command="anycable-go" || bundle exec puma -C config/puma.rb'
-      )
-      expect(file("Procfile")).to contain(
-        "worker: bundle exec lowkiq"
-      )
-      expect(file("Procfile")).to contain(
-        "release: bundle exec rails db:migrate"
-      )
-    end
-
-    context "when using HTTP RPC on Heroku" do
-      subject { run_generator default_opts + %w[--skip-heroku=false --rpc=http] }
-
-      it "doesn't update Procfile" do
-        subject
-        expect(file("Procfile")).to contain(
-          "web: bundle exec puma -C config/puma.rb"
-        )
-      end
-    end
-  end
-
   context "when local environment" do
-    before do
-      File.write(
-        File.join(destination_root, ".gitignore"),
-        <<~CODE
-          tmp/
-          *.log
-        CODE
-      )
-    end
-
-    let(:opts) { %w[--devenv local --skip-procfile-dev false] }
+    let(:opts) { %w[--devenv local] }
+    let(:version) { "latest" }
 
     subject do
-      run_generator default_opts + opts
+      gen = generator(default_opts + opts)
+      expect(gen)
+        .to receive(:generate).with("anycable:bin", "--version #{version}")
+      silence_stream($stdout) { gen.invoke_all }
       file("Procfile.dev")
-    end
-
-    it "creates bin/anycable-go" do
-      subject
-      expect(file("bin/anycable-go")).to exist
-    end
-
-    it "adds bin/dist to .gitignore" do
-      subject
-      expect(file(".gitignore")).to contain("bin/dist")
     end
 
     context "when Procfile.dev exists" do
@@ -188,17 +167,7 @@ describe AnyCableRailsGenerators::SetupGenerator, type: :generator do
           expect(subject)
             .not_to contain("anycable: bundle exec anycable")
           expect(subject)
-            .to contain("ws: bin/anycable-go --port=8080 --broadcast_adapter=http --rpc_impl=http --rpc_host=http://localhost:3000/_anycable\n")
-        end
-      end
-
-      context "when version is specified" do
-        before { opts << "--version=1.4" }
-
-        it "creates bin/anycable-go with the specified version" do
-          subject
-          expect(file("bin/anycable-go")).to exist
-          expect(file("bin/anycable-go")).to contain("1.4.0")
+            .to contain("ws: bin/anycable-go --port=8080 --broadcast_adapter=http --rpc_host=http://localhost:3000/_anycable\n")
         end
       end
     end
@@ -219,9 +188,11 @@ describe AnyCableRailsGenerators::SetupGenerator, type: :generator do
     context "when has devise.rb" do
       before do
         File.write(
-          File.join(destination_root, "config/initializers/devise.rb"),
+          File.join(destination_root, "Gemfile.lock"),
           <<~CODE
-            # devise config
+            GEM
+              specs:
+                devise
           CODE
         )
       end
@@ -252,24 +223,6 @@ describe AnyCableRailsGenerators::SetupGenerator, type: :generator do
           "bundle exec rubocop -r 'anycable/rails/compatibility/rubocop' " \
           "--only AnyCable/InstanceVars,AnyCable/PeriodicalTimers,AnyCable/InstanceVars"
         )
-      silence_stream($stdout) { gen.invoke_all }
-    end
-  end
-
-  context "with jwt" do
-    it "adds anycable-rails-jwt gem" do
-      gen = generator default_opts + %w[--skip-jwt false]
-      expect(gen)
-        .to receive(:run).with("bundle add anycable-rails-jwt --skip-install")
-
-      silence_stream($stdout) { gen.invoke_all }
-    end
-
-    it "adds anycable-rails-jwt gem and install if not skipping install" do
-      gen = generator default_opts + %w[--skip-jwt false --skip-install false]
-      expect(gen)
-        .to receive(:run).with("bundle add anycable-rails-jwt")
-
       silence_stream($stdout) { gen.invoke_all }
     end
   end

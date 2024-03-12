@@ -3,9 +3,3 @@ Description:
 
 Example:
     rails generate anycable:setup
-
-    # You can opt-in to use HTTP RPC
-    rails generate anycable:setup --rpc=http
-
-    # You can specify which version of anycable-go to use
-    rails generate anycable:setup --version=1.4

@@ -1,0 +1,10 @@
+Description:
+    Generate bin/anycable-go to automatially install and run AnyCable server locally
+
+Example:
+    rails generate anycable:bin
+
+    This will create:
+        `bin/anycable-go`.
+
+    rails generate anycable:bin --version=1.4.0

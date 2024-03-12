@@ -1,5 +1,5 @@
 Description:
-    Install AnyCable-Go web server locally (the latest version by default).
+    Install AnyCable real-time server locally (the latest version by default).
 
 Example:
     rails generate anycable:download
@@ -11,4 +11,4 @@ Example:
 
     rails generate anycable:download --bin-path=/usr/local/bin
 
-    rails generate anycable:download --version=1.0.0
+    rails generate anycable:download --version=1.4.0
