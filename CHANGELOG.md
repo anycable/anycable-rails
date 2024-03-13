@@ -2,6 +2,10 @@
 
 ## master
 
+## 1.5.0.rc.1
+
+- Support passing objects to `ActionCable.server.broadcast`. ([@palkan][])
+
   Make it possible to call `ActionCable.server.broadcast(user, data)` or `ActionCable.server.broadcast([user, :context], data)`. This is a companion functionality for `#signed_stream_name`.
 
 - Added `websocket_url` configuration option to specify the URL of AnyCable server. ([@palkan][])
