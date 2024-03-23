@@ -12,9 +12,10 @@ module AnyCable
                 return @#{name} if instance_variable_defined?(:@#{name})
                 return unless anycabled?
 
-                val = __istate__["#{name}"]
+                raw_val = __istate__["#{name}"]
+                val = raw_val.present? ? AnyCable::Serializer.deserialize(JSON.parse(raw_val)) : nil
 
-                @#{name} = val.present? ? AnyCable::Serializer.deserialize(JSON.parse(val)) : nil
+                @#{name} = val.try(:with_indifferent_access) || val
               end
 
               def #{name}=(val)
