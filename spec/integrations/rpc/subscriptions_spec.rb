@@ -30,6 +30,7 @@ describe "subscriptions" do
         expect(subject.streams).to eq ["test"]
         expect(subject.stop_streams).to eq false
         expect(subject.transmissions.first).to include("confirm_subscription")
+        expect(subject.istate["$w"]).to eq "test"
       end
     end
 

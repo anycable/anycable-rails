@@ -11,7 +11,7 @@ module AnyCable
     ]
 
     ActionCable::Channel::Base.prepend(Module.new do
-      def stream_from(broadcasting, callback = nil, coder: nil)
+      def stream_from(broadcasting, callback = nil, coder: nil, **)
         if coder.present? && coder != ActiveSupport::JSON
           raise AnyCable::CompatibilityError, "Custom coders are not supported by AnyCable"
         end

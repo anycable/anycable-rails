@@ -7,7 +7,7 @@ class TestChannel < ApplicationCable::Channel
     if current_user.secret != "123"
       reject
     else
-      stream_from "test"
+      stream_from "test", whisper: true
     end
   end
 

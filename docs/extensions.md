@@ -66,6 +66,43 @@ Auto-batching uses [Rails executor](https://guides.rubyonrails.org/threading_and
 
 This feature is only supported when using AnyCable.
 
+## Whispering
+
+AnyCable supports _whispering_, or client-initiated broadcasts. A typical use-case for whispering is sending typing notifications in messaging apps or sharing cursor positions. Here is an example client-side code leveraging whispers (using [AnyCable JS][anycable-client]):
+
+```js
+let channel = cable.subscribeTo("ChatChannel", {id: 42});
+
+channel.on("message", (msg) => {
+  if (msg.event === "typing") {
+    console.log(`user ${msg.name} is typing`);
+  }
+})
+
+// publishing whispers
+const { user } = getCurrentUser();
+
+channel.whisper({event: "typing", name})
+```
+
+You MUST explicitly enable whispers in your channel class as follows:
+
+```ruby
+class ChatChannel < ApplicationCable::Channel
+  def subscribed
+    room = Chat::Room.find(params[:id])
+
+    stream_for room, whisper: true
+  end
+end
+```
+
+Adding `whisper: true` to the stream subscription enables **sending** broadcasts for this client; all subscribed client receive whispers (as regular broadcasts).
+
+**IMPORTANT:** There can be only one whisper stream per channel subscription (since from the protocol perspective clients don't know about streams).
+
+**NOTE:** This feature requires AnyCable server and it's ignored otherwise.
+
 ## Helpers
 
 AnyCable provides a few helpers you can use in your views:
@@ -102,3 +139,5 @@ module ApplicationCable
   end
 end
 ```
+
+[anycable-client]: https://github.com/anycable/anycable-client

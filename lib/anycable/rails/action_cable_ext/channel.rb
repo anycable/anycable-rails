@@ -22,12 +22,20 @@ ActionCable::Channel::Base.prepend(Module.new do
     super unless anycabled?
   end
 
-  def stream_from(broadcasting, _callback = nil, **)
+  def stream_from(broadcasting, _callback = nil, **opts)
+    whispering = opts.delete(:whisper)
     return super unless anycabled?
 
     broadcasting = String(broadcasting)
 
     connection.anycable_socket.subscribe identifier, broadcasting
+    if whispering
+      connection.anycable_socket.whisper identifier, broadcasting
+    end
+  end
+
+  def stream_for(model, callback = nil, **opts, &block)
+    stream_from(broadcasting_for(model), callback || block, **opts)
   end
 
   def stop_stream_from(broadcasting)
