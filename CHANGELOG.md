@@ -2,13 +2,13 @@
 
 ## master
 
+## 1.5.0 (2024-04-01)
+
 - Allow specifying the _whispering_ stream via `#stream_from(..., whisper: true)`. ([@palkan][])
 
   You can use specify the stream to use for _whispering_ (client-initiated broadcasts) by adding `whisper: true` to the `#stream_from` (or `#stream_for`) method call.
 
   NOTE: This feature is only supported when using AnyCable server and ignored otherwise.
-
-## 1.5.0.rc.1
 
 - Support passing objects to `ActionCable.server.broadcast`. ([@palkan][])
 

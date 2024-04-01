@@ -26,7 +26,7 @@ Gem::Specification.new do |spec|
 
   spec.required_ruby_version = ">= 2.7"
 
-  spec.add_dependency "anycable-core", "1.5.0.rc.1"
+  spec.add_dependency "anycable-core", "~> 1.5.0"
   spec.add_dependency "actioncable", ">= 6.0"
   spec.add_dependency "globalid"
 end
