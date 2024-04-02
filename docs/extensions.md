@@ -6,6 +6,8 @@ AnyCable comes with useful Action Cable API extensions which you may use with an
 
 ### Broadcast to objects
 
+> See the [demo](https://github.com/anycable/anycable_rails_demo/pull/34) of using this feature.
+
 AnyCable allows to pass not only strings but arbitrary to `ActionCable.server.broadcast` to represent streams, for example:
 
 ```ruby
@@ -67,6 +69,8 @@ Auto-batching uses [Rails executor](https://guides.rubyonrails.org/threading_and
 This feature is only supported when using AnyCable.
 
 ## Whispering
+
+> See the [demo](https://github.com/anycable/anycable_rails_demo/pull/34) of using whispering with Rails.
 
 AnyCable supports _whispering_, or client-initiated broadcasts. A typical use-case for whispering is sending typing notifications in messaging apps or sharing cursor positions. Here is an example client-side code leveraging whispers (using [AnyCable JS][anycable-client]):
 

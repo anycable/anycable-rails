@@ -184,8 +184,8 @@ To use `:test` Action Cable adapter along with AnyCable, you can extend it in th
 # config/environments/test.rb
 Rails.application.configure do
   config.after_initialize do
-    # Don't forget to configure URL
-    config.action_cable.url = ActionCable.server.config.url = ENV.fetch("CABLE_URL", "ws://localhost:8080/cable")
+    # Don't forget to configure URL in your anycable.yml or via ANYCABLE_WEBSOCKET_URL
+    config.action_cable.url = ActionCable.server.config.url = AnyCable.config.websocket_url
 
     # Make test adapter AnyCable-compatible
     AnyCable::Rails.extend_adapter!(ActionCable.server.pubsub)
