@@ -2,6 +2,8 @@
 
 ## master
 
+- Add `anycable-rails-core.rb` to avoid adding `require: ["anycable-rails"]` to Gemfiles manually. ([@palkan][])
+
 - Mount HTTP RPC independently of the current Action Cable adapter. ([@palkan][])
 
   This makes it possible to use it in tests without manually adding the middleware.
