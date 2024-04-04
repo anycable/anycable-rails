@@ -117,8 +117,6 @@ module AnyCable
       end
 
       initializer "anycable.routes" do
-        next unless AnyCable::Rails.enabled?
-
         config.after_initialize do |app|
           config = AnyCable.config
           unless config.http_rpc_mount_path.nil?

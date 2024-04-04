@@ -2,6 +2,10 @@
 
 ## master
 
+- Mount HTTP RPC independently of the current Action Cable adapter. ([@palkan][])
+
+  This makes it possible to use it in tests without manually adding the middleware.
+
 ## 1.5.0 (2024-04-01)
 
 - Allow specifying the _whispering_ stream via `#stream_from(..., whisper: true)`. ([@palkan][])
