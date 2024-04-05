@@ -1,5 +1,6 @@
 name: Release gems
 on:
+  workflow_dispatch:
   push:
     tags:
       - v*
@@ -22,4 +23,5 @@ jobs:
         uses: rubygems/configure-rubygems-credentials@main
       - name: Publish to RubyGems
         run: |
+          gem install gem-release
           gem release anycable-rails-core anycable-rails
