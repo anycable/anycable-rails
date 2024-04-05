@@ -2,6 +2,8 @@
 
 ## master
 
+## 1.5.1 (2024-04-05)
+
 - Add `anycable-rails-core.rb` to avoid adding `require: ["anycable-rails"]` to Gemfiles manually. ([@palkan][])
 
 - Mount HTTP RPC independently of the current Action Cable adapter. ([@palkan][])
