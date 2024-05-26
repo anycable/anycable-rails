@@ -154,6 +154,14 @@ module AnyCable
         end
       end
 
+      initializer "anycable.warden_manager" do
+        if defined?(::Devise) && AnyCable.config.use_warden_manager?
+          AnyCable::Rails::Rack.middleware.use Warden::Manager do |config|
+            ::Devise.warden_config = config
+          end
+        end
+      end
+
       # Since Rails 6.1
       if respond_to?(:server)
         server do

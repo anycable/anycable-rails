@@ -22,6 +22,7 @@ AnyCable::Config.attr_config(
   batch_broadcasts: false,
   socket_id_header: "X-Socket-ID",
   disable_rpc_pool_size_warning: false,
-  websocket_url: nil
+  websocket_url: nil,
+  use_warden_manager: true
 )
 AnyCable::Config.ignore_options :access_logs_disabled, :persistent_session_enabled

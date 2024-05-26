@@ -65,16 +65,6 @@ module AnyCableRailsGenerators
       end
     end
 
-    def devise
-      return unless devise?
-
-      inside("config/initializers") do
-        template "anycable.rb"
-      end
-
-      say_status :info, "✅ config/initializers/anycable.rb with Devise configuration has been added"
-    end
-
     def configs
       inside("config") do
         template "anycable.yml"
@@ -122,10 +112,6 @@ module AnyCableRailsGenerators
 
     def rubocop?
       !!gemfile_lock&.match?(/^\s+rubocop\b/)
-    end
-
-    def devise?
-      !!gemfile_lock&.match?(/^\s+devise\b/)
     end
 
     def local?

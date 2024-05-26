@@ -85,14 +85,22 @@ If your authentication method relies on non-standard Rack request properties (e.
 
 Devise relies on [`warden`](https://github.com/wardencommunity/warden) Rack middleware to authenticate users.
 
-In order to make it work with AnyCable, you must add this middleware to AnyCable's middleware stack like this:
+By default, this middleware is automatically added to the AnyCable middleware stack when Devise is present.
+
+You can edit `config/anycable.yml` to disable this behavior by changing the `use_warden_manager` parameter.
+
+```yml
+# config/anycable.yml
+development:
+  use_warden_manager: false
+```
+
+And then, you can manually put this code, for example, into an initializer (`config/initializers/anycable.rb`) or any other configuration file.
 
 ```ruby
 AnyCable::Rails::Rack.middleware.use Warden::Manager do |config|
   Devise.warden_config = config
 end
 ```
-
-You can put this code, for example, into an initializer (`config/initializers/anycable.rb`) or any other configuration file.
 
 Then, you can access the current user via `env["warden"].user(scope)` in your connection class (where `scope` is [Warden scope](https://github.com/wardencommunity/warden/wiki/Scopes), usually, `:user`).

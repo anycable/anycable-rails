@@ -2,6 +2,8 @@
 
 ## master
 
+- Automatically add Warden::Manager to the AnyCable middleware stack when Devise is present. Remove the initializer generation
+
 ## 1.5.1 (2024-04-05)
 
 - Add `anycable-rails-core.rb` to avoid adding `require: ["anycable-rails"]` to Gemfiles manually. ([@palkan][])
@@ -265,3 +267,4 @@ See [Changelog](https://github.com/anycable/anycable-rails/blob/0-6-stable/CHANG
 [@DmitryTsepelev]: https://github.com/DmitryTsepelev
 [@sponomarev]: https://github.com/sponomarev
 [@bibendi]: https://github.com/bibendi
+[@lHydra]: http://github.com/lHydra
