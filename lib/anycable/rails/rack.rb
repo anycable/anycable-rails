@@ -15,14 +15,12 @@ module AnyCable
     # For instance, consider the Rails session middleware: it's responsible for restoring the
     # session data from cookies.
     #
-    # AnyCable adds session middelware by default to its own stack.
+    # AnyCable adds session middleware by default to its own stack.
     #
-    # You can also use any Rack/Rails middleware you want. For example, to enable Devise/Warden
+    # You can also use any Rack/Rails middleware you want. For example, to enable CustomMiddleware
     # you can add the following code to an initializer or any other configuration file:
     #
-    #   AnyCable::Rails::Rack.middleware.use Warden::Manager do |config|
-    #     Devise.warden_config = config
-    #   end
+    #   AnyCable::Rails::Rack.middleware.use CustomMiddleware
     module Rack
       def self.app_build_lock
         @app_build_lock

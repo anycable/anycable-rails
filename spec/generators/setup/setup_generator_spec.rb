@@ -173,37 +173,6 @@ describe AnyCableRailsGenerators::SetupGenerator, type: :generator do
     end
   end
 
-  context "config/initializers/anycable.rb" do
-    subject do
-      run_generator default_opts
-      file("config/initializers/anycable.rb")
-    end
-
-    context "when no devise.rb" do
-      it "doesn't create anycable.rb initializer" do
-        expect(subject).not_to exist
-      end
-    end
-
-    context "when has devise.rb" do
-      before do
-        File.write(
-          File.join(destination_root, "Gemfile.lock"),
-          <<~CODE
-            GEM
-              specs:
-                devise
-          CODE
-        )
-      end
-
-      it "creates anycable.rb initializer" do
-        expect(subject)
-          .to contain("AnyCable::Rails::Rack.middleware.use Warden::Manager")
-      end
-    end
-  end
-
   context "when RuboCop is present" do
     before do
       File.write(
