@@ -2,7 +2,7 @@
 
 ## master
 
-- Automatically add Warden::Manager to the AnyCable middleware stack when Devise is present. Remove the initializer generation
+- Automatically add `Warden::Manager` to the AnyCable middleware stack when Devise is present. ([@lHydra][])
 
 ## 1.5.1 (2024-04-05)
 
