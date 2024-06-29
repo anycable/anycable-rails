@@ -5,6 +5,7 @@ module AnyCable
     module Ext
       autoload :JWT, "anycable/rails/ext/jwt"
       autoload :SignedStreams, "anycable/rails/ext/signed_streams"
+      autoload :WhisperStreams, "anycable/rails/ext/whisper_stream"
     end
   end
 end

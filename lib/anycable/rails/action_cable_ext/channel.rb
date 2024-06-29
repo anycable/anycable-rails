@@ -24,6 +24,11 @@ ActionCable::Channel::Base.prepend(Module.new do
 
   def stream_from(broadcasting, _callback = nil, **opts)
     whispering = opts.delete(:whisper)
+    if whispering
+      self.class.state_attr_accessor(:whisper_stream) unless respond_to?(:whisper_stream)
+      self.whisper_stream = broadcasting
+    end
+
     return super unless anycabled?
 
     broadcasting = String(broadcasting)
@@ -48,6 +53,12 @@ ActionCable::Channel::Base.prepend(Module.new do
     return super unless anycabled?
 
     connection.anycable_socket.unsubscribe_from_all identifier
+  end
+
+  def whisper(payload)
+    return unless whisper_stream
+
+    broadcast_to whisper_stream, payload
   end
 
   private
