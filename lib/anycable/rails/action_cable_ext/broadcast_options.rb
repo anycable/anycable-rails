@@ -13,7 +13,7 @@ ActionCable::Server::Base.prepend(Module.new do
 
   def broadcaster_for(broadcasting, **options)
     broadcasting = AnyCable::Rails.stream_name_from(broadcasting)
-    super(broadcasting, **options)
+    super
   end
 end)
 
