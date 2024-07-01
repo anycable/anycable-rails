@@ -2,6 +2,8 @@
 
 ## master
 
+## 1.5.2 (2024-07-01)
+
 - Automatically add `Warden::Manager` to the AnyCable middleware stack when Devise is present. ([@lHydra][])
 
 ## 1.5.1 (2024-04-05)
