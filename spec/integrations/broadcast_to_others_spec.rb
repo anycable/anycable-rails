@@ -65,8 +65,14 @@ describe "broadcast to others", skip: !supported do
   end
 
   context "with background jobs" do
-    before do
-      ActiveJob::Base.disable_test_adapter
+    if Rails::VERSION::MAJOR >= 7
+      def queue_adapter_for_test
+        ActiveJob::QueueAdapters::AsyncAdapter.new
+      end
+    else
+      before do
+        ActiveJob::Base.disable_test_adapter
+      end
     end
 
     it "pass cable_socket_id to the job" do
