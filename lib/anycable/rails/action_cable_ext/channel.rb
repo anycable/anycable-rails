@@ -55,12 +55,6 @@ ActionCable::Channel::Base.prepend(Module.new do
     connection.anycable_socket.unsubscribe_from_all identifier
   end
 
-  def whisper(payload)
-    return unless whisper_stream
-
-    broadcast_to whisper_stream, payload
-  end
-
   private
 
   def anycabled?
