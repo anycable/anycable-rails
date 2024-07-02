@@ -3,16 +3,11 @@
 require "action_cable"
 
 ActionCable::Channel::Base.prepend(Module.new do
-  def stream_from(broadcasting, _callback = nil, **opts)
-    whispering = opts.delete(:whisper)
-    return super# unless anycabled?
+  # Whispering support
+  def whispers_to(broadcasting)
+    return super unless anycabled?
 
-    broadcasting = String(broadcasting)
-
-    connection.anycable_socket.subscribe identifier, broadcasting
-    if whispering
-      connection.anycable_socket.whisper identifier, broadcasting
-    end
+    connection.anycable_socket.whisper identifier, broadcasting
   end
 
   # Unsubscribing relies on the channel state (which is not persistent in AnyCable).

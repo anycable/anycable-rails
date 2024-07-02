@@ -4,8 +4,10 @@ module AnyCable
   module Rails
     module Ext
       autoload :JWT, "anycable/rails/ext/jwt"
-      autoload :SignedStreams, "anycable/rails/ext/signed_streams"
-      autoload :WhisperStreams, "anycable/rails/ext/whisper_stream"
+
+      # These features are included by default
+      require "anycable/rails/ext/signed_streams"
+      require "anycable/rails/ext/whisper"
     end
   end
 end
