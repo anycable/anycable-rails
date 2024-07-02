@@ -8,6 +8,7 @@ module AnyCable
       @active_periodic_timers
       @_streams
       @parameter_filter
+      @whisper_stream
     ]
 
     ActionCable::Channel::Base.prepend(Module.new do

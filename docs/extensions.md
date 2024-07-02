@@ -105,7 +105,7 @@ Adding `whisper: true` to the stream subscription enables **sending** broadcasts
 
 **IMPORTANT:** There can be only one whisper stream per channel subscription (since from the protocol perspective clients don't know about streams).
 
-**NOTE:** This feature requires AnyCable server and it's ignored otherwise.
+**NOTE:** This feature is supported by Action Cable server (when `anycable-rails` is loaded), too.
 
 ## Helpers
 
