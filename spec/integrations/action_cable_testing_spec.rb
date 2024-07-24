@@ -2,8 +2,6 @@
 
 require "spec_helper"
 
-return unless defined?(ActionCable::Channel::TestCase)
-
 describe "action cable testing compatibility", type: :channel do
   extend(Module.new do
     def channel_class
@@ -76,7 +74,7 @@ describe "action cable testing compatibility", type: :channel do
         }
       )
 
-      expect(connection.transmissions.last["type"]).to eq("confirm_subscription")
+      expect(transmissions.last["type"]).to eq("confirm_subscription")
       expect(ApplicationCable::Connection.events_log.last[:source]).to eq "command"
     end
   end

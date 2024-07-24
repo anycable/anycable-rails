@@ -11,7 +11,7 @@ describe AnyCable::Rails::ConnectionFactory do
 
     specify do
       connection = factory.call(socket)
-      expect(connection.action_cable_connection).to be_an_instance_of(ApplicationCable::Connection)
+      expect(connection.send(:conn)).to be_an_instance_of(ApplicationCable::Connection)
     end
   end
 
@@ -41,13 +41,13 @@ describe AnyCable::Rails::ConnectionFactory do
 
     specify do
       connection = factory.call(socket)
-      expect(connection.action_cable_connection).to be_an_instance_of(cable_connection_class)
+      expect(connection.send(:conn)).to be_an_instance_of(cable_connection_class)
 
       env.url = "/admin/live?some=1"
       another_socket = AnyCable::Socket.new(env: env)
 
       connection = factory.call(another_socket)
-      expect(connection.action_cable_connection).to be_an_instance_of(live_connection_class)
+      expect(connection.send(:conn)).to be_an_instance_of(live_connection_class)
     end
 
     specify "no matching connections" do

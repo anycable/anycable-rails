@@ -14,10 +14,9 @@ module AnyCable
           super.tap { commit_session! }
         end
 
-        def build_rack_request(env)
-          return super unless socket.session
-
-          super.tap do |req|
+        def request
+          @request ||= super.tap do |req|
+            next unless socket.session
             req.env[::Rack::RACK_SESSION] =
               SessionProxy.new(req.env[::Rack::RACK_SESSION], socket.session)
           end
@@ -26,7 +25,7 @@ module AnyCable
         private
 
         def commit_session!
-          return unless request_loaded? && request.session.respond_to?(:loaded?) && request.session.loaded?
+          return unless defined?(@request) && request.session.respond_to?(:loaded?) && request.session.loaded?
 
           socket.session = request.session.to_json
         end

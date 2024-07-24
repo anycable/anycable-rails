@@ -32,6 +32,11 @@ module AnyCable
           identifiers_hash.to_json
         end
 
+        def identifiers_json=(val)
+          @cached_ids = {}
+          @serialized_ids = val ? ActiveSupport::JSON.decode(val) : {}
+        end
+
         # Fetch identifier and deserialize if neccessary
         def fetch_identifier(name)
           return unless @cached_ids
