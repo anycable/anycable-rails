@@ -39,7 +39,7 @@ describe "Compatibility" do
     end
 
     let(:socket) { instance_double("socket", subscribe: nil) }
-    let(:connection) { instance_double("connection", identifiers: [], transmit: nil, socket: socket, logger: Logger.new(IO::NULL)) }
+    let(:connection) { instance_double("connection", identifiers: [], transmit: nil, socket: socket, logger: Logger.new(IO::NULL), anycabled?: false) }
 
     subject { CompatibilityChannel.new(connection, "channel_id") }
 
