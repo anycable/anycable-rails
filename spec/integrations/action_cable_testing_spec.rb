@@ -7,6 +7,10 @@ describe "action cable testing compatibility", type: :channel do
     def channel_class
       TestChannel
     end
+
+    def connection_class
+      ApplicationCable::Connection
+    end
   end)
 
   let(:user) { User.create!(name: "max", secret: "123") }
@@ -17,7 +21,9 @@ describe "action cable testing compatibility", type: :channel do
     specify "subscription" do
       subscribe
       expect(subscription).to be_confirmed
-      expect(subscription).to have_stream_from("test")
+      # FIXME: rspec-rails integration
+      expect(testserver.streams).to include("test")
+      # expect(subscription).to have_stream_from("test")
     end
 
     specify "rejection" do
@@ -31,21 +37,17 @@ describe "action cable testing compatibility", type: :channel do
 
       perform :itick
 
-      expect(transmissions.last).to eq("result" => 1)
+      # FIXME: rspec-rails integration
+      expect(transmissions.last["message"]).to eq("result" => 1)
 
       perform :itick
 
-      expect(transmissions.last).to eq("result" => 2)
+      # FIXME: rspec-rails integration
+      expect(transmissions.last["message"]).to eq("result" => 2)
     end
   end
 
   context "connection tests" do
-    extend(Module.new do
-      def connection_class
-        ApplicationCable::Connection
-      end
-    end)
-
     specify "connect" do
       connect "/cable?token=123", session: {username: user.name}
 
