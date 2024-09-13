@@ -34,7 +34,7 @@ jobs:
             gemfile: "rails7"
           - ruby: "2.7"
             gemfile: "rails6"
-          - ruby: "3.1"
+          - ruby: "3.3"
             gemfile: "railsmaster"
           - ruby: "2.7"
             gemfile: "rails60"
