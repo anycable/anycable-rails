@@ -27,13 +27,15 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        ruby: ["3.2"]
-        gemfile: ["rails8"]
-        include:
-          - ruby: "3.3"
-            gemfile: "railsmaster"
-          - ruby: "3.2"
-            gemfile: "anycablemaster"
+        ruby: ["3.3"]
+        gemfile: ["railsmaster"]
+        # include:
+        #   - ruby: "3.3"
+        #     gemfile: "railsmaster"
+          # - ruby: "3.2"
+          #   gemfile: "anycablemaster"
+          # - ruby: "3.2"
+          #   gemfile: "rails8"
     steps:
     - uses: actions/checkout@v4
     - name: Install system deps

@@ -23,7 +23,7 @@ describe AnyCable::Rails, type: :channel do
 
   let(:conn) { connect }
 
-  let(:transmission) { transmissions.last }
+  let(:transmission) { socket.transmissions.last }
 
   let(:user) { User.create!(name: "jack") }
 

@@ -21,9 +21,7 @@ describe "action cable testing compatibility", type: :channel do
     specify "subscription" do
       subscribe
       expect(subscription).to be_confirmed
-      # FIXME: rspec-rails integration
-      expect(testserver.streams).to include("test")
-      # expect(subscription).to have_stream_from("test")
+      expect(subscription).to have_stream_from("test")
     end
 
     specify "rejection" do
@@ -37,13 +35,11 @@ describe "action cable testing compatibility", type: :channel do
 
       perform :itick
 
-      # FIXME: rspec-rails integration
-      expect(transmissions.last["message"]).to eq("result" => 1)
+      expect(transmissions.last).to eq("result" => 1)
 
       perform :itick
 
-      # FIXME: rspec-rails integration
-      expect(transmissions.last["message"]).to eq("result" => 2)
+      expect(transmissions.last).to eq("result" => 2)
     end
   end
 
@@ -76,7 +72,7 @@ describe "action cable testing compatibility", type: :channel do
         }
       )
 
-      expect(transmissions.last["type"]).to eq("confirm_subscription")
+      expect(socket.transmissions.last["type"]).to eq("confirm_subscription")
       expect(ApplicationCable::Connection.events_log.last[:source]).to eq "command"
     end
   end
