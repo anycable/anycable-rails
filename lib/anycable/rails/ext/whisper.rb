@@ -3,7 +3,7 @@
 require "action_cable"
 
 ActionCable::Channel::Base.prepend(Module.new do
-  private attr_accessor :whisper_stream
+  attr_accessor :whisper_stream
 
   def stream_from(broadcasting, _callback = nil, **opts)
     whispering = opts.delete(:whisper)
@@ -11,7 +11,10 @@ ActionCable::Channel::Base.prepend(Module.new do
     super
   end
 
-  def whispers_to(broadcasting) = self.whisper_stream = broadcasting
+  def whispers_to(broadcasting)
+    logger.debug "#{self.class.name} whispers to #{broadcasting}"
+    self.whisper_stream = broadcasting
+  end
 end)
 
 ActionCable::Connection::Subscriptions.prepend(Module.new do
@@ -26,6 +29,6 @@ ActionCable::Connection::Subscriptions.prepend(Module.new do
     stream = subscription.whisper_stream
     raise "Whispering stream is not set" unless stream
 
-    broadcast_to stream, data["data"]
+    ::ActionCable.server.broadcast stream, data["data"]
   end
 end)

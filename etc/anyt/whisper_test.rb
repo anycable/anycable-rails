@@ -29,6 +29,8 @@ feature "Whisper" do
   scenario %(
     Only other clients receive the whisper message
   ) do
+    skip if Anyt.config.use_action_cable
+
     perform_request = {
       :command => "whisper",
       :identifier => {channel: channel}.to_json,
