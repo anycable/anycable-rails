@@ -6,13 +6,10 @@ module AnyCable
   module Rails
     class Connection
       class Subscriptions < ::ActionCable::Connection::Subscriptions
-        COMMANDS = %w[subscribe unsubscribe message].freeze
-
         # Wrap the original #execute_command to pre-initialize the channel for unsubscribe/message and
         # return true/false to indicate successful/unsuccessful subscription.
         def execute_command(data)
           cmd = data["command"]
-          return false unless COMMANDS.include?(cmd)
 
           load(data["identifier"]) unless cmd == "subscribe"
 
