@@ -8,8 +8,6 @@ AnyCable allows you to use any WebSocket server (written in any language) as a r
 
 With AnyCable you can use channels, client-side JS, broadcasting - (almost) all that you can do with Action Cable.
 
-You can even use Action Cable in development and not be afraid of [compatibility issues](#compatibility).
-
 💾 [Example Application](https://github.com/anycable/anycable_rails_demo)
 
 📑 [Documentation](https://docs.anycable.io/rails/getting_started).
@@ -21,9 +19,10 @@ You can even use Action Cable in development and not be afraid of [compatibility
 
 ## Requirements
 
-- Ruby >= 2.6
-- Rails >= 6.0 (Rails 5.1 could work but we're no longer enforce compatibility on CI)
-- Redis (see [other options](https://github.com/anycable/anycable/issues/2) for broadcasting)
+- Ruby >= 3.1
+- Rails >= 6.0\*
+
+\* Recent `anycable-rails` versions only work with Rails 8+; older versions compatible with Rails 6 and Rails 7 still receive fixes and minor updates (patch releases).
 
 ## Usage
 
@@ -31,9 +30,6 @@ Add `anycable-rails` gem to your Gemfile:
 
 ```ruby
 gem "anycable-rails"
-
-# when using Redis broadcast adapter
-gem "redis", ">= 4.0"
 ```
 
 ### Interactive set up

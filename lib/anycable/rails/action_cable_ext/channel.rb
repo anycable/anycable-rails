@@ -45,6 +45,11 @@ ActionCable::Channel::Base.prepend(Module.new do
     connection.anycable_socket.unsubscribe_from_all identifier
   end
 
+  # Make rejected status accessible from outside
+  def rejected?
+    subscription_rejected?
+  end
+
   private
 
   def anycabled?

@@ -1,6 +1,10 @@
 source "https://rubygems.org"
 
+# gem "actioncable", "~> 8.0"
+# gem "activerecord"
+# gem "activejob"
 gem "rails", git: "https://github.com/palkan/rails.git", branch: "refactor/action-cable-server-adapterization"
+
 gem "rspec-rails"
 gem "sqlite3"
 

@@ -14,32 +14,32 @@ module AnyCable
           cmd = data["command"]
           return false unless COMMANDS.include?(cmd)
 
-          fetch(data["identifier"]) unless cmd == "subscribe"
+          load(data["identifier"]) unless cmd == "subscribe"
 
           super
 
           return true unless cmd == "subscribe"
 
-          !fetch(data["identifier"])&.rejected?
+          subscription = subscriptions[data["identifier"]]
+          !(subscription.nil? || subscription.rejected?)
         end
 
         # Restore channels from the list of identifiers and the state
         def restore(subscriptions, istate)
           subscriptions.each do |id|
-            channel = fetch(id)
+            channel = load(id)
             channel.__istate__ = ActiveSupport::JSON.decode(istate[id]) if istate[id]
           end
         end
 
         # Find or create a channel for a given identifier
-        def fetch(identifier)
-          add("identifier" => identifier) unless subscriptions[identifier]
+        def load(identifier)
+          return subscriptions[identifier] if subscriptions[identifier]
 
-          unless subscriptions[identifier]
-            raise "Channel not found: #{ActiveSupport::JSON.decode(identifier).fetch("channel")}"
-          end
+          subscription = subscription_from_identifier(identifier)
+          raise "Channel not found: #{ActiveSupport::JSON.decode(identifier).fetch("channel")}" unless subscription
 
-          subscriptions[identifier]
+          subscriptions[identifier] = subscription
         end
       end
 
@@ -84,6 +84,7 @@ module AnyCable
 
       def handle_close
         conn.handle_close
+        close
         true
       end
 
@@ -112,6 +113,7 @@ module AnyCable
       end
 
       def close(...)
+        return if socket.closed?
         logger.info finished_request_message if access_logs?
         socket.close(...)
       end

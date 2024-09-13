@@ -12,9 +12,7 @@ module ApplicationCable
       end
     end
 
-    if respond_to?(:rescue_from)
-      rescue_from ActiveRecord::RecordNotFound, with: :track_error
-    end
+    rescue_from ActiveRecord::RecordNotFound, with: :track_error
 
     delegate :session, to: :request
 
@@ -55,6 +53,7 @@ module ApplicationCable
 
     def track_error(e)
       self.class.log_event("error", message: e.message)
+      raise e
     end
   end
 end

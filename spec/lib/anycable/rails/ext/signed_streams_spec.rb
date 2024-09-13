@@ -21,25 +21,9 @@ describe AnyCable::Rails, type: :channel do
     AnyCable.config.streams_secret = was_secret
   end
 
-  let(:conn) do
-    req = ActionDispatch::TestRequest.create({"PATH_INFO" => "/cable"})
-    conn = AnyCableTestConnection.allocate
+  let(:conn) { connect }
 
-    ws = double("websocket")
-    allow(ws).to receive(:alive?) { true }
-    allow(ws).to receive(:close)
-    allow(conn).to receive(:websocket) { ws }
-
-    conn.singleton_class.include(ActionCable::Connection::TestConnection)
-    conn.send(:initialize, req)
-    conn
-  end
-
-  before do
-    allow_any_instance_of(AnyCable::Rails::PubSubChannel).to receive(:stream_from)
-  end
-
-  let(:transmission) { conn.transmissions.last }
+  let(:transmission) { transmissions.last }
 
   let(:user) { User.create!(name: "jack") }
 
