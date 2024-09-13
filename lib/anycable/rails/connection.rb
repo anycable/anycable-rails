@@ -4,12 +4,77 @@ require "action_cable"
 
 module AnyCable
   module Rails
+    class Current < ActiveSupport::CurrentAttributes
+      attribute :identifier
+    end
+
+    # Wrap ActionCable.server to provide a custom executor
+    # and a pubsub adapter
+    class Server < SimpleDelegator
+      # Implements an executor inteface
+      class Executor
+        class NoopTimer
+          def shutdown = nil
+        end
+
+        NOOP_TIMER = NoopTimer.new.freeze
+
+        def post(...)
+          raise NonImplementedError, "Executor#post is not implemented in AnyCable context"
+        end
+
+        def timer(...) = NOOP_TIMER
+      end
+
+      # A signleton executor for all connections
+      EXECUTOR = Executor.new.freeze
+
+      # PubSub adapter to manage streams configuration
+      # for the underlying socket
+      class PubSub
+        private attr_reader :socket
+
+        ALL_STREAMS = Data.define(:to_str).new("all")
+
+        def initialize(socket) = @socket = socket
+
+        def subscribe(channel, _message_callback, success_callback = nil)
+          socket.subscribe identifier, channel
+          success_callback&.call
+        end
+
+        def unsubscribe(channel, _message_callback)
+          if channel == ALL_STREAMS
+            socket.unsubscribe_from_all identifier
+          else
+            socket.unsubscribe identifier, channel
+          end
+        end
+
+        private
+
+        def identifier = Current.identifier
+      end
+
+      attr_accessor :pubsub, :executor
+
+      def self.for(server, socket)
+        new(server).tap do |srv|
+          srv.executor = EXECUTOR
+          srv.pubsub = PubSub.new(socket)
+        end
+      end
+    end
+
     class Connection
       class Subscriptions < ::ActionCable::Connection::Subscriptions
         # Wrap the original #execute_command to pre-initialize the channel for unsubscribe/message and
         # return true/false to indicate successful/unsuccessful subscription.
         def execute_command(data)
           cmd = data["command"]
+
+          # We need the current channel identifier in pub/sub
+          Current.identifier = data["identifier"]
 
           load(data["identifier"]) unless cmd == "subscribe"
 
@@ -50,6 +115,8 @@ module AnyCable
       delegate :cstate, :istate, to: :socket
 
       def initialize(connection_class, socket, identifiers: nil, subscriptions: nil, server: ::ActionCable.server)
+        server = Server.for(server, socket)
+
         @socket = socket
         @server = server
         # TODO: Move protocol to socket.env as "anycable.protocol"
