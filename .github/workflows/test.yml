@@ -65,6 +65,34 @@ jobs:
       run: |
         bundle install
         bundle exec anyt --self-check
+  anyt:
+    if: ${{ !contains(github.event.head_commit.message, '[ci skip tests]') }}
+    runs-on: ubuntu-latest
+    env:
+      BUNDLE_JOBS: 4
+      BUNDLE_RETRY: 3
+      BUNDLE_FORCE_RUBY_PLATFORM: 1
+      CI: true
+      BUNDLE_GEMFILE: "gemfiles/anyt.gemfile"
+    services:
+      redis:
+        image: redis:7.0-alpine
+        ports: ["6379:6379"]
+        options: --health-cmd="redis-cli ping" --health-interval 1s --health-timeout 3s --health-retries 30
+    steps:
+    - uses: actions/checkout@v4
+    - name: Install system deps
+      run: |
+        sudo apt-get update
+        sudo apt-get install libsqlite3-dev
+    - uses: ruby/setup-ruby@v1
+      with:
+        ruby-version: 3.3
+        bundler-cache: true
+    - name: Run conformance tests with Anyt
+      run: |
+        bundle exec anyt --self-check
+
   coverage:
     needs: rspec
     runs-on: ubuntu-latest
