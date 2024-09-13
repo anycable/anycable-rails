@@ -12,20 +12,10 @@ end)
 
 # Handle $pubsub channel in Subscriptions
 ActionCable::Connection::Subscriptions.prepend(Module.new do
-  # The contents are mostly copied from the original,
-  # there is no good way to configure channels mapping due to #safe_constantize
-  # and the layers of JSON
-  # https://github.com/rails/rails/blob/main/actioncable/lib/action_cable/connection/subscriptions.rb
-  def add(data)
-    id_key = data["identifier"]
+  def subscription_from_identifier(id_key)
     id_options = ActiveSupport::JSON.decode(id_key).with_indifferent_access
-
-    return if subscriptions.key?(id_key)
-
     return super unless id_options[:channel] == "$pubsub"
 
-    subscription = AnyCable::Rails::PubSubChannel.new(connection, id_key, id_options)
-    subscriptions[id_key] = subscription
-    subscription.subscribe_to_channel
+    AnyCable::Rails::PubSubChannel.new(connection, id_key, id_options)
   end
 end)

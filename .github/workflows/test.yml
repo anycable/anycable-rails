@@ -21,27 +21,21 @@ jobs:
       COVERALLS_REPO_TOKEN: ${{ secrets.github_token }}
     services:
       redis:
-        image: redis:6.0-alpine
+        image: redis:7.0-alpine
         ports: ["6379:6379"]
         options: --health-cmd="redis-cli ping" --health-interval 1s --health-timeout 3s --health-retries 30
     strategy:
       fail-fast: false
       matrix:
-        ruby: ["3.0"]
-        gemfile: ["rails6"]
+        ruby: ["3.2"]
+        gemfile: ["rails8"]
         include:
-          - ruby: "3.2"
-            gemfile: "rails7"
-          - ruby: "2.7"
-            gemfile: "rails6"
           - ruby: "3.3"
             gemfile: "railsmaster"
-          - ruby: "2.7"
-            gemfile: "rails60"
           - ruby: "3.2"
             gemfile: "anycablemaster"
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v4
     - name: Install system deps
       run: |
         sudo apt-get update

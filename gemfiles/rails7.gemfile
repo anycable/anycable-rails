@@ -1,9 +1,0 @@
-source "https://rubygems.org"
-
-gem "actioncable", "~> 7.0"
-gem "activerecord"
-gem "activejob"
-gem "rspec-rails"
-gem "sqlite3", "~> 1.4"
-
-gemspec path: "..", name: "anycable-rails"

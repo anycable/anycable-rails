@@ -16,4 +16,4 @@ else
   gem 'activejob'
 end
 
-gem 'sqlite3', '~> 1.3'
+gem 'sqlite3', '~> 2.0'

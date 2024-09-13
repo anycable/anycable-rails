@@ -10,7 +10,7 @@ module AnyCable
           super
         rescue AnyCable::JWT::ExpiredSignature
           logger.error "An expired JWT token was rejected"
-          close(reason: "token_expired", reconnect: false) if websocket&.alive?
+          close(reason: "token_expired", reconnect: false)
         end
 
         def anycable_jwt_present?
