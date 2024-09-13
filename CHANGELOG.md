@@ -2,6 +2,12 @@
 
 ## master
 
+## 1.5.3 (2024-09-12)
+
+- Set upper limit on supported Rails versions. ([@palkan][])
+
+  The current release series is unlikely to not work with Rails 8. Let's prevent using them together.
+
 ## 1.5.2 (2024-07-01)
 
 - Automatically add `Warden::Manager` to the AnyCable middleware stack when Devise is present. ([@lHydra][])
