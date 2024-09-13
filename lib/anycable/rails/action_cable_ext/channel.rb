@@ -3,20 +3,9 @@
 require "action_cable"
 
 ActionCable::Channel::Base.prepend(Module.new do
-  # TODO: Move to custom executor
-  def start_periodic_timers
-    super unless anycabled?
-  end
-
-  # TODO: Move to custom executor
-  def stop_periodic_timers
-    super unless anycabled?
-  end
-
-  # TODO: Move to custom pub/sub
   def stream_from(broadcasting, _callback = nil, **opts)
     whispering = opts.delete(:whisper)
-    return super unless anycabled?
+    return super# unless anycabled?
 
     broadcasting = String(broadcasting)
 
@@ -26,33 +15,27 @@ ActionCable::Channel::Base.prepend(Module.new do
     end
   end
 
-  # TODO: Move to custom pub/sub
-  def stream_for(model, callback = nil, **opts, &block)
-    stream_from(broadcasting_for(model), callback || block, **opts)
-  end
-
-  # TODO: Move to custom pub/sub
+  # Unsubscribing relies on the channel state (which is not persistent in AnyCable).
+  # Thus, we pretend that the stream is registered to make Action Cable do its unsubscribing job.
   def stop_stream_from(broadcasting)
-    return super unless anycabled?
-
-    connection.anycable_socket.unsubscribe identifier, broadcasting
+    streams[broadcasting] = true if anycabled?
+    super
   end
 
-  # TODO: Move to custom pub/sub
+  # For AnyCable, unsubscribing from all streams is a separate operation,
+  # so we use a special constant to indicate it.
   def stop_all_streams
-    return super unless anycabled?
-
-    connection.anycable_socket.unsubscribe_from_all identifier
+    if anycabled?
+      streams.clear
+      streams[AnyCable::Rails::Server::PubSub::ALL_STREAMS] = true
+    end
+    super
   end
 
   # Make rejected status accessible from outside
-  def rejected?
-    subscription_rejected?
-  end
+  def rejected? = subscription_rejected?
 
   private
 
-  def anycabled?
-    connection.anycabled?
-  end
+  def anycabled? = connection.anycabled?
 end)

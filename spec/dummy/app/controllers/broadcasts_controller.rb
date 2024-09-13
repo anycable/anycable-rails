@@ -14,8 +14,8 @@ class BroadcastsController < ApplicationController
 
   private
 
-  def maybe_disable_auto_batching(&block)
+  def maybe_disable_auto_batching(&)
     return yield unless params[:disable_auto_batching]
-    AnyCable.broadcast_adapter.batching(false, &block)
+    AnyCable.broadcast_adapter.batching(false, &)
   end
 end

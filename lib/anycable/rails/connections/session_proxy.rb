@@ -46,9 +46,9 @@ module AnyCable
           rack_session.respond_to?(name, include_private) || super
         end
 
-        def method_missing(method, *args, &block)
+        def method_missing(method, ...)
           if rack_session.respond_to?(method, true)
-            rack_session.send(method, *args, &block)
+            rack_session.send(method, ...)
           else
             super
           end

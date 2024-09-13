@@ -12,7 +12,7 @@ ActionCable::Connection::Base.prepend(Module.new do
   # Allow overriding #subscriptions to use a custom implementation
   attr_writer :subscriptions
 
-  # FIXME: Access AnyCable socket
+  # Alias for the #socket which is only set within AnyCable RPC context
   attr_accessor :anycable_socket
 
   # Enhance #send_welcome_message to include sid if present
@@ -23,7 +23,6 @@ ActionCable::Connection::Base.prepend(Module.new do
     }.compact)
   end
 
-  # TODO: Allow turning off internal channel?
   def subscribe_to_internal_channel
     super unless anycabled?
   end
