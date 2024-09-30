@@ -1,0 +1,17 @@
+path "../../rails" do
+  gem 'activerecord'
+  gem 'actioncable'
+  gem 'activejob'
+  gem 'activesupport'
+  gem 'railties'
+end
+gem 'anycable', path: '../anycable'
+path '../../rspec' do
+  gem 'rspec-core'
+  gem 'rspec-support'
+  gem 'rspec-expectations'
+  gem 'rspec-rails'
+end
+
+gem "anyt", path: "../anyt"
+gem "puma"

@@ -1,13 +1,7 @@
 source "https://rubygems.org"
 
-gem "rails", git: "https://github.com/palkan/rails.git", branch: "refactor/action-cable-server-adapterization"
-gem "rspec-rails", git: "https://github.com/palkan/rspec-rails.git", branch: "feat/actioncable-v8"
-
-gem "rspec-core", git: "https://github.com/rspec/rspec-core.git"
-gem "rspec-support", git: "https://github.com/rspec/rspec-support.git"
-gem "rspec-expectations", git: "https://github.com/rspec/rspec-expectations.git"
-gem "rspec-mocks", git: "https://github.com/rspec/rspec-mocks.git"
-
+gem "rails", git: "https://github.com/rails/rails.git", branch: "main"
+gem "rspec-rails"
 gem "sqlite3"
 
 gemspec path: "..", name: "anycable-rails"

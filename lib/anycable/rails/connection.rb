@@ -4,192 +4,160 @@ require "action_cable"
 
 module AnyCable
   module Rails
-    class Current < ActiveSupport::CurrentAttributes
-      attribute :identifier
-    end
+    # Enhance Action Cable connection
+    using(Module.new do
+      refine ActionCable::Connection::Base do
+        attr_writer :env, :websocket, :logger, :coder,
+          :subscriptions, :serialized_ids, :cached_ids, :server,
+          :anycable_socket
 
-    # Wrap ActionCable.server to provide a custom executor
-    # and a pubsub adapter
-    class Server < SimpleDelegator
-      # Implements an executor inteface
-      class Executor
-        class NoopTimer
-          def shutdown = nil
+        # Using public :send_welcome_message causes stack level too deep 🤷🏻‍♂️
+        def send_welcome_message
+          transmit({
+            type: ActionCable::INTERNAL[:message_types][:welcome],
+            sid: env["anycable.sid"]
+          }.compact)
         end
 
-        NOOP_TIMER = NoopTimer.new.freeze
-
-        def post(...)
-          raise NonImplementedError, "Executor#post is not implemented in AnyCable context"
+        def public_request
+          request
         end
-
-        def timer(...) = NOOP_TIMER
       end
 
-      # A signleton executor for all connections
-      EXECUTOR = Executor.new.freeze
-
-      # PubSub adapter to manage streams configuration
-      # for the underlying socket
-      class PubSub
-        private attr_reader :socket
-
-        ALL_STREAMS = Data.define(:to_str).new("all")
-
-        def initialize(socket) = @socket = socket
-
-        def subscribe(channel, _message_callback, success_callback = nil)
-          socket.subscribe identifier, channel
-          success_callback&.call
+      refine ActionCable::Channel::Base do
+        def rejected?
+          subscription_rejected?
         end
+      end
 
-        def unsubscribe(channel, _message_callback)
-          if channel == ALL_STREAMS
-            socket.unsubscribe_from_all identifier
-          else
-            socket.unsubscribe identifier, channel
+      refine ActionCable::Connection::Subscriptions do
+        # Find or add a subscription to the list
+        def fetch(identifier)
+          add("identifier" => identifier) unless subscriptions[identifier]
+
+          unless subscriptions[identifier]
+            raise "Channel not found: #{ActiveSupport::JSON.decode(identifier).fetch("channel")}"
           end
-        end
 
-        private
-
-        def identifier = Current.identifier
-      end
-
-      attr_accessor :pubsub, :executor
-
-      def self.for(server, socket)
-        new(server).tap do |srv|
-          srv.executor = EXECUTOR
-          srv.pubsub = PubSub.new(socket)
+          subscriptions[identifier]
         end
       end
-    end
+    end)
 
     class Connection
-      class Subscriptions < ::ActionCable::Connection::Subscriptions
-        # Wrap the original #execute_command to pre-initialize the channel for unsubscribe/message and
-        # return true/false to indicate successful/unsuccessful subscription.
-        def execute_command(data)
-          cmd = data["command"]
-
-          # We need the current channel identifier in pub/sub
-          Current.identifier = data["identifier"]
-
-          load(data["identifier"]) unless cmd == "subscribe"
-
-          super
-
-          return true unless cmd == "subscribe"
-
-          subscription = subscriptions[data["identifier"]]
-          !(subscription.nil? || subscription.rejected?)
-        end
-
-        # Restore channels from the list of identifiers and the state
-        def restore(subscriptions, istate)
-          subscriptions.each do |id|
-            channel = load(id)
-            channel.__istate__ = ActiveSupport::JSON.decode(istate[id]) if istate[id]
-          end
-        end
-
-        # Find or create a channel for a given identifier
-        def load(identifier)
-          return subscriptions[identifier] if subscriptions[identifier]
-
-          subscription = subscription_from_identifier(identifier)
-          raise "Channel not found: #{ActiveSupport::JSON.decode(identifier).fetch("channel")}" unless subscription
-
-          subscriptions[identifier] = subscription
-        end
-      end
-
       # We store logger tags in the connection state to be able
       # to re-use them in the subsequent calls
       LOG_TAGS_IDENTIFIER = "__ltags__"
 
-      attr_reader :socket, :server
-
       delegate :identifiers_json, to: :conn
-      delegate :cstate, :istate, to: :socket
 
-      def initialize(connection_class, socket, identifiers: nil, subscriptions: nil, server: ::ActionCable.server)
-        server = Server.for(server, socket)
+      attr_reader :socket, :logger
 
+      def initialize(connection_class, socket, identifiers: nil, subscriptions: nil)
         @socket = socket
-        @server = server
-        # TODO: Move protocol to socket.env as "anycable.protocol"
-        @protocol = "actioncable-v1-json"
 
         logger_tags = fetch_logger_tags_from_state
-        @logger = ActionCable::Server::TaggedLoggerProxy.new(AnyCable.logger, tags: logger_tags)
+        @logger = ActionCable::Connection::TaggedLoggerProxy.new(AnyCable.logger, tags: logger_tags)
 
-        @conn = connection_class.new(server, self)
-        conn.subscriptions = Subscriptions.new(conn)
-        conn.identifiers_json = identifiers
-        conn.anycable_socket = socket
-        conn.subscriptions.restore(subscriptions, socket.istate) if subscriptions
+        # Instead of calling #initialize,
+        # we allocate an instance and setup all the required components manually
+        @conn = connection_class.allocate
+        # Required to access config (for access origin checks)
+        conn.server = ActionCable.server
+        conn.logger = logger
+        conn.anycable_socket = conn.websocket = socket
+        conn.env = socket.env
+        conn.coder = ActiveSupport::JSON
+        conn.subscriptions = ActionCable::Connection::Subscriptions.new(conn)
+        conn.serialized_ids = {}
+        conn.serialized_ids = ActiveSupport::JSON.decode(identifiers) if identifiers
+        conn.cached_ids = {}
+        conn.anycable_request_builder = self
+
+        return unless subscriptions
+
+        # Pre-initialize channels (for disconnect)
+        subscriptions.each do |id|
+          channel = conn.subscriptions.fetch(id)
+          next unless socket.istate[id]
+
+          channel.__istate__ = ActiveSupport::JSON.decode(socket.istate[id])
+        end
       end
 
-      # == AnyCable RPC interface [BEGIN] ==
       def handle_open
         logger.info started_request_message if access_logs?
 
-        return close unless allow_request_origin?
+        verify_origin! || return
 
-        conn.handle_open
+        conn.connect if conn.respond_to?(:connect)
 
-        # Commit log tags to the connection state
         socket.cstate.write(LOG_TAGS_IDENTIFIER, logger.tags.to_json) unless logger.tags.empty?
 
-        socket.closed?
+        conn.send_welcome_message
+      rescue ::ActionCable::Connection::Authorization::UnauthorizedError
+        reject_request(
+          ActionCable::INTERNAL[:disconnect_reasons]&.[](:unauthorized) || "unauthorized"
+        )
       end
 
       def handle_close
-        conn.handle_close
-        close
+        logger.info finished_request_message if access_logs?
+
+        conn.subscriptions.unsubscribe_from_all
+        conn.disconnect if conn.respond_to?(:disconnect)
         true
       end
 
       def handle_channel_command(identifier, command, data)
-        conn.handle_incoming({"command" => command, "identifier" => identifier, "data" => data})
-      end
-      # == AnyCable RPC interface [END] ==
-
-      # == Action Cable socket interface [BEGIN]
-      attr_reader :protocol, :logger
-
-      def request
-        @request ||= begin
-          env = socket.env
-          environment = ::Rails.application.env_config.merge(env) if defined?(::Rails.application) && ::Rails.application
-          AnyCable::Rails::Rack.app.call(environment) if environment
-
-          ActionDispatch::Request.new(environment || env)
+        conn.run_callbacks :command do
+          # We cannot use subscriptions#execute_command here,
+          # since we MUST return true of false, depending on the status
+          # of execution
+          channel = conn.subscriptions.fetch(identifier)
+          case command
+          when "subscribe"
+            channel.handle_subscribe
+            !channel.rejected?
+          when "unsubscribe"
+            conn.subscriptions.remove_subscription(channel)
+            true
+          when "message"
+            channel.perform_action ActiveSupport::JSON.decode(data)
+            true
+          else
+            false
+          end
         end
+      # Support rescue_from
+      # https://github.com/rails/rails/commit/d2571e560c62116f60429c933d0c41a0e249b58b
+      rescue Exception => e # rubocop:disable Lint/RescueException
+        rescue_with_handler(e) || raise
+        false
       end
 
-      delegate :env, to: :request
+      def build_rack_request(env)
+        environment = ::Rails.application.env_config.merge(env) if defined?(::Rails.application) && ::Rails.application
+        AnyCable::Rails::Rack.app.call(environment) if environment
 
-      def transmit(data)
-        socket.transmit ActiveSupport::JSON.encode(data)
+        ActionDispatch::Request.new(environment || env)
       end
 
-      def close(...)
-        return if socket.closed?
-        logger.info finished_request_message if access_logs?
-        socket.close(...)
+      def action_cable_connection
+        conn
       end
-
-      def perform_work(receiver, method_name, *args)
-        raise ArgumentError, "Performing work is not supported within AnyCable"
-      end
-      # == Action Cable socket interface [END]
 
       private
 
       attr_reader :conn
+
+      def reject_request(reason, reconnect = false)
+        logger.info finished_request_message("Rejected") if access_logs?
+        conn.close(
+          reason: reason,
+          reconnect: reconnect
+        )
+      end
 
       def fetch_logger_tags_from_state
         socket.cstate.read(LOG_TAGS_IDENTIFIER).yield_self do |raw_tags|
@@ -205,21 +173,38 @@ module AnyCable
         )
       end
 
-      def finished_request_message
+      def finished_request_message(reason = "Closed")
         format(
-          'Finished "%s"%s for %s at %s',
-          request.filtered_path, " [AnyCable]", request.ip, Time.now.to_s
+          'Finished "%s"%s for %s at %s (%s)',
+          request.filtered_path, " [AnyCable]", request.ip, Time.now.to_s, reason
         )
       end
 
-      def allow_request_origin?
+      def verify_origin!
         return true unless socket.env.key?("HTTP_ORIGIN")
 
-        server.allow_request_origin?(socket.env)
+        return true if conn.send(:allow_request_origin?)
+
+        reject_request(
+          ActionCable::INTERNAL[:disconnect_reasons]&.[](:invalid_request) || "invalid_request"
+        )
+        false
       end
 
       def access_logs?
         AnyCable.config.access_logs_disabled == false
+      end
+
+      def request
+        conn.public_request
+      end
+
+      def request_loaded?
+        conn.instance_variable_defined?(:@request)
+      end
+
+      def rescue_with_handler(e)
+        conn.rescue_with_handler(e) if conn.respond_to?(:rescue_with_handler)
       end
     end
   end
