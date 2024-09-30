@@ -10,6 +10,7 @@ rescue => e
 end
 
 require "rspec/rails"
+require "action_cable/next/rspec" if ENV["NEXT_ACTION_CABLE"] == "1"
 
 Rails.application.eager_load!
 

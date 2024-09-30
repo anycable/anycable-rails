@@ -44,6 +44,10 @@ describe "action cable testing compatibility", type: :channel do
   end
 
   context "connection tests" do
+    let(:transmissions) do
+      defined?(socket) ? socket.transmissions : connection.transmissions
+    end
+
     specify "connect" do
       connect "/cable?token=123", session: {username: user.name}
 
@@ -72,7 +76,7 @@ describe "action cable testing compatibility", type: :channel do
         }
       )
 
-      expect(socket.transmissions.last["type"]).to eq("confirm_subscription")
+      expect(transmissions.last["type"]).to eq("confirm_subscription")
       expect(ApplicationCable::Connection.events_log.last[:source]).to eq "command"
     end
   end

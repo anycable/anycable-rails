@@ -1,6 +1,25 @@
 # frozen_string_literal: true
 
-require "anycable/rails/connection"
+require "action_cable"
+
+begin
+  ActionCable::Server::Socket
+rescue
+end
+
+if defined?(ActionCable::Server::Socket)
+  require "anycable/rails/next/connection"
+  require "anycable/rails/next/action_cable_ext/connection"
+  require "anycable/rails/next/action_cable_ext/channel"
+else
+  require "anycable/rails/connection"
+
+  require "anycable/rails/action_cable_ext/connection"
+  require "anycable/rails/action_cable_ext/channel"
+end
+
+require "anycable/rails/action_cable_ext/remote_connections"
+require "anycable/rails/action_cable_ext/broadcast_options"
 
 module AnyCable
   module Rails

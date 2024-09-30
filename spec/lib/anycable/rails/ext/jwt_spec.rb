@@ -74,12 +74,31 @@ describe AnyCable::Rails::Ext::JWT, type: :channel do
   it "rejects with token_expired reason when expired" do
     token = AnyCable::JWT.encode({user: user}, expires_at: 1.minute.ago)
 
-    expect { connect params: {joken: token} }.to raise_error(AnyCable::JWT::ExpiredSignature)
+    # Action Cable Next
+    if defined?(testserver)
+      expect { connect params: {joken: token} }.to raise_error(AnyCable::JWT::ExpiredSignature)
 
-    # now we can re-use the same connection info and call #handle_open directly
-    conn = self.class.connection_class.new(testserver, socket)
-    conn.handle_open
+      # now we can re-use the same connection info and call #handle_open directly
+      conn = self.class.connection_class.new(testserver, socket)
+      conn.handle_open
 
-    expect(socket.transmissions.last["reason"]).to eq "token_expired"
+      expect(socket.transmissions.last["reason"]).to eq "token_expired"
+    else
+      req = ActionDispatch::TestRequest.create({"QUERY_STRING" => "joken=#{token}", "PATH_INFO" => "/cable"})
+      conn = AnyCableTestConnection.allocate
+
+      ws = double("websocket")
+      allow(ws).to receive(:alive?) { true }
+      expect(ws).to receive(:close)
+
+      allow(conn).to receive(:websocket) { ws }
+
+      conn.singleton_class.include(ActionCable::Connection::TestConnection)
+      conn.send(:initialize, req)
+
+      conn.handle_open
+
+      expect(conn.transmissions.last["reason"]).to eq "token_expired"
+    end
   end
 end

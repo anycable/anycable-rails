@@ -1,8 +1,6 @@
 source "https://rubygems.org"
 
-gem "actioncable", "~> 8.0"
-gem "activerecord"
-gem "activejob"
+gem "rails", "~> 8.0.0.beta1"
 gem "rspec-rails"
 gem "sqlite3"
 

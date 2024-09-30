@@ -3,7 +3,7 @@ name: Build
 on:
   push:
     branches:
-    - master
+      - master
   pull_request:
   workflow_dispatch:
 
@@ -28,37 +28,35 @@ jobs:
       fail-fast: false
       matrix:
         ruby: ["3.3"]
-        gemfile: ["railsmaster"]
-        # include:
-        #   - ruby: "3.3"
-        #     gemfile: "railsmaster"
-          # - ruby: "3.2"
-          #   gemfile: "anycablemaster"
-          # - ruby: "3.2"
-          #   gemfile: "rails8"
+        gemfile: ["rails7", "rails8"]
+        next: ["0", "1"]
+        include:
+          - ruby: "3.2"
+            gemfile: "anycablemaster"
+            next: "0"
     steps:
-    - uses: actions/checkout@v4
-    - name: Install system deps
-      run: |
-        sudo apt-get update
-        sudo apt-get install libsqlite3-dev
-    - uses: ruby/setup-ruby@v1
-      with:
-        ruby-version: ${{ matrix.ruby }}
-        bundler-cache: true
-    - name: Install Coveralls reporter
-      run: |
-        curl -L https://github.com/coverallsapp/coverage-reporter/releases/latest/download/coveralls-linux.tar.gz | tar zxv
-    - name: Run RSpec
-      continue-on-error: ${{ matrix.allow_failure }}
-      run: |
-        bundle exec rake spec
-        ./coveralls -p --job-flag=ruby-${{ matrix.ruby }}-${{ matrix.gemfile }}
-    - name: Run compatibility specs
-      continue-on-error: ${{ matrix.allow_failure }}
-      run: |
-        bundle exec rake spec:compatibility
-        ./coveralls -p --job-flag=compatibility-${{ matrix.ruby }}-${{ matrix.gemfile }}
+      - uses: actions/checkout@v4
+      - name: Install system deps
+        run: |
+          sudo apt-get update
+          sudo apt-get install libsqlite3-dev
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: ${{ matrix.ruby }}
+          bundler-cache: true
+      - name: Install Coveralls reporter
+        run: |
+          curl -L https://github.com/coverallsapp/coverage-reporter/releases/latest/download/coveralls-linux.tar.gz | tar zxv
+      - name: Run RSpec
+        continue-on-error: ${{ matrix.allow_failure }}
+        run: |
+          bundle exec rake spec
+          ./coveralls -p --job-flag=ruby-${{ matrix.ruby }}-${{ matrix.gemfile }}
+      - name: Run compatibility specs
+        continue-on-error: ${{ matrix.allow_failure }}
+        run: |
+          bundle exec rake spec:compatibility
+          ./coveralls -p --job-flag=compatibility-${{ matrix.ruby }}-${{ matrix.gemfile }}
 
   anyt:
     if: ${{ !contains(github.event.head_commit.message, '[ci skip tests]') }}
@@ -75,18 +73,18 @@ jobs:
         ports: ["6379:6379"]
         options: --health-cmd="redis-cli ping" --health-interval 1s --health-timeout 3s --health-retries 30
     steps:
-    - uses: actions/checkout@v4
-    - name: Install system deps
-      run: |
-        sudo apt-get update
-        sudo apt-get install libsqlite3-dev
-    - uses: ruby/setup-ruby@v1
-      with:
-        ruby-version: 3.3
-        bundler-cache: true
-    - name: Run conformance tests with Anyt
-      run: |
-        bundle exec anyt --self-check --require=etc/anyt/*.rb
+      - uses: actions/checkout@v4
+      - name: Install system deps
+        run: |
+          sudo apt-get update
+          sudo apt-get install libsqlite3-dev
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: 3.3
+          bundler-cache: true
+      - name: Run conformance tests with Anyt
+        run: |
+          bundle exec anyt --self-check --require=etc/anyt/*.rb
 
   coverage:
     needs: rspec
@@ -94,9 +92,9 @@ jobs:
     env:
       COVERALLS_REPO_TOKEN: ${{ secrets.github_token }}
     steps:
-    - name: Install Coveralls reporter
-      run: |
-        curl -L https://github.com/coverallsapp/coverage-reporter/releases/latest/download/coveralls-linux.tar.gz | tar zxv
-    - name: Finilize Coveralls build
-      run: |
-        ./coveralls -d
+      - name: Install Coveralls reporter
+        run: |
+          curl -L https://github.com/coverallsapp/coverage-reporter/releases/latest/download/coveralls-linux.tar.gz | tar zxv
+      - name: Finilize Coveralls build
+        run: |
+          ./coveralls -d

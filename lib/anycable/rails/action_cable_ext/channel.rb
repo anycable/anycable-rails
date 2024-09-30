@@ -3,34 +3,77 @@
 require "action_cable"
 
 ActionCable::Channel::Base.prepend(Module.new do
-  # Whispering support
-  def whispers_to(broadcasting)
+  def subscribe_to_channel
+    super unless anycabled? && !@__anycable_subscribing__
+  end
+
+  def handle_subscribe
+    @__anycable_subscribing__ = true
+    subscribe_to_channel
+  ensure
+    @__anycable_subscribing__ = false
+  end
+
+  def start_periodic_timers
+    super unless anycabled?
+  end
+
+  def stop_periodic_timers
+    super unless anycabled?
+  end
+
+  def stream_from(broadcasting, _callback = nil, **opts)
+    whispering = opts.delete(:whisper)
     return super unless anycabled?
 
-    connection.anycable_socket.whisper identifier, broadcasting
-  end
+    broadcasting = String(broadcasting)
 
-  # Unsubscribing relies on the channel state (which is not persistent in AnyCable).
-  # Thus, we pretend that the stream is registered to make Action Cable do its unsubscribing job.
-  def stop_stream_from(broadcasting)
-    streams[broadcasting] = true if anycabled?
-    super
-  end
-
-  # For AnyCable, unsubscribing from all streams is a separate operation,
-  # so we use a special constant to indicate it.
-  def stop_all_streams
-    if anycabled?
-      streams.clear
-      streams[AnyCable::Rails::Server::PubSub::ALL_STREAMS] = true
+    connection.anycable_socket.subscribe identifier, broadcasting
+    if whispering
+      connection.anycable_socket.whisper identifier, broadcasting
     end
-    super
   end
 
-  # Make rejected status accessible from outside
-  def rejected? = subscription_rejected?
+  def stream_for(model, callback = nil, **opts, &block)
+    stream_from(broadcasting_for(model), callback || block, **opts)
+  end
+
+  def stop_stream_from(broadcasting)
+    return super unless anycabled?
+
+    connection.anycable_socket.unsubscribe identifier, broadcasting
+  end
+
+  def stop_all_streams
+    return super unless anycabled?
+
+    connection.anycable_socket.unsubscribe_from_all identifier
+  end
 
   private
 
-  def anycabled? = connection.anycabled?
+  def anycabled?
+    # Use instance variable check here for testing compatibility
+    connection.instance_variable_defined?(:@anycable_socket)
+  end
+end)
+
+# Handle $pubsub channel in Subscriptions
+ActionCable::Connection::Subscriptions.prepend(Module.new do
+  # The contents are mostly copied from the original,
+  # there is no good way to configure channels mapping due to #safe_constantize
+  # and the layers of JSON
+  # https://github.com/rails/rails/blob/main/actioncable/lib/action_cable/connection/subscriptions.rb
+  def add(data)
+    id_key = data["identifier"]
+    id_options = ActiveSupport::JSON.decode(id_key).with_indifferent_access
+
+    return if subscriptions.key?(id_key)
+
+    return super unless id_options[:channel] == "$pubsub"
+
+    subscription = AnyCable::Rails::PubSubChannel.new(connection, id_key, id_options)
+    subscriptions[id_key] = subscription
+    subscription.subscribe_to_channel
+  end
 end)
