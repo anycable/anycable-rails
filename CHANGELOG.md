@@ -2,6 +2,10 @@
 
 ## master
 
+## 1.5.4 (2024-10-08)
+
+- Add [actioncable-next](https://github.com/anycable/actioncable-next) support. ([@palkan][])
+
 - Generate `anycable.toml` in `anycable:setup` generator. ([@palkan][])
 
 ## 1.5.3 (2024-09-12)
