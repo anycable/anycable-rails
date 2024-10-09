@@ -28,6 +28,7 @@ describe AnyCableRailsGenerators::SetupGenerator, type: :generator do
       expect(file("config/cable.yml")).to exist
       expect(file("config/cable.yml")).to contain(%(adapter: <%= ENV.fetch("ACTION_CABLE_ADAPTER", "any_cable") %>))
       expect(file("config/anycable.yml")).to contain("broadcast_adapter: http")
+      expect(file("anycable.toml")).to contain('broadcast_adapters = ["http"]')
     end
 
     context "when cable.yml is present" do
@@ -84,10 +85,12 @@ describe AnyCableRailsGenerators::SetupGenerator, type: :generator do
         )
       end
 
-      it "anycable.yml use redis broadcast adapter" do
+      it "uses redisx broadcast adapter" do
         subject
         expect(file("config/anycable.yml")).not_to contain("broadcast_adapter: http")
-        expect(file("config/anycable.yml")).to contain("broadcast_adapter: redis")
+        expect(file("config/anycable.yml")).to contain("broadcast_adapter: redisx")
+        expect(file("anycable.toml")).to contain('broadcast_adapters = ["http", "redisx"]')
+        expect(file("anycable.toml")).to contain('pubsub_adapter = "redis"')
       end
     end
 
@@ -97,6 +100,7 @@ describe AnyCableRailsGenerators::SetupGenerator, type: :generator do
       it "anycable.yml use redis broadcast adapter" do
         subject
         expect(file("config/anycable.yml")).to contain(%(  http_rpc_mount_path: "/_anycable"))
+        expect(file("anycable.toml")).to contain('host = "http://localhost:3000/_anycable"')
       end
     end
   end
@@ -126,7 +130,7 @@ describe AnyCableRailsGenerators::SetupGenerator, type: :generator do
         expect(subject)
           .to contain("anycable: bundle exec anycable")
         expect(subject)
-          .to contain("ws: bin/anycable-go --port=8080 --broadcast_adapter=http")
+          .to contain("ws: bin/anycable-go")
       end
     end
 
@@ -137,7 +141,7 @@ describe AnyCableRailsGenerators::SetupGenerator, type: :generator do
         expect(subject)
           .to contain("anycable: bundle exec anycable")
         expect(subject)
-          .to contain("ws: bin/anycable-go --port=8080 --broadcast_adapter=http")
+          .to contain("ws: bin/anycable-go")
       end
 
       context "when redis is in the deps" do
@@ -156,7 +160,7 @@ describe AnyCableRailsGenerators::SetupGenerator, type: :generator do
           expect(subject)
             .to contain("anycable: bundle exec anycable")
           expect(subject)
-            .to contain("ws: bin/anycable-go --port=8080\n")
+            .to contain("ws: bin/anycable-go")
         end
       end
 
@@ -167,7 +171,7 @@ describe AnyCableRailsGenerators::SetupGenerator, type: :generator do
           expect(subject)
             .not_to contain("anycable: bundle exec anycable")
           expect(subject)
-            .to contain("ws: bin/anycable-go --port=8080 --broadcast_adapter=http --rpc_host=http://localhost:3000/_anycable\n")
+            .to contain("ws: bin/anycable-go")
         end
       end
     end

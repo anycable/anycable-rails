@@ -70,6 +70,8 @@ module AnyCableRailsGenerators
         template "anycable.yml"
       end
 
+      template "anycable.toml"
+
       update_cable_yml
     end
 
@@ -168,6 +170,7 @@ module AnyCableRailsGenerators
               ANYCABLE_BROADCAST_ADAPTER: http
               ANYCABLE_RPC_HOST: anycable:50051
               ANYCABLE_DEBUG: ${ANYCABLE_DEBUG:-true}
+              ANYCABLE_SECRET: "anycable-local-secret"
 
           anycable:
             <<: *rails
@@ -208,6 +211,7 @@ module AnyCableRailsGenerators
               ANYCABLE_BROADCAST_ADAPTER: http
               ANYCABLE_RPC_HOST: http://rails:3000/_anycable
               ANYCABLE_DEBUG: ${ANYCABLE_DEBUG:-true}
+              ANYCABLE_SECRET: "anycable-local-secret"
           ─────────────────────────────────────────
         YML
       end
@@ -266,16 +270,9 @@ module AnyCableRailsGenerators
           end
         end
         unless contents.match?(/^ws:\s/)
-          append_file file_name, "ws: bin/anycable-go #{anycable_go_options}", force: true
+          append_file file_name, "ws: bin/anycable-go", force: true
         end
       end
-    end
-
-    def anycable_go_options
-      opts = ["--port=8080"]
-      opts << "--broadcast_adapter=http" unless redis?
-      opts << "--rpc_host=http://localhost:3000/_anycable" if http_rpc?
-      opts.join(" ")
     end
 
     def file_exists?(name)

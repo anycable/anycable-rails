@@ -15,14 +15,15 @@ default: &default
   # Whether to enable gRPC level logging or not
   log_grpc: false
   <%- if redis? -%>
-  # Use Redis to broadcast messages to AnyCable server
-  broadcast_adapter: redis
+  # Use Redis Streams to broadcast messages to AnyCable server
+  broadcast_adapter: redisx
   <%- elsif nats? -%>
   # Use NATS to broadcast messages to AnyCable server
   broadcast_adapter: nats
   <%- else -%>
   # Use HTTP broadcaster
   broadcast_adapter: http
+  http_broadcast_url: "http://localhost:8090/_anycable"
   <%- end -%>
   <%- if redis? -%>
   # You can use REDIS_URL env var to configure Redis URL.
@@ -37,6 +38,8 @@ default: &default
   # Read more about AnyCable RPC:  <%= DOCS_ROOT %>/anycable-go/rpc
   http_rpc_mount_path: "/_anycable"
   <%- end -%>
+  # Must be the same as in your AnyCable server config
+  secret: "anycable-local-secret"
 
 development:
   <<: *default
@@ -51,3 +54,4 @@ test:
 production:
   <<: *default
   websocket_url: ~
+  secret: ~

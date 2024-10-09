@@ -2,4 +2,4 @@ web: bin/rails s
 <%- unless http_rpc? -%>
 anycable: bundle exec anycable
 <%- end -%>
-ws: bin/anycable-go <%= anycable_go_options %>
+ws: bin/anycable-go

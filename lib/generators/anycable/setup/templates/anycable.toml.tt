@@ -1,0 +1,83 @@
+# AnyCable server configuration (development).
+#
+# Read more at https://docs.anycable.io/anycable-go/configuration
+
+# Public mode disables connection authentication, pub/sub streams and broadcasts verification
+# public = false
+
+# The application secret key
+secret = "anycable-local-secret"
+
+# Broadcasting adapters for app-to-clients messages
+<%- if redis? -%>
+broadcast_adapters = ["http", "redisx"]
+<%- elsif nats? -%>
+broadcast_adapters = ["http", "nats"]
+<%- else -%>
+broadcast_adapters = ["http"]
+<%- end -%>
+
+# Pub/sub adapter for inter-node communication
+<%- if redis? -%>
+pubsub_adapter = "redis"
+<%- elsif nats? -%>
+pubsub_adapter = "nats"
+<%- else -%>
+# pubsub_adapter = "redis" # or "nats"
+<%- end -%>
+
+[server]
+host = "localhost"
+port = 8080
+
+[logging]
+debug = true
+
+# Read more about broker: https://docs.anycable.io/anycable-go/reliable_streams
+[broker]
+adapter = "memory"
+history_ttl = 300
+history_limit = 100
+sessions_ttl = 300
+
+[rpc]
+<%- if http_rpc? -%>
+host = "http://localhost:3000/_anycable"
+<%- else -%>
+host = "localhost:50051"
+<%- end -%>
+# Specify HTTP headers that must be proxied to the RPC service
+proxy_headers = ["cookie"]
+# RPC concurrency (max number of concurrent RPC requests)
+concurrency = 28
+
+# Read more about AnyCable JWT: https://docs.anycable.io/anycable-go/jwt_identification
+[jwt]
+# param = "jid"
+# force = true
+
+# Read more about AnyCable signed streams: https://docs.anycable.io/anycable-go/signed_streams
+[streams]
+# Enable public (unsigned) streams
+# public = true
+# Enable whispering support for pub/sub streams
+# whisper = true
+pubsub_channel = "$pubsub"
+# turbo = true
+# cable_ready = true
+
+[redis]
+<%- if redis? -%>
+url = "redis://localhost:6379"
+<%- else -%>
+# url = "redis://localhost:6379"
+<%- end -%>
+
+<%- if nats? -%>
+[nats]
+servers = "nats://127.0.0.1:4222"
+<%- end -%>
+
+[http_broadcast]
+port = 8090
+path = "/_broadcast"

@@ -2,6 +2,8 @@
 
 ## master
 
+- Generate `anycable.toml` in `anycable:setup` generator. ([@palkan][])
+
 ## 1.5.3 (2024-09-12)
 
 - Set upper limit on supported Rails versions. ([@palkan][])
