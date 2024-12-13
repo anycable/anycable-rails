@@ -2,6 +2,8 @@
 
 ## master
 
+## 1.5.5 (2024-12-12)
+
 - Publish RuboCop cops as a separate gem (`rubocop-anycable-rails`). ([@palkan][])
 
 - Upgrade RuboCop cops. ([@palkan][])
