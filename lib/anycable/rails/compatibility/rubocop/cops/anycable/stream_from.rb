@@ -34,7 +34,7 @@ module RuboCop
       #     end
       #   end
       #
-      class StreamFrom < RuboCop::Cop::Cop
+      class StreamFrom < RuboCop::Cop::Base
         def_node_matcher :stream_from_with_block?, <<-PATTERN
           (block {(send _ :stream_from ...) (send _ :stream_for ...)} ...)
         PATTERN
@@ -81,16 +81,14 @@ module RuboCop
 
         def add_callback_offense(node)
           add_offense(
-            node,
-            location: :expression,
+            node.loc.expression,
             message: "Custom stream callbacks are not supported in AnyCable"
           )
         end
 
         def add_custom_coder_offense(node)
           add_offense(
-            node,
-            location: :expression,
+            node.loc.expression,
             message: "Custom coders are not supported in AnyCable"
           )
         end

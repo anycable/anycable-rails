@@ -23,7 +23,7 @@ default: &default
   <%- else -%>
   # Use HTTP broadcaster
   broadcast_adapter: http
-  http_broadcast_url: "http://localhost:8090/_anycable"
+  http_broadcast_url: "http://localhost:8090/_broadcast"
   <%- end -%>
   <%- if redis? -%>
   # You can use REDIS_URL env var to configure Redis URL.

@@ -13,7 +13,7 @@ module RuboCop
       #     periodically(:do_something, every: 2.seconds)
       #   end
       #
-      class PeriodicalTimers < RuboCop::Cop::Cop
+      class PeriodicalTimers < RuboCop::Cop::Base
         MSG = "Periodical Timers are not supported in AnyCable"
 
         def_node_matcher :calls_periodically?, <<-PATTERN

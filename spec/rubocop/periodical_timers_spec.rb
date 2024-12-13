@@ -6,24 +6,20 @@ describe RuboCop::Cop::AnyCable::PeriodicalTimers do
   include_context "cop spec"
 
   it "registers offense for #periodically call" do
-    inspect_source(<<~RUBY)
+    expect_offense(<<~RUBY)
       class MyChannel < ApplicationCable::Channel
         periodically(:do_something, every: 2.seconds)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ AnyCable/PeriodicalTimers: Periodical Timers are not supported in AnyCable
       end
     RUBY
-
-    expect(cop.offenses.size).to be(1)
-    expect(cop.messages.first).to include("Periodical Timers are not supported in AnyCable")
   end
 
   it "registers offense for #periodically call explicit self" do
-    inspect_source(<<~RUBY)
+    expect_offense(<<~RUBY)
       class MyChannel < ApplicationCable::Channel
         self.periodically(:do_something, every: 2.seconds)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ AnyCable/PeriodicalTimers: Periodical Timers are not supported in AnyCable
       end
     RUBY
-
-    expect(cop.offenses.size).to be(1)
-    expect(cop.messages.first).to include("Periodical Timers are not supported in AnyCable")
   end
 end

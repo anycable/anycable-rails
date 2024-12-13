@@ -24,7 +24,7 @@ module RuboCop
       #     end
       #   end
       #
-      class InstanceVars < RuboCop::Cop::Cop
+      class InstanceVars < RuboCop::Cop::Base
         MSG = "Channel instance variables are not supported in AnyCable. Use `state_attr_accessor` instead"
 
         def on_class(node)

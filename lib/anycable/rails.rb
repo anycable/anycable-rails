@@ -84,7 +84,7 @@ end
 
 # Warn if application has been already initialized.
 # AnyCable should be loaded before initialization in order to work correctly.
-if defined?(::Rails) && ::Rails.application && ::Rails.application.initialized?
+if defined?(::Rails) && ::Rails.application&.initialized?
   puts("\n**************************************************")
   puts(
     "⛔️  WARNING: AnyCable loaded after application initialization. Might not work correctly.\n" \

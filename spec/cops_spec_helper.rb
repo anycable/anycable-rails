@@ -15,7 +15,6 @@ shared_context "cop spec" do
   subject(:cop) { described_class.new }
 
   it "works with empty file" do
-    inspect_source("")
-    expect(cop.offenses.size).to be(0)
+    expect_no_offenses("")
   end
 end

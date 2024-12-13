@@ -2,6 +2,8 @@
 
 ## master
 
+- Upgrade RuboCop cops. ([@palkan][])
+
 ## 1.5.4 (2024-10-08)
 
 - Add [actioncable-next](https://github.com/anycable/actioncable-next) support. ([@palkan][])
