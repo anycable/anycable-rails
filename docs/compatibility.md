@@ -59,7 +59,7 @@ Add to your `.rubocop.yml`:
 
 ```yml
 require:
-  - "anycable/rails/compatibility/rubocop"
+  - "anycable/rails/rubocop"
 # ...
 ```
 
@@ -76,14 +76,20 @@ $ bundle exec rubocop
 Or you can require AnyCable Rails cops dynamically:
 
 ```sh
-bundle exec rubocop -r 'anycable/rails/compatibility/rubocop' --only AnyCable
+bundle exec rubocop -r 'anycable/rails/rubocop' --only AnyCable
 ```
 
 **NOTE**: If you have `DisabledByDefault: true` in your RuboCop config, you need to specify all AnyCable Rails cops explicitly:
 
 ```sh
-bundle exec rubocop -r 'anycable/rails/compatibility/rubocop' \
+bundle exec rubocop -r 'anycable/rails/rubocop' \
 --only AnyCable/InstanceVars,AnyCable/PeriodicalTimers,AnyCable/InstanceVars
+```
+
+You can also install AnyCable Rails RuboCop extension as a separate gem (for example, if you use a dedicated RuboCop Gemfile):
+
+```sh
+gem "rubocop-anycable-rails"
 ```
 
 ### Cops
