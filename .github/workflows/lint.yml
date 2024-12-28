@@ -3,7 +3,7 @@ name: Lint Ruby
 on:
   push:
     branches:
-    - master
+    - main
     paths:
     - "**/*.rb"
     - "**/*.gemspec"
