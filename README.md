@@ -10,7 +10,7 @@
 [AnyCable](https://github.com/anycable/anycable) is an open-source language-agnostic realtime server for reliable two-way communication over WebSockets and SSE.
 This repository contains code for AnyCable Rails SKD that allows you to use AnyCable as a drop-in replacement for Action Cable.
 
-🌐 [Website](https://anycable.io) | 📚 [Documentation](https://docs.anycable.io/rails/getting_started) | 💾 [Example Rails Application](https://github.com/anycable/anycable_rails_demo)
+🌐 [Website](https://anycable.io) · 📚 [Documentation](https://docs.anycable.io/rails/getting_started) · 💾 [Example Rails Application](https://github.com/anycable/anycable_rails_demo)
 
 ## Quick Start
 
