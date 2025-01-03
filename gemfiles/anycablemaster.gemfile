@@ -1,8 +1,8 @@
 source "https://rubygems.org"
 
-gem "rails", "~> 7.0"
+gem "rails", "~> 8.0"
 gem "rspec-rails"
-gem "anycable", git: "https://github.com/anycable/anycable.git", branch: "master"
+gem "anycable", git: "https://github.com/anycable/anycable-rb.git", branch: "main"
 gem "sqlite3"
 
 gemspec path: "..", name: "anycable-rails"

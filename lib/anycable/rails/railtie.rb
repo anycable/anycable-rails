@@ -123,11 +123,12 @@ module AnyCable
 
       initializer "anycable.verify_pool_sizes" do
         next if AnyCable.config.disable_rpc_pool_size_warning?
-        # Skip if non-gRPC server is used
-        next unless AnyCable.config.respond_to?(:rpc_pool_size)
 
         # Log current db vs. gRPC pool sizes
         AnyCable.configure_server do
+          # Skip if non-gRPC server is used
+          next unless AnyCable.config.respond_to?(:rpc_pool_size)
+
           ActiveSupport.on_load(:active_record) do
             db_pool_size = ::ActiveRecord::Base.connection_pool.size
             rpc_pool_size = AnyCable.config.rpc_pool_size
