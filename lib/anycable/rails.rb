@@ -9,6 +9,7 @@ require "globalid"
 require "active_support/core_ext/module/attribute_accessors_per_thread"
 
 require "anycable/rails/ext"
+require "anycable/rails/channel"
 
 module AnyCable
   # Rails handler for AnyCable

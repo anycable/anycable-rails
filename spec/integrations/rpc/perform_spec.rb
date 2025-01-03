@@ -121,5 +121,26 @@ describe "client messages" do
         end
       end
     end
+
+    describe "#join_presence" do
+      let(:data) { {action: "follow"} }
+
+      it "responds with presence event", :aggregate_failures do
+        expect(subject).to be_success
+        expect(subject["presence"].type).to eq "join"
+        expect(subject["presence"].id).to eq user.name
+        expect(subject["presence"].info).to eq({name: user.name}.to_json)
+      end
+    end
+
+    describe "#leave_presence" do
+      let(:data) { {action: "unfollow_all"} }
+
+      it "responds with presence event", :aggregate_failures do
+        expect(subject).to be_success
+        expect(subject["presence"].type).to eq "leave"
+        expect(subject["presence"].id).to eq user.name
+      end
+    end
   end
 end

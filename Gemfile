@@ -12,6 +12,11 @@ if ENV["NEXT_ACTION_CABLE"] == "1"
   end
 end
 
+if File.directory?(File.join(__dir__, "../anycable-rb"))
+  $stdout.puts "\n=== Using local AnyCable gem ===\n\n"
+  gem "anycable", path: "../anycable-rb"
+end
+
 local_gemfile = "#{File.dirname(__FILE__)}/Gemfile.local"
 
 eval_gemfile "gemfiles/rubocop.gemfile"

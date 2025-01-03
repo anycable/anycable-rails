@@ -1,6 +1,79 @@
 # Action Cable extensions
 
-AnyCable comes with useful Action Cable API extensions which you may use with and without AnyCable server.
+AnyCable comes with useful Action Cable API extensions which you may use with (and sometimes without) AnyCable server:
+
+- [Presence tracking](#presence-tracking)
+- [Broadcast API extensions](#broadcast-api)
+- [Whispering](#whispering)
+
+## Presence tracking
+
+AnyCable provides built-in [presence tracking](https://docs.anycable.io/edge/anycable-go/presence) support. You can join (or leave) the presence set either by calling `channel.presence.join()` (or `channel.presence.leave()`) from the client-side (see [AnyCable JS client](https://github.com/anycable/anycable-client)) or by performing the corresponding actions in the server-side channel classes.
+
+To control presence from server, you must first include the `AnyCable::Rails::Channel::Presence` module in your channel class. Them, you'll be able to perform presence actions as follows:
+
+```ruby
+class ChatChannel < ApplicationCable::Channel
+  def subscribed
+    room = Chat::Room.find(params[:id])
+
+    stream_for room
+
+    join_presence(
+      # presence set is associated with the stream,
+      # which is also used for broadcasting join/leave events
+      broadcasting_for(room),
+      # you must provide a unique user identifier
+      id: current_user.id,
+      # (optional) additional user info that will be available
+      # to clients via the presence API
+      info: {name: current_user.name}
+    )
+  end
+end
+```
+
+You can provide the default values for presence ID and info by overriding the `#user_presence_id` and `#user_presence_info` methods in your channel class. For example, in your base channel class:
+
+```ruby
+class ApplicationCable::Channel < ActionChannel::Channel::Base
+  include AnyCable::Rails::Channel::Presence
+
+  private
+
+  def user_presence_id = current_user.id
+
+  def user_presence_info = {name: current_user.name}
+end
+```
+
+You can also omit the `stream` argument when calling the `#join_presence` method. In this case, the presence set will be associated with the first stream you've subscribed to **within the action**.
+
+Thus, the example above could be rewritten as follows (given that `#user_presence_id` and `#user_presence_info` are defined in the base class):
+
+```ruby
+class ChatChannel < ApplicationCable::Channel
+  def subscribed
+    room = Chat::Room.find(params[:id])
+
+    stream_for room
+
+    join_presence
+  end
+end
+```
+
+In most cases, you don't need to leave the presence set manually; it happens automatically on unsubscribe or disconnect (with some configurable delay). However, if you want to do that, you can call `leave_presence` method:
+
+```ruby
+class ChatChannel < ApplicationCable::Channel
+  def leave
+    leave_presence current_user.id
+  end
+end
+```
+
+You can omit the `id` argument and fallback to the default value provided by `#user_presence_id`.
 
 ## Broadcast API
 

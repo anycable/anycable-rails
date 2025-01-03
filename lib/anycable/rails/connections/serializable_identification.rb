@@ -6,6 +6,20 @@ module AnyCable
       module SerializableIdentification
         extend ActiveSupport::Concern
 
+        module ConnectionGID
+          def connection_identifier
+            unless defined? @connection_identifier
+              @connection_identifier = connection_gid identifiers.filter_map { |id| __send__(id) }
+            end
+
+            @connection_identifier
+          end
+        end
+
+        included do
+          prepend ConnectionGID
+        end
+
         class_methods do
           def identified_by(*identifiers)
             super

@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class TestChannel < ApplicationCable::Channel
+  include AnyCable::Rails::Channel::Presence
+
   state_attr_accessor :counter, :another_user, :topics, :name
 
   def subscribed
@@ -12,12 +14,16 @@ class TestChannel < ApplicationCable::Channel
   end
 
   def follow
-    stream_from "user_#{current_user.name}"
     stream_from "all"
+    stream_from "user_#{current_user.name}"
+
+    join_presence id: current_user.name, info: {name: current_user.name}
   end
 
   def unfollow_all
     stop_stream_from "all"
+
+    leave_presence current_user.name
   end
 
   def nil_stream
