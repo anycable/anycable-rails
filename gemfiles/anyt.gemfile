@@ -1,7 +1,10 @@
 source "https://rubygems.org" do
   gem "anycable-rails", path: ".."
-  gem "anyt", "~> 1.4"
+  gem "anycable", ">= 1.6.0.rc.1"
+  gem "anyt"
+  gem "nio4r", "2.7.4"
 
-  gem "rails", git: "https://github.com/palkan/rails.git", branch: "refactor/action-cable-server-adapterization"
+  gem "actioncable-next"
+  gem "rails"
   gem "puma"
 end

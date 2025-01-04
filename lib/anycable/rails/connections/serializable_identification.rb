@@ -9,7 +9,7 @@ module AnyCable
         module ConnectionGID
           def connection_identifier
             unless defined? @connection_identifier
-              @connection_identifier = connection_gid identifiers.filter_map { |id| __send__(id) }
+              @connection_identifier = connection_gid identifiers.filter_map { |id| instance_variable_get(:"@#{id}") || __send__(id) }
             end
 
             @connection_identifier
