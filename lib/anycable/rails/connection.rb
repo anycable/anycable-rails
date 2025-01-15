@@ -31,15 +31,65 @@ module AnyCable
       end
 
       refine ActionCable::Connection::Subscriptions do
-        # Find or add a subscription to the list
-        def fetch(identifier)
-          add("identifier" => identifier) unless subscriptions[identifier]
+        # Override the original #execute_command to pre-initialize the channel for unsubscribe/message and
+        # return true/false to indicate successful/unsuccessful subscription.
+        # We also must not lose any exceptions raised in the process.
+        def execute_rpc_command(data)
+          # First, verify the channel name
+          raise "Channel not found: #{ActiveSupport::JSON.decode(data["identifier"]).fetch("channel")}" unless subscription_class_from_identifier(data["identifier"])
 
-          unless subscriptions[identifier]
-            raise "Channel not found: #{ActiveSupport::JSON.decode(identifier).fetch("channel")}"
+          if data["command"] == "subscribe"
+            add data
+            subscription = subscriptions[data["identifier"]]
+            return !(subscription.nil? || subscription.rejected?)
           end
 
-          subscriptions[identifier]
+          load(data["identifier"])
+
+          case data["command"]
+          when "unsubscribe"
+            remove data
+          when "message"
+            perform_action data
+          when "whisper"
+            whisper data
+          else
+            raise UnknownCommandError, data["command"]
+          end
+
+          true
+        end
+
+        # Restore channels from the list of identifiers and the state
+        def restore(subscriptions, istate)
+          subscriptions.each do |id|
+            channel = load(id)
+            channel.__istate__ = ActiveSupport::JSON.decode(istate[id]) if istate[id]
+          end
+        end
+
+        # Find or create a channel for a given identifier
+        def load(identifier)
+          return subscriptions[identifier] if subscriptions[identifier]
+
+          subscription = subscription_from_identifier(identifier)
+          raise "Channel not found: #{ActiveSupport::JSON.decode(identifier).fetch("channel")}" unless subscription
+
+          subscriptions[identifier] = subscription
+        end
+
+        def subscription_class_from_identifier(id_key)
+          id_options = ActiveSupport::JSON.decode(id_key).with_indifferent_access
+          id_options[:channel].safe_constantize
+        end
+
+        def subscription_from_identifier(id_key)
+          subscription_klass = subscription_class_from_identifier(id_key)
+
+          if subscription_klass && subscription_klass < ActionCable::Channel::Base
+            id_options = ActiveSupport::JSON.decode(id_key).with_indifferent_access
+            subscription_klass.new(connection, id_key, id_options)
+          end
         end
       end
     end)
@@ -74,15 +124,8 @@ module AnyCable
         conn.cached_ids = {}
         conn.anycable_request_builder = self
 
-        return unless subscriptions
-
         # Pre-initialize channels (for disconnect)
-        subscriptions.each do |id|
-          channel = conn.subscriptions.fetch(id)
-          next unless socket.istate[id]
-
-          channel.__istate__ = ActiveSupport::JSON.decode(socket.istate[id])
-        end
+        conn.subscriptions.restore(subscriptions, socket.istate) if subscriptions
       end
 
       def handle_open
@@ -111,26 +154,8 @@ module AnyCable
 
       def handle_channel_command(identifier, command, data)
         conn.run_callbacks :command do
-          # We cannot use subscriptions#execute_command here,
-          # since we MUST return true of false, depending on the status
-          # of execution
-          channel = conn.subscriptions.fetch(identifier)
-          case command
-          when "subscribe"
-            channel.handle_subscribe
-            !channel.rejected?
-          when "unsubscribe"
-            conn.subscriptions.remove_subscription(channel)
-            true
-          when "message"
-            channel.perform_action ActiveSupport::JSON.decode(data)
-            true
-          else
-            false
-          end
+          conn.subscriptions.execute_rpc_command({"command" => command, "identifier" => identifier, "data" => data})
         end
-      # Support rescue_from
-      # https://github.com/rails/rails/commit/d2571e560c62116f60429c933d0c41a0e249b58b
       rescue Exception => e # rubocop:disable Lint/RescueException
         rescue_with_handler(e) || raise
         false
