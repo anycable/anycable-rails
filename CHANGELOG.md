@@ -1,6 +1,8 @@
 # Change log
 
-## master
+## main
+
+- Add Presence API. ([@palkan][])
 
 ## 1.5.5 (2024-12-12)
 
