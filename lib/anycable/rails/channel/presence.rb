@@ -12,7 +12,7 @@ module AnyCable
 
           stream ||= connection.anycable_socket.streams[:start].first || raise(ArgumentError, "Provide a stream name for presence updates")
 
-          connection.anycable_socket.presence_join(stream, id, info)
+          connection.anycable_socket.presence_join(stream, id.to_s, info)
         end
 
         def leave_presence(id = user_presence_id)
