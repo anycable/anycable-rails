@@ -103,6 +103,20 @@ describe AnyCableRailsGenerators::SetupGenerator, type: :generator do
         expect(file("anycable.toml")).to contain('host = "http://localhost:3000/_anycable"')
       end
     end
+
+    context "warning messages" do
+      let(:gen) { generator(default_opts) }
+
+      specify "warn about action_cable in application.rb" do
+        out = capture(:stdout) { gen.invoke_all }
+        expect(out).to include('Add `require "action_cable/engine"`')
+      end
+
+      specify "action_cable_meta_tag" do
+        out = capture(:stdout) { gen.invoke_all }
+        expect(out).to include("make sure you have `action_cable_meta_tag`")
+      end
+    end
   end
 
   context "when docker environment" do

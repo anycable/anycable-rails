@@ -75,6 +75,10 @@ development:
 
 ## Manual setup
 
+### Prerequisites
+
+Make sure you have `require "action_cable/engine"` or `require "rails/all"` in your `config/application.rb` (AnyCable relies Action Cable abstractions).
+
 ### Development
 
 First, activate AnyCable in your Rails application by specifying it as an adapter for Action Cable:

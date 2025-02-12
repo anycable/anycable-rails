@@ -88,6 +88,13 @@ module AnyCableRailsGenerators
                         "`action_cable_meta_tag` or `action_cable_with_jwt_meta_tag` included in your HTML layout"
     end
 
+    def cable_engine_warning
+      return unless application_rb
+      return if application_rb.match?(/^require\s+['"](action_cable\/engine|rails\/all)['"]/)
+
+      say_status :help, "⚠️  Ensure Action Cable is loaded.\nAdd `require \"action_cable/engine\"` to your `config/application.rb`."
+    end
+
     def deployment_method
       say_status :info, "🚢  See our deployment guide to learn how to run AnyCable in production 👉 #{DOCS_ROOT}/deployment"
 
@@ -134,6 +141,17 @@ module AnyCableRailsGenerators
         in_root do
           next unless File.file?("Gemfile.lock")
           res = File.read("Gemfile.lock")
+        end
+        res
+      end
+    end
+
+    def application_rb
+      @application_rb ||= begin
+        res = nil
+        in_root do
+          next unless File.file?("config/application.rb")
+          res = File.read("config/application.rb")
         end
         res
       end
