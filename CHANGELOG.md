@@ -2,6 +2,10 @@
 
 ## main
 
+- Add `#anycable_token_meta_tag` helper. ([@palkan][])
+
+  It generates a meta tag with the AnyCable JWT token (w/o the URL).
+
 ## 1.6.0.rc.2 (2025-02-10)
 
 - Add Presence API. ([@palkan][])

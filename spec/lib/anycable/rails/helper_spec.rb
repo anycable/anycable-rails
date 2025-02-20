@@ -22,10 +22,10 @@ describe AnyCable::Rails::Helper, type: :helper do
     end
   end
 
-  describe "#any_cable_jwt_meta_tag" do
+  describe "#anycable_token_meta_tag" do
     it "builds a metatag with a token" do
-      expect(any_cable_jwt_meta_tag(**payload))
-        .to eq("<meta name=\"any-cable-jwt\" content=\"test.jwt.token\" />")
+      expect(anycable_token_meta_tag(**payload))
+        .to eq("<meta name=\"cable-token\" content=\"test.jwt.token\" />")
     end
   end
 

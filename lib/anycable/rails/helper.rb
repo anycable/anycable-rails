@@ -22,10 +22,10 @@ module AnyCable
         tag "meta", name: "action-cable-url", content: url
       end
 
-      def any_cable_jwt_meta_tag(**identifiers)
+      def anycable_token_meta_tag(**identifiers)
         token = JWT.encode(identifiers)
 
-        tag "meta", name: "any-cable-jwt", content: token
+        tag "meta", name: "cable-token", content: token
       end
 
       def signed_stream_name(streamables)

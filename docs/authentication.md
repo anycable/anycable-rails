@@ -14,6 +14,16 @@ With AnyCable Rails, all you need is to configure the AnyCable application secre
 
 You MUST pass current user's **connection identifiers** as keyword arguments to provide identity information.
 
+You can also use a separate `#anycable_token_meta_tag` helper to inject the token into the page:
+
+```erb
+<%= anycable_token_meta_tag(user: current_user, tenant: Current.tenant) %>
+
+# => <meta name="cable-token" content="<token>" />
+```
+
+[AnyCable JS client](https://github.com/anycable/anycable-client) will automatically pick up the token from the `cable-token` meta tag.
+
 _Connection identifiers_ are the connection class parameters you define via the `.identified_by` method and set in the `#connect` method. For example:
 
 ```ruby
