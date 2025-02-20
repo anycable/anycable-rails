@@ -37,24 +37,35 @@ module AnyCableRailsGenerators
       return latest_release_url(version) if version == "latest"
 
       if Gem::Version.new(version).segments.first >= 1
-        new_release_url("v#{version}")
+        new_release_url(version)
       else
-        legacy_release_url("v#{version}")
+        legacy_release_url(version)
+      end
+    end
+
+    def repository_name(version)
+      return "anycable/anycable" if version == "latest"
+
+      major, minor, = Gem::Version.new(version).segments
+      if (major >= 1 && minor >= 6) || (major > 1)
+        "anycable/anycable"
+      else
+        "anycable/anycable-go"
       end
     end
 
     def legacy_release_url(version)
-      "https://github.com/anycable/anycable-go/releases/download/#{version}/" \
+      "https://github.com/#{repository_name(version)}/releases/download/v#{version}/" \
         "anycable-go-v#{version}-#{os_name}-#{cpu_name}"
     end
 
     def new_release_url(version)
-      "https://github.com/anycable/anycable-go/releases/download/#{version}/" \
+      "https://github.com/#{repository_name(version)}/releases/download/v#{version}/" \
         "anycable-go-#{os_name}-#{cpu_name}"
     end
 
     def latest_release_url(version)
-      "https://github.com/anycable/anycable-go/releases/latest/download/" \
+      "https://github.com/#{repository_name(version)}/releases/latest/download/" \
         "anycable-go-#{os_name}-#{cpu_name}"
     end
 

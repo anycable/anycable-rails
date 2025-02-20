@@ -37,9 +37,20 @@ describe AnyCableRailsGenerators::DownloadGenerator, type: :generator do
 
   context "when version is provided" do
     specify do
-      gen = generator(%w[--os linux --cpu amd64 --version=1.1.2])
+      gen = generator(%w[--os linux --cpu amd64 --version=1.5.4])
       expect(gen)
-        .to receive(:download_exe).with(%r{/releases/download/v1.1.2/anycable-go-linux-amd64},
+        .to receive(:download_exe).with(%r{anycable/anycable-go/releases/download/v1.5.4/anycable-go-linux-amd64},
+          to: "/usr/local/bin",
+          file_name: "anycable-go")
+      silence_stream($stdout) { gen.invoke_all }
+    end
+  end
+
+  context "when version >= 1.6.0" do
+    specify do
+      gen = generator(%w[--os linux --cpu amd64 --version=1.6.0-rc.4])
+      expect(gen)
+        .to receive(:download_exe).with(%r{anycable/anycable/releases/download/v1.6.0-rc.4/anycable-go-linux-amd64},
           to: "/usr/local/bin",
           file_name: "anycable-go")
       silence_stream($stdout) { gen.invoke_all }
