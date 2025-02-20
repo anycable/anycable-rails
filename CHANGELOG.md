@@ -2,6 +2,10 @@
 
 ## main
 
+## 1.6.0.rc.3 (2025-02-20)
+
+- Update `anycable:download` generator to support v1.6+. ([@palkan][])
+
 - Add `#anycable_token_meta_tag` helper. ([@palkan][])
 
   It generates a meta tag with the AnyCable JWT token (w/o the URL).
