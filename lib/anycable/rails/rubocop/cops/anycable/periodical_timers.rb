@@ -15,14 +15,9 @@ module RuboCop
       #
       class PeriodicalTimers < RuboCop::Cop::Base
         MSG = "Periodical Timers are not supported in AnyCable"
+        RESTRICT_ON_SEND = %i[periodically].freeze
 
-        def_node_matcher :calls_periodically?, <<-PATTERN
-          (send _ :periodically ...)
-        PATTERN
-
-        def on_send(node)
-          add_offense(node) if calls_periodically?(node)
-        end
+        alias_method :on_send, :add_offense
       end
     end
   end
