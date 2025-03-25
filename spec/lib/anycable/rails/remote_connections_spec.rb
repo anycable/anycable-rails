@@ -17,4 +17,21 @@ describe ActionCable::RemoteConnections do
         reconnect: true
       )
   end
+
+  context "when AnyCable is disabled" do
+    before do
+      @old = ActionCable.server.config.cable[:adapter]
+      ActionCable.server.config.cable[:adapter] = "test"
+    end
+
+    after do
+      ActionCable.server.config.cable[:adapter] = @old
+    end
+
+    it "doesn't call #broadcast_command" do
+      ActionCable.server.disconnect(current_user: user, url: "anycable.io/cable")
+
+      expect(AnyCable.broadcast_adapter).not_to have_received(:broadcast_command)
+    end
+  end
 end
