@@ -80,7 +80,11 @@ module AnyCable
 
         def subscription_class_from_identifier(id_key)
           id_options = ActiveSupport::JSON.decode(id_key).with_indifferent_access
-          id_options[:channel].safe_constantize
+          if id_options[:channel] == "$pubsub"
+            PubSubChannel
+          else
+            id_options[:channel].safe_constantize
+          end
         end
 
         def subscription_from_identifier(id_key)

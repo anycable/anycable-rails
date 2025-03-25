@@ -84,6 +84,23 @@ describe "disconnection" do
       end
     end
 
+    context "with $pubsub channel" do
+      let(:pubsub_id) { {channel: "$pubsub", stream_name: "test"}.to_json }
+      let(:channel_id) { {channel: "TestChannel"}.to_json }
+      let(:subscriptions) { [pubsub_id, channel_id] }
+
+      specify do
+        expect { subject }
+          .to change { log.select { |entry| entry[:source] == channel_id }.size }
+          .by(1)
+
+        expect(subject).to be_success
+
+        channel_logs = log.select { |entry| entry[:source] == channel_id }
+        expect(channel_logs.last[:data]).to eq(user: "disco", type: "unsubscribed")
+      end
+    end
+
     context "with .state_attr_accessor" do
       let(:channel_id) { {channel: "TestChannel", id: 1}.to_json }
       let(:channel2_id) { {channel: "TestChannel", id: 2}.to_json }
