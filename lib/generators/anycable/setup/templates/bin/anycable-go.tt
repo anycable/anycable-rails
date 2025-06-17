@@ -10,6 +10,11 @@ if [ ! -f ./bin/dist/anycable-go ]; then
   ./bin/rails g anycable:download --version=$version --bin-path=./bin/dist
 fi
 
+if [ -x ./bin/dist/anycable-go ]; then
+  echo "Setting execution permission for AnyCable server"
+  chmod +x ./bin/dist/anycable-go
+fi
+
 curVersion=$(./bin/dist/anycable-go -v)
 
 if [[ "$version" != "latest" ]]; then
