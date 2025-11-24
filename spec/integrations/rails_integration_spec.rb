@@ -71,6 +71,8 @@ describe "rails integration" do
     before { allow(Kernel).to receive(:warn) }
 
     specify do
+      next unless AnyCable.config.respond_to?(:rpc_pool_size)
+
       AnyCable.server_callbacks.last.call
       expect(Kernel).to have_received(:warn).with(/is greater than DB pool size/)
     end
