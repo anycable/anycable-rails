@@ -11,8 +11,8 @@ module AnyCable
 
       private
 
-      def anycable_tracking_socket_id(&)
-        Rails.with_socket_id(request.headers[AnyCable.config.socket_id_header], &)
+      def anycable_tracking_socket_id(&block)
+        Rails.with_socket_id(request.headers[AnyCable.config.socket_id_header], &block)
       end
     end
 

@@ -34,6 +34,12 @@ jobs:
           - ruby: "3.2"
             gemfile: "anycablemaster"
             next: "0"
+          - ruby: "3.0"
+            gemfile: "rails7"
+            next: "0"
+          - ruby: "2.7"
+            gemfile: "rails7"
+            next: "0"
     steps:
       - uses: actions/checkout@v4
       - name: Install system deps
