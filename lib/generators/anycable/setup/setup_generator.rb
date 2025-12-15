@@ -288,7 +288,7 @@ module AnyCableRailsGenerators
           end
         end
         unless contents.match?(/^ws:\s/)
-          append_file file_name, "ws: bin/anycable-go", force: true
+          append_file file_name, "ws: bin/anycable-go --port 8080", force: true
         end
       end
     end

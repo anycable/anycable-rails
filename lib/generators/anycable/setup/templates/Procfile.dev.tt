@@ -1,5 +1,5 @@
-web: bin/rails s
+web: bin/rails s -p 3000
 <%- unless http_rpc? -%>
 anycable: bundle exec anycable
 <%- end -%>
-ws: bin/anycable-go
+ws: bin/anycable-go --port 8080
