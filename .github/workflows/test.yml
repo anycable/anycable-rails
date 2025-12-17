@@ -17,8 +17,6 @@ jobs:
       BUNDLE_FORCE_RUBY_PLATFORM: 1
       CI: true
       BUNDLE_GEMFILE: gemfiles/${{ matrix.gemfile }}.gemfile
-      COVERAGE: "true"
-      COVERALLS_REPO_TOKEN: ${{ secrets.github_token }}
     services:
       redis:
         image: redis:7.0-alpine
@@ -50,19 +48,14 @@ jobs:
         with:
           ruby-version: ${{ matrix.ruby }}
           bundler-cache: true
-      - name: Install Coveralls reporter
-        run: |
-          curl -L https://github.com/coverallsapp/coverage-reporter/releases/latest/download/coveralls-linux.tar.gz | tar zxv
       - name: Run RSpec
         continue-on-error: ${{ matrix.allow_failure }}
         run: |
           bundle exec rake spec
-          ./coveralls -p --job-flag=ruby-${{ matrix.ruby }}-${{ matrix.gemfile }}
       - name: Run compatibility specs
         continue-on-error: ${{ matrix.allow_failure }}
         run: |
           bundle exec rake spec:compatibility
-          ./coveralls -p --job-flag=compatibility-${{ matrix.ruby }}-${{ matrix.gemfile }}
 
   anyt:
     if: ${{ !contains(github.event.head_commit.message, '[ci skip tests]') }}
@@ -91,16 +84,3 @@ jobs:
       - name: Run conformance tests with Anyt
         run: |
           bundle exec anyt --self-check --require=etc/anyt/*.rb
-
-  coverage:
-    needs: rspec
-    runs-on: ubuntu-latest
-    env:
-      COVERALLS_REPO_TOKEN: ${{ secrets.github_token }}
-    steps:
-      - name: Install Coveralls reporter
-        run: |
-          curl -L https://github.com/coverallsapp/coverage-reporter/releases/latest/download/coveralls-linux.tar.gz | tar zxv
-      - name: Finilize Coveralls build
-        run: |
-          ./coveralls -d
