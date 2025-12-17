@@ -5,4 +5,6 @@ gem "rspec-rails"
 gem "anycable", git: "https://github.com/anycable/anycable-rb.git", branch: "main"
 gem "sqlite3"
 
+eval_gemfile "./rubocop.gemfile"
+
 gemspec path: "..", name: "anycable-rails"

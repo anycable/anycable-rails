@@ -4,4 +4,6 @@ gem "rails", "~> 8.0.0.beta1"
 gem "rspec-rails"
 gem "sqlite3"
 
+eval_gemfile "./rubocop.gemfile"
+
 gemspec path: "..", name: "anycable-rails"
