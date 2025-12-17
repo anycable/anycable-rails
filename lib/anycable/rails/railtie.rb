@@ -113,6 +113,7 @@ module AnyCable
       initializer "anycable.routes" do
         config.after_initialize do |app|
           config = AnyCable.config
+          config.http_rpc_mount_path ||= "/_anycable" if config.http_rpc?
           unless config.http_rpc_mount_path.nil?
             app.routes.prepend do
               mount AnyCable::HTTRPC::Server.new => config.http_rpc_mount_path, :internal => true

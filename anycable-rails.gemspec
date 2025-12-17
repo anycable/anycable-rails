@@ -35,4 +35,5 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency "warden"
   spec.add_development_dependency "simplecov"
   spec.add_development_dependency "simplecov-lcov"
+  spec.add_development_dependency "toml", "~> 0.3.0"
 end

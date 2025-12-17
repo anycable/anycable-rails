@@ -1,57 +1,40 @@
-# This file contains per-environment settings for AnyCable.
+# This file contains per-environment settings for AnyCable Rails integration
+# (NOT the AnyCable server).
 #
-# Since AnyCable config is based on anyway_config (https://github.com/palkan/anyway_config), all AnyCable settings
-# can be set or overridden through the corresponding environment variables.
-# E.g., `rpc_host` is overridden by ANYCABLE_RPC_HOST, `debug` by ANYCABLE_DEBUG etc.
-#
-# Note that AnyCable recognizes REDIS_URL env variable for Redis pub/sub adapter. If you want to
-# use another Redis instance for AnyCable, provide ANYCABLE_REDIS_URL variable.
-#
-# Read more about AnyCable configuration here: <%= DOCS_ROOT %>/ruby/configuration
+# The settings specified here would be overriden by the corresponding values in Rails credentials (e.g., `anycable.secret`), or environment variables (e.g., ANYCABLE_SECRET), or any other configuration
+# sources supported by Anyway Config (https://github.com/palkan/anyway_config).
 #
 default: &default
   # Turn on/off access logs ("Started..." and "Finished...")
   access_logs_disabled: false
   # Whether to enable gRPC level logging or not
   log_grpc: false
-  <%- if redis? -%>
-  # Use Redis Streams to broadcast messages to AnyCable server
-  broadcast_adapter: redisx
-  <%- elsif nats? -%>
-  # Use NATS to broadcast messages to AnyCable server
-  broadcast_adapter: nats
-  <%- else -%>
-  # Use HTTP broadcaster
+  # Use HTTP broadcaster by default
   broadcast_adapter: http
-  http_broadcast_url: "http://localhost:8090/_broadcast"
-  <%- end -%>
-  <%- if redis? -%>
-  # You can use REDIS_URL env var to configure Redis URL.
-  # Localhost is used by default.
-  # redis_url: "redis://localhost:6379/1"
-  # Use the same channel name for WebSocket server, e.g.:
-  #   $ anycable-go --redis_channel="__anycable__"
-  # redis_channel: "__anycable__"
-  <%- end -%>
   <%- if http_rpc? -%>
-  # Use HTTP RPC mounted at the specified path of your web server
-  # Read more about AnyCable RPC:  <%= DOCS_ROOT %>/anycable-go/rpc
-  http_rpc_mount_path: "/_anycable"
+  # Use HTTP RPC mounted at the "/_anycable" path of your web server
+  # Read more: https://docs.anycable.io/anycable-go/rpc?id=rpc-over-http
+  http_rpc: true
   <%- end -%>
-  # Must be the same as in your AnyCable server config
+  # This values MUST be the same as in your AnyCable server configuration
   secret: "anycable-local-secret"
+  # WebSocket endpoint of your AnyCable server for clients to connect to
+  # IMPORTANT: Make sure you have the `action_cable_meta_tag` in your HTML layout
+  # to propogate this value to the client app.
+  # Make sure your AnyCable server runs on port 8080 in development.
+  websocket_url: "ws://localhost:8080/cable"
 
 development:
   <<: *default
-  # WebSocket endpoint of your AnyCable server for clients to connect to
-  # Make sure you have the `action_cable_meta_tag` in your HTML layout
-  # to propogate this value to the client app
-  websocket_url: "ws://localhost:8080/cable"
 
+# Read more about running AnyCable in test env:
+# https://docs.anycable.io/rails/getting_started?id=testing-with-anycable
 test:
   <<: *default
 
 production:
   <<: *default
+  # Use ANYCABLE_WEBSOCKET_URL and ANYCABLE_SECRET environment variables
+  # or credentials or whatever.
   websocket_url: ~
   secret: ~

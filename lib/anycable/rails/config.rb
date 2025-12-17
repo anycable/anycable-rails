@@ -9,6 +9,7 @@ require "anyway/rails"
 # - `access_logs_disabled` (defaults to true) — whether to print Started/Finished logs
 # - `persistent_session_enabled` (defaults to false) — whether to store session changes in the connection state
 # - `embedded` (defaults to false) — whether to run RPC server inside a Rails server process
+# - `http_rpc` (default to false) - whether to mount HTTP RPC server or not
 # - `http_rpc_mount_path` (defaults to nil) — path to mount HTTP RPC server
 # - `batch_broadcasts` (defaults to false) — whether to batch broadcasts automatically for code wrapped with Rails executor
 # - `jwt_param` (defaults to 'jid') — the name of the JWT authentication query paramter or header
@@ -18,6 +19,7 @@ AnyCable::Config.attr_config(
   persistent_session_enabled: false,
   embedded: false,
   jwt_param: "jid",
+  http_rpc: false,
   http_rpc_mount_path: nil,
   batch_broadcasts: false,
   socket_id_header: "X-Socket-ID",

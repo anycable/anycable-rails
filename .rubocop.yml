@@ -25,6 +25,8 @@ Standard/BlockSingleLineBraces:
 
 Style/FrozenStringLiteralComment:
   Enabled: true
+  Exclude:
+    - 'spec/fixtures/basic_rails_app/**/*'
 
 Naming/FileName:
   Exclude:
