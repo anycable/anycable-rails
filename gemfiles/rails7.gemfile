@@ -4,7 +4,7 @@ gem "actioncable", "~> 7.0"
 gem "activerecord"
 gem "activejob"
 gem "rspec-rails"
-gem "sqlite3"
+gem "sqlite3", "~> 1.6.0"
 
 eval_gemfile "./rubocop.gemfile"
 

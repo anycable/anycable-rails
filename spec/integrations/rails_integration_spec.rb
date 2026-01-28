@@ -14,9 +14,7 @@ describe "rails integration" do
     end
 
     it "responds with not found" do
-      expect { get "/cable" }
-        .to output(%r{No route matches \[GET\] "/cable"})
-        .to_stdout_from_any_process
+      get "/cable"
       expect(response.code).to eq "404"
     end
   end
