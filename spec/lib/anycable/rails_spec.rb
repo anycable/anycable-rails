@@ -15,7 +15,7 @@ describe AnyCable::Rails do
 
     specify do
       messages = []
-      subject.subscribe "test", ->(msg) { messages << msg }
+      subject.subscribe "test", ->(msg) { messages << (msg.try(:data) || msg) }
 
       subject.broadcast "test", "hello"
 

@@ -1,10 +1,11 @@
 inherit_from: ".rubocop.yml"
 
-require:
+plugins:
   - rubocop-md
 
-
 AllCops:
+  SuggestExtensions: false
+  NewCops: disable
   Include:
     - '**/*.md'
 

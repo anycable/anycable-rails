@@ -19,7 +19,7 @@ eval_gemfile "gemfiles/rubocop.gemfile"
 if File.exist?(local_gemfile)
   eval(File.read(local_gemfile)) # rubocop:disable Lint/Eval
 else
-  gem 'actioncable', '~> 7.0'
+  gem 'actioncable', '~> 8.0'
   gem 'activerecord'
   gem 'activejob'
 end
