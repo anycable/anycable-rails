@@ -9,6 +9,7 @@ module AnyCable
       @_streams
       @parameter_filter
       @whisper_stream
+      @__sid__
     ]
 
     ActionCable::Channel::Base.prepend(Module.new do
