@@ -20,12 +20,7 @@ describe ActionCable::RemoteConnections do
 
   context "when AnyCable is disabled" do
     before do
-      @old = ActionCable.server.config.cable[:adapter]
-      ActionCable.server.config.cable[:adapter] = "test"
-    end
-
-    after do
-      ActionCable.server.config.cable[:adapter] = @old
+      allow(AnyCable::Rails).to receive(:enabled?).and_return(false)
     end
 
     it "doesn't call #broadcast_command" do

@@ -3,7 +3,7 @@
 ENV["RAILS_ENV"] = "test"
 
 begin
-  require "debug"
+  require "debug" unless ENV["CI"] == "true"
 rescue LoadError, NoMethodError
 end
 
