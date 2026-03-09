@@ -75,7 +75,7 @@ module ApplicationCable
 
     def connect
       self.current_user = verify_user
-      # URL is accesible in subsequent RPC calls just like current_user
+      # URL is accessible in subsequent RPC calls just like current_user
       self.url = request.url if current_user
       logger.add_tags "ActionCable", current_user.name
     end

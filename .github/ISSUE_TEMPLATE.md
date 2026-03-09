@@ -6,7 +6,7 @@
 
   Please, check the documentation website (https://docs.anycable.io/),
   especially, the "Troubleshooting" section (https://docs.anycable.io/troubleshooting)
-  before submiting the issue.
+  before submitting the issue.
 -->
 
 ### Tell us about your environment
