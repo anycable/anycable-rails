@@ -18,7 +18,8 @@ Gem::Specification.new do |spec|
     "documentation_uri" => "https://docs.anycable.io/#/using_with_rails",
     "homepage_uri" => "https://anycable.io/",
     "source_code_uri" => "http://github.com/anycable/anycable-rails",
-    "funding_uri" => "https://github.com/sponsors/anycable"
+    "funding_uri" => "https://github.com/sponsors/anycable",
+    "rubygems_mfa_required" => "true"
   }
 
   spec.files = %w[README.md MIT-LICENSE CHANGELOG.md]
