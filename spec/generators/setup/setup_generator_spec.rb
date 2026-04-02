@@ -207,7 +207,7 @@ describe AnyCableRailsGenerators::SetupGenerator, type: :generator do
   end
 
   context "when local environment" do
-    let(:opts) { {development: "local"} }
+    let(:opts) { {development: "bin"} }
     let(:version) { "latest" }
 
     subject do
@@ -298,7 +298,7 @@ describe AnyCableRailsGenerators::SetupGenerator, type: :generator do
 
     it "installs packages with importmap and update the application.js" do
       expect(gen)
-        .to receive(:run).with(%r{bin/importmap pin @hotwired/turbo @anycable/web @anycable/turbo-stream})
+        .to receive(:run).with(%r{bin/importmap pin @hotwired/turbo @anycable/web @anycable/turbo-stream}).and_return(true)
       silence_stream($stdout) do
         gen.invoke_all
       end

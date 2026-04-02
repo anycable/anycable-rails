@@ -9,7 +9,7 @@ module AnyCableRailsGenerators
     source_root File.expand_path("templates", __dir__)
 
     DOCS_ROOT = "https://docs.anycable.io"
-    DEVELOPMENT_METHODS = %w[skip local docker].freeze
+    DEVELOPMENT_METHODS = %w[skip bin docker].freeze
     DEPLOYMENT_METHODS = %w[skip thruster fly heroku anycable_plus].freeze
     RPC_IMPL = %w[none grpc http].freeze
 
@@ -41,7 +41,7 @@ module AnyCableRailsGenerators
       end
 
       if hotwire? && !custom_channels?
-        say <<~MSG
+        say_status :info, <<~MSG
           ⚡️ Hotwire application has been detected, installing AnyCable in a standalone mode.
         MSG
         @rpc_impl = "none"
@@ -52,6 +52,7 @@ module AnyCableRailsGenerators
         answer = RPC_IMPL.index(options[:rpc]) || 99
 
         unless RPC_IMPL[answer.to_i]
+          say ""
           say <<~MSG
             AnyCable connects to your Rails server to communicate with Action Cable channels either via HTTP or gRPC.
 
@@ -68,15 +69,14 @@ module AnyCableRailsGenerators
           say ""
         end
 
-        until RPC_IMPL[answer.to_i]
-          answer = ask "Which RPC implementation would you like to use? (1) gRPC, (2) HTTP, (0) None"
-        end
+        answer = ask "Which RPC implementation would you like to use?", limited_to: %w[grpc http none], default: "grpc"
 
-        @rpc_impl = RPC_IMPL[answer.to_i]
+        @rpc_impl = answer
+        return
       end
 
       # no Hotwire, no custom channels
-      say "Looks like you don't have any real-time functionality yet. Let's start with a miminal AnyCable setup!"
+      say_status :info, "Looks like you don't have any real-time functionality yet. Let's start with a miminal AnyCable setup!"
       @rpc_impl = "none"
     end
 
@@ -87,10 +87,11 @@ module AnyCableRailsGenerators
 
       # Fast-track for local development
       if file_exists?("bin/dev") && file_exists?("Procfile.dev")
-        @development = "local"
+        @development = "bin"
       end
 
       unless @development
+        say ""
         say <<~MSG
           You can run AnyCable server locally (recommended for most cases) or as a Docker container (in case you develop in a containerized environment).
 
@@ -99,15 +100,9 @@ module AnyCableRailsGenerators
         MSG
         say ""
 
-        answer = DEVELOPMENT_METHODS.index(options[:development]) || 99
+        answer = ask "Which way to run AnyCable server locally would you prefer?", limited_to: %w[bin docker skip], default: "bin"
 
-        until DEVELOPMENT_METHODS[answer.to_i]
-          answer = ask <<~MSG
-            Which way to run AnyCable server locally would you prefer? (1) Binstub, (2) Docker, (0) Skip
-          MSG
-        end
-
-        @development = DEVELOPMENT_METHODS[answer.to_i]
+        @development = answer
       end
 
       case @development
@@ -135,7 +130,7 @@ module AnyCableRailsGenerators
       res = run "bundle exec rubocop -r 'anycable/rails/compatibility/rubocop' --only AnyCable/InstanceVars,AnyCable/PeriodicalTimers,AnyCable/InstanceVars"
 
       unless res
-        say_status :help, "⚠️  Please, take a look at the icompatibilities above and fix them"
+        say_status :help, "⚠️  Please, take a look at the incompatibilities above and fix them"
 
         @todos << "Fix Action Cable compatibility issues (listed above): #{DOCS_ROOT}/rails/compatibility"
       end
@@ -402,7 +397,7 @@ module AnyCableRailsGenerators
       end
     end
 
-    def install_for_local
+    def install_for_bin
       unless file_exists?("bin/anycable-go")
         generate "anycable:bin", "--version #{options[:version]}"
       end
@@ -519,13 +514,10 @@ module AnyCableRailsGenerators
     def install_js_packages
       if file_exists?("config/importmap.rb") && file_exists?("bin/importmap")
         run "bin/importmap pin @hotwired/turbo @anycable/web @anycable/turbo-stream"
-        true
       elsif file_exists?("yarn.lock")
         run "yarn add @anycable/web @anycable/turbo-stream"
-        true
       elsif file_exists?("package-json.lock")
         run "npm install @anycable/web @anycable/turbo-stream"
-        true
       else
         false
       end
