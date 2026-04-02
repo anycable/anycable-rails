@@ -2,7 +2,11 @@
 
 ## main
 
+## 1.6.2 (2026-04-02)
+
 - Upgrade setup generator. ([@palkan][])
+
+## 1.6.1 (2025-12-18)
 
 - Ensure `bin/dist/anycable-go` has execution permission as part of `bin/anycable-go` ([@dmorgan-fa][])
 
