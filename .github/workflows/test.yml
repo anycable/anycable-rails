@@ -25,13 +25,16 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        ruby: ["3.3"]
-        gemfile: ["rails7", "rails8"]
+        ruby: ["4.0"]
+        gemfile: ["rails8"]
         next: ["0", "1"]
         include:
           - ruby: "3.2"
             gemfile: "anycablemaster"
             next: "0"
+          - ruby: "3.3"
+            gemfile: "rails7"
+            next: "1"
           - ruby: "3.0"
             gemfile: "rails7"
             next: "0"
