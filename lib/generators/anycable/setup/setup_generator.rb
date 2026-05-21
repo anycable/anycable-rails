@@ -1,12 +1,14 @@
 # frozen_string_literal: true
 
 require "generators/anycable/with_os_helpers"
+require "rails/generators/active_record/migration"
 
 module AnyCableRailsGenerators
   # Entry point for interactive installation
   class SetupGenerator < ::Rails::Generators::Base
     namespace "anycable:setup"
     source_root File.expand_path("templates", __dir__)
+    include ActiveRecord::Generators::Migration
 
     DOCS_ROOT = "https://docs.anycable.io"
     DEVELOPMENT_METHODS = %w[skip bin docker].freeze
@@ -26,6 +28,17 @@ module AnyCableRailsGenerators
       type: :string,
       desc: "Specify AnyCable server version (defaults to latest release)",
       default: "latest"
+    class_option :postgres_signalling,
+      type: :boolean,
+      desc: "Install the Postgres signalling contract and use Postgres for broadcasting and pub/sub"
+
+    def self.next_migration_number(dirname)
+      if ActiveRecord.timestamped_migrations
+        Time.now.utc.strftime("%Y%m%d%H%M%S")
+      else
+        "%.3d" % (current_migration_number(dirname) + 1)
+      end
+    end
 
     def welcome
       say ""
@@ -121,6 +134,12 @@ module AnyCableRailsGenerators
       template "anycable.toml"
 
       update_cable_yml
+    end
+
+    def postgres_signalling_contract
+      return unless postgres?
+
+      migration_template "db/migrate/create_anycable_postgres_signalling.rb", "db/migrate/create_anycable_postgres_signalling.rb"
     end
 
     def rubocop_compatibility
@@ -244,6 +263,16 @@ module AnyCableRailsGenerators
 
     def nats?
       !!gemfile_lock&.match?(/^\s+nats-pure\b/)
+    end
+
+    def postgres?
+      !!options[:postgres_signalling]
+    end
+
+    def migration_version
+      "[#{ActiveRecord::Migration.current_version}]"
+    rescue NoMethodError
+      "[7.0]"
     end
 
     def webpacker?

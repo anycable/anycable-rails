@@ -9,8 +9,16 @@ default: &default
   access_logs_disabled: false
   # Whether to enable gRPC level logging or not
   log_grpc: false
+  <%- if postgres? -%>
+  # Use Postgres-backed broadcaster. The payload is stored in the database;
+  # LISTEN/NOTIFY is used by anycable-go only as a wake-up signal.
+  broadcast_adapter: postgres
+  postgres_broadcasts_table: anycable_broadcasts
+  postgres_contract_table: anycable_contracts
+  <%- else -%>
   # Use HTTP broadcaster by default
   broadcast_adapter: http
+  <%- end -%>
   <%- if http_rpc? -%>
   # Use HTTP RPC mounted at the "/_anycable" path of your web server
   # Read more: https://docs.anycable.io/anycable-go/rpc?id=rpc-over-http

@@ -23,6 +23,7 @@ describe AnyCableRailsGenerators::SetupGenerator, type: :generator do
   let(:cable_yml) { YAML.load_file(File.join(destination_root, "config/cable.yml"), aliases: true).deep_symbolize_keys }
   let(:anycable_yml) { YAML.load_file(File.join(destination_root, "config/anycable.yml"), aliases: true).deep_symbolize_keys }
   let(:anycable_toml) { TOML.load_file(File.join(destination_root, "anycable.toml")).deep_symbolize_keys }
+  let(:postgres_migration) { Dir[File.join(destination_root, "db/migrate/*_create_anycable_postgres_signalling.rb")].first }
 
   # Base options=skip everything, the generator only adds/updates config files
   let(:base_opts) { {rpc: "none", development: "skip"} }
@@ -120,6 +121,33 @@ describe AnyCableRailsGenerators::SetupGenerator, type: :generator do
       subject
       expect(anycable_yml.dig(:development, :http_rpc)).to be_nil
       expect(anycable_toml.dig(:rpc, :host)).to eq "localhost:50051"
+    end
+  end
+
+  context "when using Postgres signalling" do
+    let(:opts) { {postgres_signalling: true} }
+
+    specify do
+      subject
+
+      expect(anycable_yml.dig(:development, :broadcast_adapter)).to eq "postgres"
+      expect(anycable_yml.dig(:development, :postgres_broadcasts_table)).to eq "anycable_broadcasts"
+      expect(anycable_yml.dig(:development, :postgres_contract_table)).to eq "anycable_contracts"
+
+      expect(anycable_toml[:broadcast_adapters]).to eq(["http", "postgres"])
+      expect(anycable_toml[:pubsub_adapter]).to eq "postgres"
+      expect(anycable_toml.dig(:postgres, :notify_channel)).to eq "anycable_signals"
+      expect(anycable_toml.dig(:postgres, :broadcasts_table)).to eq "anycable_broadcasts"
+      expect(anycable_toml.dig(:postgres, :pubsub_table)).to eq "anycable_pubsub"
+      expect(anycable_toml.dig(:postgres, :contract_table)).to eq "anycable_contracts"
+      expect(anycable_toml.dig(:postgres, :validate_contract)).to eq true
+
+      expect(postgres_migration).not_to be_nil
+      migration = File.read(postgres_migration)
+      expect(migration).to include("CREATE TABLE anycable_broadcasts")
+      expect(migration).to include("CREATE TABLE anycable_pubsub")
+      expect(migration).to include("CREATE TRIGGER anycable_broadcasts_notify_insert")
+      expect(migration).to include("CREATE TRIGGER anycable_pubsub_notify_insert")
     end
   end
 
