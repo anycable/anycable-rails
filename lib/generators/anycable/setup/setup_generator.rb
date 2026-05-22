@@ -1,14 +1,12 @@
 # frozen_string_literal: true
 
 require "generators/anycable/with_os_helpers"
-require "rails/generators/active_record/migration"
 
 module AnyCableRailsGenerators
   # Entry point for interactive installation
   class SetupGenerator < ::Rails::Generators::Base
     namespace "anycable:setup"
     source_root File.expand_path("templates", __dir__)
-    include ActiveRecord::Generators::Migration
 
     DOCS_ROOT = "https://docs.anycable.io"
     DEVELOPMENT_METHODS = %w[skip bin docker].freeze
@@ -139,6 +137,7 @@ module AnyCableRailsGenerators
     def postgres_signalling_contract
       return unless postgres?
 
+      active_record_migration_support!
       migration_template "db/migrate/create_anycable_postgres_signalling.rb", "db/migrate/create_anycable_postgres_signalling.rb"
     end
 
@@ -267,6 +266,14 @@ module AnyCableRailsGenerators
 
     def postgres?
       !!options[:postgres_signalling]
+    end
+
+    def active_record_migration_support!
+      require "rails/generators/active_record/migration"
+
+      self.class.include ActiveRecord::Generators::Migration unless self.class < ActiveRecord::Generators::Migration
+    rescue LoadError
+      raise Thor::Error, "ActiveRecord is required to generate the Postgres signalling migration"
     end
 
     def migration_version

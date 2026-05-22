@@ -2,6 +2,8 @@
 
 ## main
 
+- Add Postgres signalling setup generator option. ([@TikiTDO][])
+
 ## 1.6.2 (2026-04-02)
 
 - Upgrade setup generator. ([@palkan][])
@@ -306,3 +308,4 @@ See [Changelog](https://github.com/anycable/anycable-rails/blob/0-6-stable/CHANG
 [@sponomarev]: https://github.com/sponomarev
 [@bibendi]: https://github.com/bibendi
 [@lHydra]: http://github.com/lHydra
+[@TikiTDO]: https://github.com/TikiTDO

@@ -3,3 +3,9 @@ Description:
 
 Example:
     rails generate anycable:setup
+
+Postgres signalling:
+    rails generate anycable:setup --postgres-signalling
+
+    Generates the shared Postgres signalling migration and configures
+    AnyCable Ruby and anycable-go to use Postgres for broadcasting and pub/sub.
