@@ -18,7 +18,7 @@ secret = "anycable-local-secret"
 presets = ["broker"]
 
 # Broadcasting adapters for app-to-clients messages.
-# You one of the specified adapters in the config/anycable.yml.
+# Use one of the specified adapters in the config/anycable.yml.
 # Read more in https://docs.anycable.io/anycable-go/broadcasting.
 <%- if postgres? -%>
 broadcast_adapters = ["http", "postgres"]
@@ -32,7 +32,7 @@ broadcast_adapters = ["http"]
 
 # Pub/sub adapter for inter-node communication in a production cluster
 # IMPORTANT: In production, when running AnyCable in a cluster mode,
-# make sure to enable pub/sub adapter via the ANYCABLE_PUBSUB_ADAPTER env var
+# make sure to enable pub/sub adapter via the ANYCABLE_PUBSUB env var
 <%- if postgres? -%>
 pubsub_adapter = "postgres"
 <%- else -%>
