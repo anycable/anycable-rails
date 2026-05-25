@@ -10,11 +10,9 @@ default: &default
   # Whether to enable gRPC level logging or not
   log_grpc: false
   <%- if postgres? -%>
-  # Use Postgres-backed broadcaster. The payload is stored in the database;
-  # LISTEN/NOTIFY is used by anycable-go only as a wake-up signal.
+  # Use Postgres-backed broadcaster. anycable-go owns the signalling schema;
+  # Rails publishes through SQL functions.
   broadcast_adapter: postgres
-  postgres_broadcasts_table: anycable_broadcasts
-  postgres_contract_table: anycable_contracts
   <%- else -%>
   # Use HTTP broadcaster by default
   broadcast_adapter: http

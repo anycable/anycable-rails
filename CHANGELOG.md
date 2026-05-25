@@ -2,7 +2,7 @@
 
 ## main
 
-- Add Postgres signalling setup generator option. ([@TikiTDO][])
+- Add Postgres signalling setup generator option for server-owned schema. ([@TikiTDO][])
 
 ## 1.6.2 (2026-04-02)
 

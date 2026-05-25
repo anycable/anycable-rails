@@ -39,7 +39,8 @@ If you want to use Postgres as the AnyCable signalling backend instead of Redis 
 bin/rails g anycable:setup --postgres-signalling
 ```
 
-This generates the shared Postgres signalling migration and configures Rails broadcasting plus anycable-go pub/sub to use Postgres. Run the generated migration before starting anycable-go with contract validation enabled.
+This configures Rails broadcasting plus anycable-go pub/sub to use Postgres.
+anycable-go owns and ensures the required signalling schema on startup.
 
 ## Configuration
 

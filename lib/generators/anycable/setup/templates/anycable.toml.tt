@@ -91,16 +91,17 @@ servers = "nats://127.0.0.1:4222"
 # IMPORTANT: In production, provide the same Postgres URL used by the Rails
 # Postgres broadcast adapter via ANYCABLE_POSTGRES_URL.
 url = "postgres://localhost:5432/postgres?sslmode=disable"
-notify_channel = "anycable_signals"
+broadcast_notify_channel = "anycable_broadcasts"
+pubsub_notify_channel = "anycable_pubsub"
 internal_stream = "__anycable_internal__"
 broadcasts_table = "anycable_broadcasts"
 pubsub_table = "anycable_pubsub"
-contract_table = "anycable_contracts"
+ensure_schema = true
 poll_interval_milliseconds = 500
 batch_size = 100
 claim_timeout_seconds = 30
 max_attempts = 5
+exhausted_broadcast_policy = "skip"
 retention_ttl = 300
 cleanup_interval = 60
-validate_contract = true
 <%- end -%>
