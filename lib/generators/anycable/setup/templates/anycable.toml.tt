@@ -96,6 +96,7 @@ pubsub_notify_channel = "anycable_pubsub"
 internal_stream = "__anycable_internal__"
 broadcasts_table = "anycable_broadcasts"
 pubsub_table = "anycable_pubsub"
+stream_offsets_table = "anycable_stream_offsets"
 ensure_schema = true
 poll_interval_milliseconds = 500
 batch_size = 100

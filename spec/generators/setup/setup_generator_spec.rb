@@ -139,6 +139,7 @@ describe AnyCableRailsGenerators::SetupGenerator, type: :generator do
       expect(anycable_toml.dig(:postgres, :pubsub_notify_channel)).to eq "anycable_pubsub"
       expect(anycable_toml.dig(:postgres, :broadcasts_table)).to eq "anycable_broadcasts"
       expect(anycable_toml.dig(:postgres, :pubsub_table)).to eq "anycable_pubsub"
+      expect(anycable_toml.dig(:postgres, :stream_offsets_table)).to eq "anycable_stream_offsets"
       expect(anycable_toml.dig(:postgres, :ensure_schema)).to eq true
       expect(anycable_toml.dig(:postgres, :exhausted_broadcast_policy)).to eq "skip"
 
