@@ -18,9 +18,11 @@ secret = "anycable-local-secret"
 presets = ["broker"]
 
 # Broadcasting adapters for app-to-clients messages.
-# You one of the specified adapters in the config/anycable.yml.
+# Use one of the specified adapters in the config/anycable.yml.
 # Read more in https://docs.anycable.io/anycable-go/broadcasting.
-<%- if redis? -%>
+<%- if postgres? -%>
+broadcast_adapters = ["http", "postgres"]
+<%- elsif redis? -%>
 broadcast_adapters = ["http", "redisx"]
 <%- elsif nats? -%>
 broadcast_adapters = ["http", "nats"]
@@ -30,8 +32,12 @@ broadcast_adapters = ["http"]
 
 # Pub/sub adapter for inter-node communication in a production cluster
 # IMPORTANT: In production, when running AnyCable in a cluster mode,
-# make sure to enable pub/sub adapter via the ANYCABLE_PUBSUB_ADAPTER env var
-# pubsub_adapter = "redis" # or "nats"
+# make sure to enable pub/sub adapter via the ANYCABLE_PUBSUB env var
+<%- if postgres? -%>
+pubsub_adapter = "postgres"
+<%- else -%>
+# pubsub_adapter = "redis" # or "nats" or "postgres"
+<%- end -%>
 
 [logging]
 debug = true
@@ -78,4 +84,25 @@ url = "redis://localhost:6379"
 [nats]
 # IMPORTANT: In production, provide NATS address via the ANYCABLE_NATS_SERVERS env var
 servers = "nats://127.0.0.1:4222"
+<%- end -%>
+
+<%- if postgres? -%>
+[postgres]
+# IMPORTANT: In production, provide the same Postgres URL used by the Rails
+# Postgres broadcast adapter via ANYCABLE_POSTGRES_URL.
+url = "postgres://localhost:5432/postgres?sslmode=disable"
+broadcast_notify_channel = "anycable_broadcasts"
+pubsub_notify_channel = "anycable_pubsub"
+internal_stream = "__anycable_internal__"
+broadcasts_table = "anycable_broadcasts"
+pubsub_table = "anycable_pubsub"
+stream_offsets_table = "anycable_stream_offsets"
+ensure_schema = true
+poll_interval_milliseconds = 500
+batch_size = 100
+claim_timeout_seconds = 30
+max_attempts = 5
+exhausted_broadcast_policy = "skip"
+retention_ttl = 300
+cleanup_interval = 60
 <%- end -%>

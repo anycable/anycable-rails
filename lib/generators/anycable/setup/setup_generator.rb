@@ -26,6 +26,9 @@ module AnyCableRailsGenerators
       type: :string,
       desc: "Specify AnyCable server version (defaults to latest release)",
       default: "latest"
+    class_option :postgres_signalling,
+      type: :boolean,
+      desc: "Use Postgres for broadcasting and pub/sub"
 
     def welcome
       say ""
@@ -244,6 +247,10 @@ module AnyCableRailsGenerators
 
     def nats?
       !!gemfile_lock&.match?(/^\s+nats-pure\b/)
+    end
+
+    def postgres?
+      !!options[:postgres_signalling]
     end
 
     def webpacker?

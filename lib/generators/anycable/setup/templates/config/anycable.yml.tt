@@ -9,8 +9,14 @@ default: &default
   access_logs_disabled: false
   # Whether to enable gRPC level logging or not
   log_grpc: false
+  <%- if postgres? -%>
+  # Use Postgres-backed broadcaster. anycable-go owns the signalling schema;
+  # Rails publishes through SQL functions.
+  broadcast_adapter: postgres
+  <%- else -%>
   # Use HTTP broadcaster by default
   broadcast_adapter: http
+  <%- end -%>
   <%- if http_rpc? -%>
   # Use HTTP RPC mounted at the "/_anycable" path of your web server
   # Read more: https://docs.anycable.io/anycable-go/rpc?id=rpc-over-http

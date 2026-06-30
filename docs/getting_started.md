@@ -33,6 +33,15 @@ bin/rails g anycable:setup
 
 The command above asks you a few questions to configure AnyCable for your application. Want more control? Check out the [manual setup section](#manual-setup) below.
 
+If you want to use Postgres as the AnyCable signalling backend instead of Redis or NATS, pass `--postgres-signalling`:
+
+```sh
+bin/rails g anycable:setup --postgres-signalling
+```
+
+This configures Rails broadcasting plus anycable-go pub/sub to use Postgres.
+anycable-go owns and ensures the required signalling schema on startup.
+
 ## Configuration
 
 AnyCable Rails uses [Anyway Config][] for configuration. Thus, you can store configuration parameters whenever you want: YAML files, credentials, environment variables, whatever.

@@ -123,6 +123,30 @@ describe AnyCableRailsGenerators::SetupGenerator, type: :generator do
     end
   end
 
+  context "when using Postgres signalling" do
+    let(:opts) { {postgres_signalling: true} }
+
+    specify do
+      subject
+
+      expect(anycable_yml.dig(:development, :broadcast_adapter)).to eq "postgres"
+      expect(anycable_yml.dig(:development, :postgres_broadcasts_table)).to be_nil
+      expect(anycable_yml.dig(:development, :postgres_contract_table)).to be_nil
+
+      expect(anycable_toml[:broadcast_adapters]).to eq(["http", "postgres"])
+      expect(anycable_toml[:pubsub_adapter]).to eq "postgres"
+      expect(anycable_toml.dig(:postgres, :broadcast_notify_channel)).to eq "anycable_broadcasts"
+      expect(anycable_toml.dig(:postgres, :pubsub_notify_channel)).to eq "anycable_pubsub"
+      expect(anycable_toml.dig(:postgres, :broadcasts_table)).to eq "anycable_broadcasts"
+      expect(anycable_toml.dig(:postgres, :pubsub_table)).to eq "anycable_pubsub"
+      expect(anycable_toml.dig(:postgres, :stream_offsets_table)).to eq "anycable_stream_offsets"
+      expect(anycable_toml.dig(:postgres, :ensure_schema)).to eq true
+      expect(anycable_toml.dig(:postgres, :exhausted_broadcast_policy)).to eq "skip"
+
+      expect(Dir[File.join(destination_root, "db/migrate/*_create_anycable_postgres_signalling.rb")]).to be_empty
+    end
+  end
+
   context "action_cable/engine" do
     it "adds to application.rb if missing" do
       subject
