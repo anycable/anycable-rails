@@ -26,6 +26,19 @@ class TestChannel < ApplicationCable::Channel
     leave_presence current_user.name
   end
 
+  # `#user_presence_id` below returns a non-string (a numeric record id, as the
+  # docs recommend). Join/leave with no explicit id fall back to it, and the id
+  # must be cast before it reaches the string `id` field of the presence proto.
+  def follow_by_id
+    stream_from "all"
+
+    join_presence
+  end
+
+  def unfollow_by_id
+    leave_presence
+  end
+
   def nil_stream
     stream_from nil
   end
@@ -62,6 +75,8 @@ class TestChannel < ApplicationCable::Channel
   end
 
   private
+
+  def user_presence_id = current_user.id
 
   def unsubscribed_params
     {name: name}
