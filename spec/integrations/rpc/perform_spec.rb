@@ -142,5 +142,28 @@ describe "client messages" do
         expect(subject["presence"].id).to eq user.name
       end
     end
+
+    # `TestChannel#user_presence_id` returns a non-string (`current_user.id`),
+    # and these actions join/leave with no explicit id, so the id comes from the
+    # default and must still be cast to a string for the presence proto.
+    describe "#join_presence with a non-string user_presence_id" do
+      let(:data) { {action: "follow_by_id"} }
+
+      it "casts the id to a string", :aggregate_failures do
+        expect(subject).to be_success
+        expect(subject["presence"].type).to eq "join"
+        expect(subject["presence"].id).to eq user.id.to_s
+      end
+    end
+
+    describe "#leave_presence with a non-string user_presence_id" do
+      let(:data) { {action: "unfollow_by_id"} }
+
+      it "casts the id to a string", :aggregate_failures do
+        expect(subject).to be_success
+        expect(subject["presence"].type).to eq "leave"
+        expect(subject["presence"].id).to eq user.id.to_s
+      end
+    end
   end
 end

@@ -18,7 +18,7 @@ module AnyCable
         def leave_presence(id = user_presence_id)
           return unless anycabled?
 
-          connection.anycable_socket.presence_leave(id)
+          connection.anycable_socket.presence_leave(id.to_s)
         end
 
         private

@@ -2,6 +2,10 @@
 
 ## main
 
+- Cast the presence ID to a string on leave, matching join. ([@ashwin47][])
+
+  `#join_presence` already casts the ID via `#to_s`, but `#leave_presence` passed it through untouched, so a non-string `user_presence_id` (e.g. a numeric record id) raised `Invalid argument for string field 'id'` when building the presence response.
+
 ## 1.6.2 (2026-04-02)
 
 - Upgrade setup generator. ([@palkan][])
@@ -306,3 +310,4 @@ See [Changelog](https://github.com/anycable/anycable-rails/blob/0-6-stable/CHANG
 [@sponomarev]: https://github.com/sponomarev
 [@bibendi]: https://github.com/bibendi
 [@lHydra]: http://github.com/lHydra
+[@ashwin47]: https://github.com/ashwin47
