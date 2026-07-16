@@ -76,7 +76,9 @@ class TestChannel < ApplicationCable::Channel
 
   private
 
-  def user_presence_id = current_user.id
+  def user_presence_id
+    current_user.id
+  end
 
   def unsubscribed_params
     {name: name}
