@@ -6,6 +6,8 @@ module AnyCable
       # Wrap `request.session` to lazily load values provided
       # in the RPC call (set by the previous calls)
       class SessionProxy
+        include Enumerable
+
         attr_reader :rack_session, :socket_session
 
         def initialize(rack_session, socket_session)
@@ -35,6 +37,13 @@ module AnyCable
         end
 
         alias_method :to_h, :to_hash
+
+        def each(&block)
+          restore!
+          rack_session.each(&block)
+        end
+
+        alias_method :each_pair, :each
 
         def keys
           rack_session.keys + socket_session.keys
